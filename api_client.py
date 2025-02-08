@@ -22,7 +22,8 @@ class OpenAlexClient:
         """Search OpenAlex for works matching the query."""
         params = {
             "search": query,
-            "per_page": 50,
+            "per_page": 10,  # Limit to 10 results
+            "sort": "publication_date:desc",  # Sort by publication date, newest first
             "filter": "is_paratext:false"  # Exclude paratext items
         }
 
