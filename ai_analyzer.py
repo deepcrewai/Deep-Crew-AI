@@ -122,15 +122,18 @@ class AIAnalyzer:
                 messages=[{
                     "role": "system",
                     "content": "Identify potential research gaps based on the titles and concepts. "
-                              "Return a JSON array of gap descriptions."
+                              "Return a JSON object with an array of gap descriptions in the format: "
+                              "{'gaps': ['gap1', 'gap2', ...]}."
                 }, {
                     "role": "user",
                     "content": json.dumps(data)
                 }],
                 response_format={"type": "json_object"}
             )
-            return json.loads(response.choices[0].message.content)
+            result = json.loads(response.choices[0].message.content)
+            return result.get('gaps', [])
         except Exception as e:
+            print(f"Error identifying gaps: {str(e)}")
             return [f"Error identifying gaps: {str(e)}"]
 
     def _optimize_keywords(self, data: Dict) -> List[str]:
@@ -141,16 +144,19 @@ class AIAnalyzer:
                 messages=[{
                     "role": "system",
                     "content": "Based on the titles and concepts, suggest improved keywords "
-                              "for searching this topic. Return a JSON array of keywords."
+                              "for searching this topic. Return a JSON object with an array "
+                              "of keywords in the format: {'keywords': ['keyword1', 'keyword2', ...]}."
                 }, {
                     "role": "user",
                     "content": json.dumps(data)
                 }],
                 response_format={"type": "json_object"}
             )
-            return json.loads(response.choices[0].message.content)
+            result = json.loads(response.choices[0].message.content)
+            return result.get('keywords', [])
         except Exception as e:
-            return [f"Error optimizing keywords: {str(e)}"]
+            print(f"Error optimizing keywords: {str(e)}")
+            return []
 
     def _assess_complexity(self, results: List[Dict]) -> Dict:
         """Assess the complexity of research papers."""
