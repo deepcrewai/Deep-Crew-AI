@@ -29,8 +29,8 @@ def main():
             # Show the generated keywords
             st.write("🔍 Generated search keywords:", ", ".join(keywords))
 
-            # Use the first few keywords for search
-            combined_query = " ".join(keywords[:3])  # Use top 3 keywords
+            # Use all keywords for search
+            combined_query = " ".join(keywords)  # Use all keywords
 
             # Get results from OpenAlex
             results = openalex_client.search(query=combined_query)
@@ -45,7 +45,8 @@ def main():
                 # Render analysis
                 render_analysis_section(analysis)
             else:
-                st.warning("No results found. Try adjusting your search query.")
+                st.warning("""No results found. Your query might be too specific. 
+                Try using more general academic terms.""")
 
 if __name__ == "__main__":
     main()

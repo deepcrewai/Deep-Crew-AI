@@ -16,9 +16,13 @@ class AIAnalyzer:
                 model=self.model,
                 messages=[{
                     "role": "system",
-                    "content": "You are a research expert. Extract key academic search terms from "
-                              "the given query. Return a JSON array of 3-5 most relevant academic "
-                              "search keywords. Focus on technical and specific terms."
+                    "content": """You are a research expert. Extract key academic search terms from 
+                    the given query. Return a JSON object with 'keywords' array containing 2-3 
+                    general academic search terms. Focus on broader academic concepts rather than 
+                    specific technical terms. For example:
+                    - Instead of "carafe detection system", use "coffee automation"
+                    - Instead of "neural network architecture optimization", use "machine learning"
+                    The response should be in format: {"keywords": ["term1", "term2"]}"""
                 }, {
                     "role": "user",
                     "content": query
