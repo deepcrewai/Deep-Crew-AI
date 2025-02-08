@@ -29,11 +29,8 @@ def main():
             # Show the generated keywords
             st.write("🔍 Generated search keywords:", ", ".join(keywords))
 
-            # Use all keywords for search
-            combined_query = " ".join(keywords)  # Use all keywords
-
-            # Get results from OpenAlex
-            results = openalex_client.search(query=combined_query)
+            # Get results from OpenAlex using keywords for similarity ranking
+            results = openalex_client.search(query=search_query, keywords=keywords)
 
             if results:
                 # Render search results
