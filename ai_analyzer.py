@@ -6,7 +6,6 @@ import json
 class AIAnalyzer:
     def __init__(self):
         self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-        # the newest OpenAI model is "gpt-4o" which was released May 13, 2024.
         self.model = "gpt-4o"
 
     def generate_search_keywords(self, query: str) -> List[str]:
@@ -16,12 +15,20 @@ class AIAnalyzer:
                 model=self.model,
                 messages=[{
                     "role": "system",
-                    "content": """You are a research expert. Extract key academic search terms from 
-                    the given query. Return a JSON object with 'keywords' array containing 2-3 
-                    general academic search terms. Focus on broader academic concepts rather than 
-                    specific technical terms. For example:
-                    - Instead of "carafe detection system", use "coffee automation"
-                    - Instead of "neural network architecture optimization", use "machine learning"
+                    "content": """You are a research expert. Extract 1-2 concise, focused keywords that capture 
+                    the core concept of the query. Return a JSON object with 'keywords' array. Focus on the 
+                    main innovation or concept, not the technical details.
+
+                    Examples:
+                    Query: "A mobile phone that detects users' facial expressions and adjusts text size"
+                    Keywords: ["Adaptive display"]
+
+                    Query: "A coffee maker that detects empty carafe and turns off heating"
+                    Keywords: ["Coffee maker"]
+
+                    Query: "A vehicle tire with built-in pump using centrifugal forces"
+                    Keywords: ["Self-inflating tire"]
+
                     The response should be in format: {"keywords": ["term1", "term2"]}"""
                 }, {
                     "role": "user",
