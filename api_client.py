@@ -36,21 +36,35 @@ class OpenAlexClient:
         params = {
             "search": query,
             "per_page": 25,  # Increased to get more results for better filtering
-            "filter": "is_paratext:false"  # Exclude paratext items
+            "filter": "is_paratext:false",  # Exclude paratext items
+            "select": "title,abstract,doi,cited_by_count,publication_year,id"  # Specify fields to return
         }
 
         try:
             response = self._make_request("works", params)
             results = response.get("results", [])
 
+            # Enhance results with properly formatted data
+            enhanced_results = []
+            for paper in results:
+                paper_data = {
+                    'title': paper.get('title', 'No title available'),
+                    'abstract': paper.get('abstract', None) or 'Abstract not available',
+                    'doi': paper.get('doi'),
+                    'cited_by_count': paper.get('cited_by_count', 0),
+                    'publication_year': paper.get('publication_year'),
+                    'url': f"https://doi.org/{paper.get('doi')}" if paper.get('doi') else None
+                }
+                enhanced_results.append(paper_data)
+
             if keywords:
                 # Calculate similarity scores and sort by similarity
-                for paper in results:
+                for paper in enhanced_results:
                     paper['similarity_score'] = self._calculate_keywords_similarity(paper, keywords)
-                results.sort(key=lambda x: x['similarity_score'], reverse=True)
-                results = results[:10]  # Return top 10 most similar results
+                enhanced_results.sort(key=lambda x: x['similarity_score'], reverse=True)
+                enhanced_results = enhanced_results[:10]  # Return top 10 most similar results
 
-            return results
+            return enhanced_results
         except Exception as e:
             print(f"Error in OpenAlex API request: {e}")
             return []

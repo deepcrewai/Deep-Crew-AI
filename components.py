@@ -19,8 +19,10 @@ def render_search_section(results):
         similarity = paper.get('similarity_score', 0)
         with st.expander(f"{paper.get('title', 'Untitled')} (Similarity: {similarity:.2f})"):
             st.write(format_citation(paper))
+            if paper.get('url'):
+                st.write(f"🔗 [View Paper]({paper['url']})")
             st.write(f"Citations: {paper.get('cited_by_count', 0)}")
-            st.write(f"Abstract: {paper.get('abstract', 'No abstract available')}")
+            st.write(f"Abstract: {paper.get('abstract')}")
 
 def render_analysis_section(analysis):
     """Render the AI analysis section."""
