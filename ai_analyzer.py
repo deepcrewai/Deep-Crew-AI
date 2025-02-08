@@ -9,6 +9,28 @@ class AIAnalyzer:
         # the newest OpenAI model is "gpt-4o" which was released May 13, 2024.
         self.model = "gpt-4o"
 
+    def generate_search_keywords(self, query: str) -> List[str]:
+        """Generate optimal search keywords from the user's query."""
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=[{
+                    "role": "system",
+                    "content": "You are a research expert. Extract key academic search terms from "
+                              "the given query. Return a JSON array of 3-5 most relevant academic "
+                              "search keywords. Focus on technical and specific terms."
+                }, {
+                    "role": "user",
+                    "content": query
+                }],
+                response_format={"type": "json_object"}
+            )
+            keywords = json.loads(response.choices[0].message.content)
+            return keywords.get("keywords", [query])  # Fallback to original query if extraction fails
+        except Exception as e:
+            print(f"Error generating keywords: {e}")
+            return [query]  # Fallback to original query
+
     def analyze_results(self, results: List[Dict]) -> Dict:
         """Analyze search results using AI."""
         analysis = {

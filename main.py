@@ -22,9 +22,18 @@ def main():
     search_query = st.text_input("Enter your search query")
 
     if search_query:
-        with st.spinner("Searching and analyzing..."):
+        with st.spinner("Analyzing query and searching..."):
+            # First, generate optimized search keywords using AI
+            keywords = ai_analyzer.generate_search_keywords(search_query)
+
+            # Show the generated keywords
+            st.write("🔍 Generated search keywords:", ", ".join(keywords))
+
+            # Use the first few keywords for search
+            combined_query = " ".join(keywords[:3])  # Use top 3 keywords
+
             # Get results from OpenAlex
-            results = openalex_client.search(query=search_query)
+            results = openalex_client.search(query=combined_query)
 
             if results:
                 # Render search results
