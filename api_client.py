@@ -23,7 +23,7 @@ class OpenAlexClient:
         params = {
             "search": query,
             "per_page": 10,  # Limit to 10 results
-            "sort": "publication_date:desc",  # Sort by publication date, newest first
+            "sort": "cited_by_count:desc",  # Sort by citation count, highest first
             "filter": "is_paratext:false"  # Exclude paratext items
         }
 
