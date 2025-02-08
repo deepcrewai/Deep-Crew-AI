@@ -6,12 +6,12 @@ from difflib import SequenceMatcher
 class OpenAlexClient:
     def __init__(self):
         self.base_url = "https://api.openalex.org"
-        self.email = "anonymous@example.org"  # Best practice for OpenAlex
+        self.email = "researcher@example.org"  # Updated email for better rate limits
         self.last_request_time = 0
         self.min_request_interval = 1.0  # 1 second between requests
 
     def _make_request(self, endpoint: str, params: Dict) -> Dict:
-        """Make a request to OpenAlex API with improved rate limiting."""
+        """Make a request to OpenAlex API with improved rate limiting and error handling."""
         # Ensure minimum time between requests
         current_time = time.time()
         time_since_last_request = current_time - self.last_request_time
@@ -24,21 +24,31 @@ class OpenAlexClient:
         }
 
         try:
+            url = f"{self.base_url}/{endpoint}"
+            print(f"Making request to: {url} with params: {params}")  # Debug log
+
             response = requests.get(
-                f"{self.base_url}/{endpoint}",
+                url,
                 params=params,
                 headers=headers,
-                timeout=10
+                timeout=30
             )
             self.last_request_time = time.time()
+
+            print(f"Response status: {response.status_code}")  # Debug log
 
             if response.status_code == 429:  # Rate limit exceeded
                 print("Rate limit exceeded, waiting...")
                 time.sleep(5)  # Wait 5 seconds before retry
                 return self._make_request(endpoint, params)  # Retry the request
 
-            response.raise_for_status()
-            return response.json()
+            # Try to handle the response even if it's not 200
+            try:
+                return response.json()
+            except Exception as e:
+                print(f"Error parsing response: {str(e)}")
+                return {"results": []}
+
         except requests.exceptions.RequestException as e:
             print(f"API Request Error: {str(e)}")
             return {"results": []}
@@ -52,12 +62,10 @@ class OpenAlexClient:
     def search(self, query: str, keywords: List[str] = None) -> List[Dict]:
         """Search OpenAlex for works matching the query with improved error handling."""
         try:
-            # Base search parameters
+            # Base search parameters with minimal filters
             params = {
                 "search": query,
-                "per_page": 50,
-                "filter": "is_paratext:false",
-                "select": "id,title,abstract,doi,cited_by_count,publication_year,concepts"
+                "per_page": 50
             }
 
             # First attempt with exact query
@@ -66,7 +74,7 @@ class OpenAlexClient:
 
             # If no results, try with keywords
             if not results and keywords:
-                keyword_query = " OR ".join(f'"{kw}"' for kw in keywords)
+                keyword_query = " OR ".join(keywords)
                 params["search"] = keyword_query
                 response = self._make_request("works", params)
                 results = response.get("results", [])
@@ -74,7 +82,6 @@ class OpenAlexClient:
             # If still no results, try with a more lenient search
             if not results:
                 params["search"] = query.replace('"', '')  # Remove quotes
-                params["filter"] = None  # Remove filters
                 response = self._make_request("works", params)
                 results = response.get("results", [])
 
