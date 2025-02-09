@@ -97,7 +97,6 @@ class OpenAlexClient:
                     'title': paper.get('title', 'No title available'),
                     'abstract': abstract,
                     'doi': paper.get('doi'),
-                    'cited_by_count': paper.get('cited_by_count', 0),
                     'publication_year': paper.get('publication_year'),
                     'url': f"https://doi.org/{paper.get('doi')}" if paper.get('doi') else None,
                     'concepts': paper.get('concepts', [])
