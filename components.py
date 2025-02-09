@@ -23,7 +23,7 @@ def generate_pdf_report(results, analysis):
         c.drawString(page_width - 150, 30, "deep-crew.ai")
 
     # Add logo to top right
-    logo = ImageReader("attached_assets/deep-crew-logo.png")
+    logo = ImageReader("attached_assets/deep-crew.jpg")
     c.drawImage(logo, page_width - 250, page_height - 100, width=200, preserveAspectRatio=True)
 
     y = page_height - 150  # Start after logo and spacing
