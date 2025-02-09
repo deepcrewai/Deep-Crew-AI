@@ -6,7 +6,7 @@ import json
 class AIAnalyzer:
     def __init__(self):
         self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-        self.model = "gpt-4o"
+        self.model = "gpt-4"  # Fixed typo in model name
 
     def generate_search_keywords(self, query: str) -> List[str]:
         """Generate optimal search keywords from the user's query."""

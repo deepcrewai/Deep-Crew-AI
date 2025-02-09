@@ -22,11 +22,17 @@ def generate_pdf_report(results, analysis):
         c.setFillColorRGB(0, 0, 1)  # Blue color for link
         c.drawString(page_width - 150, 30, "deep-crew.ai")
 
-    # Add logo to top right
-    logo = ImageReader("attached_assets/deep-crew.jpg")
-    c.drawImage(logo, page_width - 250, page_height - 100, width=200, preserveAspectRatio=True)
+    # Try to add logo, fallback to text header if logo not found
+    try:
+        logo = ImageReader("attached_assets/deep-crew.jpg")
+        c.drawImage(logo, page_width - 250, page_height - 100, width=200, preserveAspectRatio=True)
+    except Exception as e:
+        print(f"Logo not found: {str(e)}")
+        # Add text header instead
+        c.setFont("Helvetica-Bold", 24)
+        c.drawString(page_width - 250, page_height - 80, "Deep Crew AI")
 
-    y = page_height - 150  # Start after logo and spacing
+    y = page_height - 150  # Start after logo/header and spacing
 
     # Title
     c.setFont("Helvetica-Bold", 16)
