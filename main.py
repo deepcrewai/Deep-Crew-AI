@@ -2,7 +2,7 @@ import streamlit as st
 import plotly.express as px
 from api_client import OpenAlexClient
 from ai_analyzer import AIAnalyzer
-from components import render_search_section, render_analysis_section
+from components import render_search_section, render_analysis_section, handle_pdf_export
 from utils import setup_page
 
 def main():
@@ -33,11 +33,14 @@ def main():
             results = openalex_client.search(query=search_query, keywords=keywords)
 
             if results:
+                # Perform AI analysis
+                analysis = ai_analyzer.analyze_results(results)
+
                 # Render search results
                 render_search_section(results)
 
-                # Perform AI analysis
-                analysis = ai_analyzer.analyze_results(results)
+                # Handle PDF export if requested
+                handle_pdf_export(results, analysis)
 
                 # Render analysis
                 render_analysis_section(analysis)

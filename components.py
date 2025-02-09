@@ -1,6 +1,68 @@
 import streamlit as st
 import plotly.express as px
 from utils import format_citation, calculate_metrics
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from datetime import datetime
+
+def generate_pdf_report(results, analysis):
+    """Generate a PDF report of search results and analysis."""
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=letter)
+    y = 750  # Starting y position
+
+    # Title
+    c.setFont("Helvetica-Bold", 16)
+    c.drawString(50, y, "Research Analysis Report")
+    y -= 30
+
+    # Date
+    c.setFont("Helvetica", 10)
+    c.drawString(50, y, f"Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+    y -= 40
+
+    # Papers
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(50, y, "Research Papers")
+    y -= 20
+
+    c.setFont("Helvetica", 10)
+    for paper in results[:5]:  # Limit to top 5 papers
+        if y < 100:  # Check if we need a new page
+            c.showPage()
+            y = 750
+
+        title = paper.get('title', 'Untitled')
+        citation = format_citation(paper)
+
+        c.drawString(50, y, title[:80] + '...' if len(title) > 80 else title)
+        y -= 15
+        citation_lines = [citation[i:i+80] for i in range(0, len(citation), 80)]
+        for line in citation_lines:
+            c.drawString(50, y, line)
+            y -= 15
+        y -= 10
+
+    # Analysis Summary
+    if y < 200:  # Ensure enough space for summary
+        c.showPage()
+        y = 750
+
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(50, y, "Analysis Summary")
+    y -= 20
+
+    c.setFont("Helvetica", 10)
+    summary = analysis.get("summary", "No summary available")
+    summary_lines = [summary[i:i+80] for i in range(0, len(summary), 80)]
+    for line in summary_lines[:10]:  # Limit summary length
+        c.drawString(50, y, line)
+        y -= 15
+
+    c.save()
+    buffer.seek(0)
+    return buffer
 
 def render_search_section(results):
     """Render the search results section."""
@@ -13,6 +75,11 @@ def render_search_section(results):
     col3.metric("Average Year", metrics["avg_year"])
     col4.metric("Average Citations", metrics["avg_citations"])
 
+    # Add export button
+    if st.button("📑 Export Results as PDF"):
+        st.session_state['export_results'] = results
+        st.experimental_rerun()
+
     # Display results
     st.subheader("Search Results")
     for paper in results:
@@ -22,7 +89,28 @@ def render_search_section(results):
             if paper.get('url'):
                 st.write(f"🔗 [View Paper]({paper['url']})")
             st.write(f"Citations: {paper.get('cited_by_count', 0)}")
-            st.write(f"Abstract: {paper.get('abstract')}")
+
+            # Abstract preview with PDF-like styling
+            with st.container():
+                st.markdown("""
+                <style>
+                .pdf-preview {
+                    background-color: white;
+                    border: 1px solid #ddd;
+                    padding: 20px;
+                    border-radius: 5px;
+                    font-family: serif;
+                    line-height: 1.6;
+                }
+                </style>
+                """, unsafe_allow_html=True)
+
+                st.markdown(f"""
+                <div class="pdf-preview">
+                <h4>Abstract</h4>
+                {paper.get('abstract', 'No abstract available')}
+                </div>
+                """, unsafe_allow_html=True)
 
 def render_analysis_section(analysis):
     """Render the AI analysis section."""
@@ -66,3 +154,15 @@ def render_analysis_section(analysis):
     st.progress(score / 10)
     st.write(f"Complexity Score: {score}/10")
     st.write(complexity.get("explanation", "No explanation available"))
+
+def handle_pdf_export(results, analysis):
+    """Handle PDF export functionality."""
+    if 'export_results' in st.session_state:
+        pdf_buffer = generate_pdf_report(st.session_state['export_results'], analysis)
+        st.download_button(
+            label="⬇️ Download PDF Report",
+            data=pdf_buffer,
+            file_name="research_report.pdf",
+            mime="application/pdf"
+        )
+        del st.session_state['export_results']
