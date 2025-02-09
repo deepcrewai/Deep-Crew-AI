@@ -75,11 +75,6 @@ def render_search_section(results):
     col3.metric("Average Year", metrics["avg_year"])
     col4.metric("Average Citations", metrics["avg_citations"])
 
-    # Add export button
-    if st.button("📑 Export Results as PDF"):
-        st.session_state['export_results'] = results
-        st.rerun()
-
     # Display results
     st.subheader("Search Results")
     for paper in results:
@@ -157,12 +152,11 @@ def render_analysis_section(analysis):
 
 def handle_pdf_export(results, analysis):
     """Handle PDF export functionality."""
-    if 'export_results' in st.session_state:
-        pdf_buffer = generate_pdf_report(st.session_state['export_results'], analysis)
-        st.download_button(
-            label="⬇️ Download PDF Report",
-            data=pdf_buffer,
-            file_name="research_report.pdf",
-            mime="application/pdf"
-        )
-        del st.session_state['export_results']
+    # Add export button at the top of the results
+    if st.download_button(
+        label="📑 Export Results as PDF",
+        data=generate_pdf_report(results, analysis),
+        file_name="research_report.pdf",
+        mime="application/pdf"
+    ):
+        st.success("PDF report generated successfully!")
