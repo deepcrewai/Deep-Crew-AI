@@ -91,10 +91,10 @@ class OpenAlexClient:
                 # Extract and format paper data
                 abstract = paper.get('abstract')
                 if abstract is None or abstract == "":
-                    abstract = "Abstract not available"
+                    abstract = "Bu makale için özet bulunmamaktadır. Detaylı bilgi için makaleye göz atabilirsiniz."
 
                 paper_data = {
-                    'title': paper.get('title', 'No title available'),
+                    'title': paper.get('title', 'Başlık bulunamadı'),
                     'abstract': abstract,
                     'doi': paper.get('doi'),
                     'publication_year': paper.get('publication_year'),
