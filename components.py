@@ -5,16 +5,32 @@ from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from datetime import datetime
+from reportlab.lib.utils import ImageReader
 
 def generate_pdf_report(results, analysis):
-    """Generate a PDF report of search results and analysis."""
+    """Generate a PDF report of AI analysis."""
     buffer = BytesIO()
     c = canvas.Canvas(buffer, pagesize=letter)
-    y = 750  # Starting y position
+    page_width, page_height = letter
+
+    def add_page_footer():
+        """Add date and link to bottom of page"""
+        c.setFont("Helvetica", 10)
+        # Add date to bottom left
+        c.drawString(50, 30, datetime.now().strftime('%Y-%m-%d'))
+        # Add link to bottom right
+        c.setFillColorRGB(0, 0, 1)  # Blue color for link
+        c.drawString(page_width - 150, 30, "deep-crew.ai")
+
+    # Add logo
+    logo = ImageReader("attached_assets/deep-crew-logo.png")
+    c.drawImage(logo, 50, page_height - 100, width=200, preserveAspectRatio=True)
+
+    y = page_height - 150  # Start after logo and spacing
 
     # Title
     c.setFont("Helvetica-Bold", 16)
-    c.drawString(50, y, "Research Analysis Report")
+    c.drawString(50, y, "AI Analysis Report")
     y -= 30
 
     # Date
@@ -22,43 +38,109 @@ def generate_pdf_report(results, analysis):
     c.drawString(50, y, f"Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
     y -= 40
 
-    # Papers
-    c.setFont("Helvetica-Bold", 12)
-    c.drawString(50, y, "Research Papers")
-    y -= 20
-
-    c.setFont("Helvetica", 10)
-    for paper in results[:5]:  # Limit to top 5 papers
-        if y < 100:  # Check if we need a new page
-            c.showPage()
-            y = 750
-
-        title = paper.get('title', 'Untitled')
-        citation = format_citation(paper)
-
-        c.drawString(50, y, title[:80] + '...' if len(title) > 80 else title)
-        y -= 15
-        citation_lines = [citation[i:i+80] for i in range(0, len(citation), 80)]
-        for line in citation_lines:
-            c.drawString(50, y, line)
-            y -= 15
-        y -= 10
-
     # Analysis Summary
-    if y < 200:  # Ensure enough space for summary
-        c.showPage()
-        y = 750
-
     c.setFont("Helvetica-Bold", 12)
-    c.drawString(50, y, "Analysis Summary")
+    c.drawString(50, y, "Research Summary")
     y -= 20
 
     c.setFont("Helvetica", 10)
     summary = analysis.get("summary", "No summary available")
     summary_lines = [summary[i:i+80] for i in range(0, len(summary), 80)]
-    for line in summary_lines[:10]:  # Limit summary length
+    for line in summary_lines:
+        if y < 100:  # Check if we need a new page
+            add_page_footer()
+            c.showPage()
+            y = page_height - 50
+
         c.drawString(50, y, line)
         y -= 15
+    y -= 20
+
+    # Research Trends
+    if y < 200:  # Ensure enough space for trends section
+        add_page_footer()
+        c.showPage()
+        y = page_height - 50
+
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(50, y, "Research Trends")
+    y -= 20
+
+    trends = analysis.get("trends", {})
+    c.setFont("Helvetica", 10)
+
+    # Emerging Topics
+    c.drawString(50, y, "Emerging Topics:")
+    y -= 20
+    for topic in trends.get("emerging_topics", []):
+        if y < 100:
+            add_page_footer()
+            c.showPage()
+            y = page_height - 50
+        c.drawString(70, y, f"• {topic}")
+        y -= 15
+    y -= 20
+
+    # Declining Topics
+    c.drawString(50, y, "Declining Topics:")
+    y -= 20
+    for topic in trends.get("declining_topics", []):
+        if y < 100:
+            add_page_footer()
+            c.showPage()
+            y = page_height - 50
+        c.drawString(70, y, f"• {topic}")
+        y -= 15
+    y -= 20
+
+    # Research Gaps
+    if y < 200:
+        add_page_footer()
+        c.showPage()
+        y = page_height - 50
+
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(50, y, "Research Gaps")
+    y -= 20
+
+    c.setFont("Helvetica", 10)
+    for gap in analysis.get("gaps", []):
+        if y < 100:
+            add_page_footer()
+            c.showPage()
+            y = page_height - 50
+        c.drawString(70, y, f"• {gap}")
+        y -= 15
+    y -= 20
+
+    # Complexity Assessment
+    if y < 200:
+        add_page_footer()
+        c.showPage()
+        y = page_height - 50
+
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(50, y, "Complexity Assessment")
+    y -= 20
+
+    c.setFont("Helvetica", 10)
+    complexity = analysis.get("complexity", {})
+    score = complexity.get("complexity_score", 0)
+    c.drawString(50, y, f"Complexity Score: {score}/10")
+    y -= 15
+
+    explanation = complexity.get("explanation", "No explanation available")
+    explanation_lines = [explanation[i:i+80] for i in range(0, len(explanation), 80)]
+    for line in explanation_lines:
+        if y < 100:
+            add_page_footer()
+            c.showPage()
+            y = page_height - 50
+        c.drawString(50, y, line)
+        y -= 15
+
+    # Add footer to the last page
+    add_page_footer()
 
     c.save()
     buffer.seek(0)
