@@ -103,20 +103,25 @@ class OpenAlexClient:
                     'concepts': paper.get('concepts', [])
                 }
 
-                # Calculate similarity score
+                # Calculate similarity score with more weight
                 if keywords:
                     paper_text = f"{paper_data['title']} {paper_data['abstract']}"
-                    similarities = [self._calculate_similarity(paper_text, kw) for kw in keywords]
-                    paper_data['similarity_score'] = max(similarities) if similarities else 0.0
+                    # Calculate similarity for both title and abstract separately
+                    title_similarities = [self._calculate_similarity(paper_data['title'], kw) for kw in keywords]
+                    abstract_similarities = [self._calculate_similarity(paper_data['abstract'], kw) for kw in keywords]
+
+                    # Give more weight to title matches (0.7) vs abstract matches (0.3)
+                    max_title_sim = max(title_similarities) if title_similarities else 0.0
+                    max_abstract_sim = max(abstract_similarities) if abstract_similarities else 0.0
+                    paper_data['similarity_score'] = (0.7 * max_title_sim) + (0.3 * max_abstract_sim)
                 else:
-                    paper_data['similarity_score'] = 1.0
+                    paper_data['similarity_score'] = 0.0
 
                 enhanced_results.append(paper_data)
 
-            # Sort results if we have keywords
-            if keywords:
-                enhanced_results.sort(key=lambda x: (-x['similarity_score'], -x['cited_by_count']))
-                enhanced_results = enhanced_results[:10]  # Return top 10 most relevant results
+            # Sort results primarily by similarity score
+            enhanced_results.sort(key=lambda x: (-x['similarity_score'], -x['cited_by_count']))
+            enhanced_results = enhanced_results[:10]  # Return top 10 most relevant results
 
             return enhanced_results
 
