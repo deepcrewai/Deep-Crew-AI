@@ -22,9 +22,9 @@ def generate_pdf_report(results, analysis):
         c.setFillColorRGB(0, 0, 1)  # Blue color for link
         c.drawString(page_width - 150, 30, "deep-crew.ai")
 
-    # Add logo
+    # Add logo to top right
     logo = ImageReader("attached_assets/deep-crew-logo.png")
-    c.drawImage(logo, 50, page_height - 100, width=200, preserveAspectRatio=True)
+    c.drawImage(logo, page_width - 250, page_height - 100, width=200, preserveAspectRatio=True)
 
     y = page_height - 150  # Start after logo and spacing
 
