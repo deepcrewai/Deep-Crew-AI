@@ -62,10 +62,11 @@ class OpenAlexClient:
     def search(self, query: str, keywords: List[str] = None) -> List[Dict]:
         """Search OpenAlex for works matching the query with improved error handling."""
         try:
-            # Base search parameters with minimal filters
+            # Base search parameters with minimal filters and sort by cited_by_count
             params = {
                 "search": query,
-                "per_page": 50
+                "per_page": 100,  # Get more results initially
+                "sort": "cited_by_count:desc"  # Sort by citations
             }
 
             # First attempt with exact query
@@ -105,7 +106,6 @@ class OpenAlexClient:
 
                 # Calculate similarity score with more weight
                 if keywords:
-                    paper_text = f"{paper_data['title']} {paper_data['abstract']}"
                     # Calculate similarity for both title and abstract separately
                     title_similarities = [self._calculate_similarity(paper_data['title'], kw) for kw in keywords]
                     abstract_similarities = [self._calculate_similarity(paper_data['abstract'], kw) for kw in keywords]
@@ -119,8 +119,8 @@ class OpenAlexClient:
 
                 enhanced_results.append(paper_data)
 
-            # Sort results primarily by similarity score
-            enhanced_results.sort(key=lambda x: (-x['similarity_score'], -x['cited_by_count']))
+            # Sort by similarity score for final results
+            enhanced_results.sort(key=lambda x: (-x['similarity_score']))
             enhanced_results = enhanced_results[:10]  # Return top 10 most relevant results
 
             return enhanced_results
