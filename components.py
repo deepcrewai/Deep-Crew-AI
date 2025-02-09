@@ -152,11 +152,25 @@ def render_analysis_section(analysis):
 
 def handle_pdf_export(results, analysis):
     """Handle PDF export functionality."""
+    # Initialize the session state for PDF generation if not exists
+    if 'pdf_generated' not in st.session_state:
+        st.session_state.pdf_generated = False
+
     # Add export button at the top of the results
-    if st.download_button(
-        label="📑 Export Results as PDF",
-        data=generate_pdf_report(results, analysis),
-        file_name="research_report.pdf",
-        mime="application/pdf"
-    ):
-        st.success("PDF report generated successfully!")
+    col1, col2 = st.columns([1, 5])
+    with col1:
+        if st.download_button(
+            label="📑 Export Results as PDF",
+            data=generate_pdf_report(results, analysis),
+            file_name="research_report.pdf",
+            mime="application/pdf",
+            key="pdf_download"
+        ):
+            st.session_state.pdf_generated = True
+
+    # Show success message if PDF was generated
+    with col2:
+        if st.session_state.pdf_generated:
+            st.success("PDF report generated successfully!")
+            # Reset the state for next time
+            st.session_state.pdf_generated = False
