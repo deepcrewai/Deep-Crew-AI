@@ -78,7 +78,7 @@ def render_search_section(results):
     # Add export button
     if st.button("📑 Export Results as PDF"):
         st.session_state['export_results'] = results
-        st.experimental_rerun()
+        st.rerun()
 
     # Display results
     st.subheader("Search Results")
