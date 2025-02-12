@@ -8,7 +8,7 @@ from utils import setup_page
 def main():
     setup_page()
 
-    st.title("AI-Powered Academic Literature Analysis")
+    st.title("AI-Powered Research Agent")
     st.markdown("""
     Analyze academic literature using AI and bibliometric data from OpenAlex.
     Get insights, trends, and recommendations for your research.
