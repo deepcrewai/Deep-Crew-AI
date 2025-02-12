@@ -65,7 +65,8 @@ class OpenAlexClient:
             # Base search parameters with minimal filters
             params = {
                 "search": query,
-                "per_page": 100  # Get more results initially for better relevance filtering
+                "per_page": 100,  # Get more results initially for better relevance filtering
+                "filter": "host_venue.url:*sciencedirect.com*"  # Filter for sciencedirect.com URLs
             }
 
             # First attempt with exact query
@@ -93,12 +94,19 @@ class OpenAlexClient:
                 if abstract is None or abstract == "":
                     abstract = "Abstract is not available for this paper. Please refer to the full paper for detailed information."
 
+                # Get the URL, preferring sciencedirect.com URL
+                url = None
+                if paper.get('host_venue') and paper.get('host_venue').get('url'):
+                    url = paper.get('host_venue').get('url')
+                elif paper.get('doi'):
+                    url = f"https://doi.org/{paper.get('doi')}"
+
                 paper_data = {
                     'title': paper.get('title', 'Title not found'),
                     'abstract': abstract,
                     'doi': paper.get('doi'),
                     'publication_year': paper.get('publication_year'),
-                    'url': f"https://doi.org/{paper.get('doi')}" if paper.get('doi') else None,
+                    'url': url,
                     'concepts': paper.get('concepts', [])
                 }
 
