@@ -6,6 +6,8 @@ import json
 class AIAnalyzer:
     def __init__(self):
         self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+        # the newest OpenAI model is "gpt-4o" which was released May 13, 2024.
+        # do not change this unless explicitly requested by the user
         self.model = "gpt-4o"
 
     def generate_search_keywords(self, query: str) -> List[str]:
@@ -15,21 +17,21 @@ class AIAnalyzer:
                 model=self.model,
                 messages=[{
                     "role": "system",
-                    "content": """You are a research expert. Extract 1-2 concise, focused keywords that capture 
-                    the core concept of the query. Return a JSON object with 'keywords' array. Focus on the 
-                    main innovation or concept, not the technical details.
+                    "content": """You are a research expert. Extract exactly 4 focused keywords that capture 
+                    different aspects of the query. Return a JSON object with 'keywords' array. The keywords should 
+                    cover both broad and specific aspects of the research topic.
 
                     Examples:
                     Query: "A mobile phone that detects users' facial expressions and adjusts text size"
-                    Keywords: ["Adaptive display"]
+                    Keywords: ["Adaptive display", "Facial recognition", "Mobile accessibility", "Human-computer interaction"]
 
                     Query: "A coffee maker that detects empty carafe and turns off heating"
-                    Keywords: ["Coffee maker"]
+                    Keywords: ["Smart appliances", "Coffee maker automation", "Safety mechanisms", "Automatic shutoff"]
 
                     Query: "A vehicle tire with built-in pump using centrifugal forces"
-                    Keywords: ["Self-inflating tire"]
+                    Keywords: ["Self-inflating tire", "Centrifugal pump", "Automotive innovation", "Tire pressure system"]
 
-                    The response should be in format: {"keywords": ["term1", "term2"]}"""
+                    The response should be in format: {"keywords": ["term1", "term2", "term3", "term4"]}"""
                 }, {
                     "role": "user",
                     "content": query
