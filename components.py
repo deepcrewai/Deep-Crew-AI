@@ -163,17 +163,6 @@ def render_search_section(results):
         similarity = paper.get('similarity_score', 0)
         with st.expander(f"{paper.get('title', 'Untitled')} (Similarity: {similarity:.2f})"):
             st.write(format_citation(paper))
-
-            # Display authors with OpenAlex profiles
-            st.write("📚 Authors:")
-            for author in paper.get('authors', []):
-                col1, col2 = st.columns([3, 1])
-                with col1:
-                    st.write(f"• {author['name']} ({author['institution']})")
-                with col2:
-                    if author.get('openalex_url'):
-                        st.write(f"[OpenAlex Profile]({author['openalex_url']})")
-
             if paper.get('url'):
                 st.write(f"🔗 [View Paper]({paper['url']})")
             st.write(f"Citations: {paper.get('cited_by_count', 0)}")

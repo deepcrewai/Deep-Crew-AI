@@ -93,25 +93,13 @@ class OpenAlexClient:
                 if abstract is None or abstract == "":
                     abstract = "Abstract is not available for this paper. Please refer to the full paper for detailed information."
 
-                # Process authors information
-                authors = []
-                for author in paper.get('authorships', []):
-                    author_info = author.get('author', {})
-                    authors.append({
-                        'name': author_info.get('display_name', 'Unknown Author'),
-                        'openalex_id': author_info.get('id'),
-                        'openalex_url': author_info.get('id', '').replace('https://openalex.org/', 'https://explore.openalex.org/'),
-                        'institution': author.get('institutions', [{}])[0].get('display_name', 'Unknown Institution')
-                    })
-
                 paper_data = {
                     'title': paper.get('title', 'Title not found'),
                     'abstract': abstract,
                     'doi': paper.get('doi'),
                     'publication_year': paper.get('publication_year'),
                     'url': f"https://doi.org/{paper.get('doi')}" if paper.get('doi') else None,
-                    'concepts': paper.get('concepts', []),
-                    'authors': authors  # Add authors information
+                    'concepts': paper.get('concepts', [])
                 }
 
                 # Calculate similarity score with more weight on title matches
