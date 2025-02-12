@@ -1,24 +1,44 @@
+# AI-Powered Research Agent 🔬
+
+[![Python 3.11](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/downloads/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.32.0-FF4B4B.svg)](https://streamlit.io)
+[![OpenAI](https://img.shields.io/badge/OpenAI-API-00A36C.svg)](https://openai.com/blog/openai-api)
+
+An advanced AI-powered academic research discovery platform that transforms how researchers explore, analyze, and collaborate on scientific literature.
+
+## ✨ Features
+
+- 🔍 **Semantic Search**: Advanced search capabilities powered by OpenAI
+- 📊 **Dynamic Visualizations**: Interactive data visualizations using Plotly
+- 🌐 **Multi-Language Support**: Research discovery across multiple languages
+- 📑 **PDF Export**: Generate comprehensive research reports
+- 📈 **Trend Analysis**: Identify emerging research trends
+- 🤖 **AI Analysis**: Get AI-powered insights and recommendations
+- 🔗 **OpenAlex Integration**: Access comprehensive research database
+
+## 🚀 Prerequisites
+
+Before you begin, ensure you have:
+
+- Python 3.11 or higher installed
+- An OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
+- Git installed on your system
+- Internet connection for API access
+
+## 💻 Installation
+
+### 1. Clone the Repository
+```bash
 git clone https://github.com/yourusername/ai-powered-research-agent.git
 cd ai-powered-research-agent
 ```
 
-### 2. Set Up Python Virtual Environment (Optional)
-```bash
-# For Windows
-python -m venv venv
-.\venv\Scripts\activate
-
-# For Linux/macOS
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### 3. Install Required Python Packages
+### 2. Install Required Python Packages
 ```bash
 pip install streamlit openai plotly reportlab requests pandas trafilatura pypdf2 anthropic twilio
 ```
 
-### 4. Configure Environment Variables
+### 3. Configure Environment Variables
 1. Create a `.env` file in the project root directory:
 ```bash
 # For Windows
@@ -33,7 +53,7 @@ touch .env
 OPENAI_API_KEY=your_openai_api_key_here
 ```
 
-### 5. Configure Streamlit
+### 4. Configure Streamlit
 1. Create a `.streamlit` directory:
 ```bash
 mkdir .streamlit
@@ -47,7 +67,7 @@ address = "0.0.0.0"
 port = 5000
 ```
 
-## Usage 🖥️
+## 🖥️ Usage
 
 1. Start the application:
 ```bash
@@ -59,74 +79,43 @@ streamlit run main.py
 http://localhost:5000
 ```
 
-3. Enter your research query in the search box.
+## 📝 Features Guide
 
-4. The system will automatically:
-   - Generate AI-optimized search keywords
-   - Fetch relevant papers from OpenAlex
-   - Provide AI-powered analysis
-   - Enable PDF export of results
+### Search
+- Enter your research query in the search box
+- AI will generate optimized search keywords
+- View results with relevance scores and citations
 
-## Project Structure 📁
+### Analysis
+- Get AI-generated research summaries
+- View emerging and declining research trends
+- Identify potential research gaps
+- Assess research complexity
 
-```
-├── main.py                # Main application entry point
-├── ai_analyzer.py         # AI analysis logic
-├── api_client.py         # OpenAlex API client
-├── components.py         # UI components
-├── utils.py             # Utility functions
-└── visualizations.py    # Data visualization components
-```
+### Export
+- Generate PDF reports with analysis
+- Export visualizations and data
+- Save search results for later reference
 
-## Troubleshooting 🔧
+## 🤝 Contributing
 
-### Common Issues and Solutions
-
-1. **ImportError: No module named 'streamlit'**
-   ```bash
-   pip install streamlit
-   ```
-
-2. **ModuleNotFoundError: No module named 'openai'**
-   ```bash
-   pip install openai
-   ```
-
-3. **API Key Error**
-   - Verify `.env` file location
-   - Check API key format
-   - Ensure environment variables are properly loaded
-
-4. **Port 5000 is already in use**
-   ```bash
-   # Modify port in .streamlit/config.toml
-   port = 5001  # or any other available port
-   ```
-
-5. **PDF Generation Issues**
-   - Ensure ReportLab is installed
-   ```bash
-   pip install reportlab
-   ```
-   - Verify required font files are present
-
-### For Other Issues
-
-- Visit the GitHub Issues page
-- Share error messages and logs
-- Include system details (OS, Python version)
-
-## Contributing 🤝
-
-1. Fork the project
-2. Create a feature branch (`git checkout -b feature/NewFeature`)
-3. Commit your changes (`git commit -m 'Add new feature'`)
-4. Push to the branch (`git push origin feature/NewFeature`)
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## Updates and Maintenance 🔄
+## 📄 License
 
-1. Keep your project up to date:
-```bash
-git pull origin main
-pip install -r requirements.txt
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- OpenAI for providing the GPT-4o API
+- OpenAlex for research data access
+- Streamlit for the web framework
+- All contributors and users of this project
+
+## 📧 Contact
+
+For questions and support, please open an issue in the GitHub repository.
