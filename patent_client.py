@@ -3,6 +3,7 @@ from typing import Dict, List
 import os
 from openai import OpenAI
 import json
+import time
 
 class PatentSearchClient:
     def __init__(self):
@@ -25,21 +26,28 @@ class PatentSearchClient:
                 timeout=30
             )
 
+            print(f"Patent search response status: {response.status_code}")  # Debug log
+
             if response.status_code == 200:
                 results = response.json().get("results", [])
+                print(f"Found {len(results)} patent results")  # Debug log
+
                 formatted_results = []
                 for result in results:
-                    formatted_results.append({
-                        'patent_id': result.get('publication_number'),
-                        'title': result.get('title'),
-                        'abstract': result.get('abstract'),
-                        'filing_date': result.get('filing_date'),
+                    formatted_result = {
+                        'patent_id': result.get('publication_number', 'N/A'),
+                        'title': result.get('title', 'Untitled Patent'),
+                        'abstract': result.get('abstract', 'No abstract available'),
+                        'filing_date': result.get('filing_date', 'N/A'),
                         'inventors': ', '.join(result.get('inventors', [])),
-                        'url': f"https://patents.google.com/patent/{result.get('publication_number')}"
-                    })
+                        'url': f"https://patents.google.com/patent/{result.get('publication_number', '')}"
+                    }
+                    formatted_results.append(formatted_result)
+                    print(f"Processed patent: {formatted_result['patent_id']}")  # Debug log
+
                 return formatted_results
             else:
-                print(f"Error searching patents: {response.status_code}")
+                print(f"Error searching patents: {response.status_code}, {response.text}")
                 return []
 
         except Exception as e:
@@ -51,21 +59,24 @@ class PatentSearchClient:
         try:
             # Prepare data for analysis
             patent_data = [
-                f"Patent: {p['title']}\nAbstract: {p['abstract']}\nFiling Date: {p['filing_date']}"
+                f"Patent ID: {p['patent_id']}\nTitle: {p['title']}\nAbstract: {p['abstract']}\nFiling Date: {p['filing_date']}\nInventors: {p['inventors']}"
                 for p in patents
             ]
+
+            print("Sending patents to OpenAI for analysis...")  # Debug log
 
             # Generate analysis using OpenAI
             response = self.ai_client.chat.completions.create(
                 model=self.model,
                 messages=[{
                     "role": "system",
-                    "content": """You are a patent analysis expert. Analyze these patents and provide:
-                    1. A summary of the technology landscape
-                    2. Key technology trends
-                    3. Potential market opportunities
-                    4. Competitive analysis
-                    Return a JSON object with these sections."""
+                    "content": """As a patent analysis expert, analyze these patents and provide a JSON response with the following structure:
+                    {
+                        "summary": "A detailed overview of the technology landscape...",
+                        "trends": ["trend1", "trend2", "trend3"],
+                        "opportunities": ["opportunity1", "opportunity2", "opportunity3"],
+                        "competition": "A detailed competitive analysis..."
+                    }"""
                 }, {
                     "role": "user",
                     "content": "\n\n".join(patent_data)
@@ -74,12 +85,13 @@ class PatentSearchClient:
             )
 
             analysis = json.loads(response.choices[0].message.content)
+            print("Successfully received AI analysis")  # Debug log
             return analysis
 
         except Exception as e:
             print(f"Error in patent analysis: {str(e)}")
             return {
-                "summary": "Error generating analysis",
+                "summary": f"Error generating analysis: {str(e)}",
                 "trends": [],
                 "opportunities": [],
                 "competition": "Analysis unavailable"

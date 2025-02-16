@@ -112,50 +112,83 @@ def main():
             if search_query != st.session_state.last_query or st.session_state.patent_results is None:
                 with st.spinner("Searching patents..."):
                     patent_results = patent_client.search_patents(search_query)
-                    st.session_state.patent_results = patent_results
-
-                    # Perform AI analysis on patent results
                     if patent_results:
-                        with st.spinner("Analyzing patents..."):
+                        st.session_state.patent_results = patent_results
+                        # Perform AI analysis on patent results
+                        with st.spinner("Analyzing patents with AI..."):
                             st.session_state.patent_analysis = patent_client.analyze_patents(patent_results)
+                    else:
+                        st.warning("No patent results found. Try modifying your search terms.")
+                        st.session_state.patent_results = None
+                        st.session_state.patent_analysis = None
 
             # Display patent results
             if st.session_state.patent_results:
                 st.subheader("Patent Search Results")
+
+                # Add metrics for patent results
+                total_patents = len(st.session_state.patent_results)
+                unique_inventors = len(set([p['inventors'] for p in st.session_state.patent_results]))
+
+                col1, col2 = st.columns(2)
+                col1.metric("Total Patents Found", total_patents)
+                col2.metric("Unique Inventors", unique_inventors)
+
                 for patent in st.session_state.patent_results:
                     with st.expander(f"{patent.get('title', 'Untitled Patent')}"):
-                        st.write(f"Patent ID: {patent.get('patent_id', 'N/A')}")
-                        st.write(f"Inventors: {patent.get('inventors', 'N/A')}")
-                        st.write(f"Filing Date: {patent.get('filing_date', 'N/A')}")
-                        st.write(f"Abstract: {patent.get('abstract', 'No abstract available')}")
+                        st.write(f"📜 Patent ID: {patent.get('patent_id', 'N/A')}")
+                        st.write(f"👩‍🔬 Inventors: {patent.get('inventors', 'N/A')}")
+                        st.write(f"📅 Filing Date: {patent.get('filing_date', 'N/A')}")
+                        st.markdown(f"""
+                        **Abstract:**
+                        {patent.get('abstract', 'No abstract available')}
+                        """)
                         if patent.get('url'):
                             st.write(f"🔗 [View Patent Details]({patent['url']})")
 
-                # Display AI Analysis
+                # Display AI Analysis with better formatting
                 if st.session_state.patent_analysis:
                     st.subheader("AI Patent Analysis")
 
-                    # Technology Landscape
+                    # Technology Landscape with card-like styling
+                    st.markdown("""
+                    <style>
+                    .analysis-card {
+                        background-color: #f0f2f6;
+                        border-radius: 10px;
+                        padding: 20px;
+                        margin: 10px 0;
+                    }
+                    </style>
+                    """, unsafe_allow_html=True)
+
+                    # Summary
+                    st.markdown('<div class="analysis-card">', unsafe_allow_html=True)
                     st.write("🔬 Technology Landscape")
                     st.write(st.session_state.patent_analysis.get("summary", "Analysis not available"))
+                    st.markdown('</div>', unsafe_allow_html=True)
 
-                    # Technology Trends
+                    # Trends
+                    st.markdown('<div class="analysis-card">', unsafe_allow_html=True)
                     st.write("📈 Key Technology Trends")
                     trends = st.session_state.patent_analysis.get("trends", [])
                     for trend in trends:
                         st.write(f"• {trend}")
+                    st.markdown('</div>', unsafe_allow_html=True)
 
-                    # Market Opportunities
+                    # Opportunities
+                    st.markdown('<div class="analysis-card">', unsafe_allow_html=True)
                     st.write("💡 Potential Market Opportunities")
                     opportunities = st.session_state.patent_analysis.get("opportunities", [])
                     for opportunity in opportunities:
                         st.write(f"• {opportunity}")
+                    st.markdown('</div>', unsafe_allow_html=True)
 
-                    # Competitive Analysis
+                    # Competition
+                    st.markdown('<div class="analysis-card">', unsafe_allow_html=True)
                     st.write("🏢 Competitive Analysis")
                     st.write(st.session_state.patent_analysis.get("competition", "Analysis not available"))
-            else:
-                st.info("No patent results found. Try modifying your search terms.")
+                    st.markdown('</div>', unsafe_allow_html=True)
 
         if "Networking" in selected_stages:
             st.header("Networking Analysis")
