@@ -414,3 +414,48 @@ def render_analysis_section(analysis):
 def handle_pdf_export(results, analysis):
     """This function is now deprecated as the export functionality has been moved to render_search_section"""
     pass
+
+def render_combined_results(research_results, patent_results, combined_analysis):
+    """Render combined analysis of research and patent results."""
+    st.header("Comprehensive Analysis")
+
+    # Summary
+    st.subheader("Overview")
+    st.write(combined_analysis.get("comprehensive_summary", "No summary available"))
+
+    # Key Findings
+    st.subheader("Key Findings")
+    for finding in combined_analysis.get("key_findings", []):
+        st.markdown(f"• {finding}")
+
+    # Research-Patent Alignment
+    st.subheader("Research & Patent Alignment")
+    st.write(combined_analysis.get("research_patent_alignment", "No alignment analysis available"))
+
+    # Innovation Opportunities
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader("Innovation Opportunities")
+        for opp in combined_analysis.get("innovation_opportunities", []):
+            st.markdown(f"• {opp}")
+
+    with col2:
+        st.subheader("Market & Research Gaps")
+        for gap in combined_analysis.get("market_research_gaps", []):
+            st.markdown(f"• {gap}")
+
+    # Future Directions
+    st.subheader("Future Directions")
+    for direction in combined_analysis.get("future_directions", []):
+        st.markdown(f"• {direction}")
+
+    # Statistics
+    st.subheader("Statistics")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Research Papers", len(research_results))
+    with col2:
+        st.metric("Patents", len(patent_results))
+    with col3:
+        total_documents = len(research_results) + len(patent_results)
+        st.metric("Total Documents", total_documents)

@@ -6,9 +6,64 @@ import json
 class AIAnalyzer:
     def __init__(self):
         self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-        # the newest OpenAI model is "gpt-4o" which was released May 13, 2024.
-        # do not change this unless explicitly requested by the user
         self.model = "gpt-4o"
+
+    # ... existing methods ...
+
+    def analyze_combined_results(self, research_results: List[Dict], patent_results: List[Dict]) -> Dict:
+        """Analyze combined research and patent results for comprehensive insights."""
+        try:
+            # Prepare combined data for analysis
+            combined_data = {
+                'research_papers': [
+                    {
+                        'title': r.get('title', ''),
+                        'abstract': r.get('abstract', ''),
+                        'year': r.get('publication_year', ''),
+                        'type': 'research'
+                    } for r in research_results
+                ],
+                'patents': [
+                    {
+                        'title': p.get('title', ''),
+                        'abstract': p.get('abstract', ''),
+                        'filing_date': p.get('filing_date', ''),
+                        'type': 'patent'
+                    } for p in patent_results
+                ]
+            }
+
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=[{
+                    "role": "system",
+                    "content": """Analyze the combined research papers and patents to provide comprehensive insights.
+                    Return a JSON object with the following structure:
+                    {
+                        "comprehensive_summary": "Overall analysis of both research and patents",
+                        "key_findings": ["finding1", "finding2", ...],
+                        "research_patent_alignment": "Analysis of how research aligns with patent activity",
+                        "innovation_opportunities": ["opportunity1", "opportunity2", ...],
+                        "market_research_gaps": ["gap1", "gap2", ...],
+                        "future_directions": ["direction1", "direction2", ...]
+                    }"""
+                }, {
+                    "role": "user",
+                    "content": json.dumps(combined_data)
+                }],
+                response_format={"type": "json_object"}
+            )
+            return json.loads(response.choices[0].message.content)
+        except Exception as e:
+            print(f"Error in combined analysis: {str(e)}")
+            return {
+                "comprehensive_summary": "Error performing combined analysis",
+                "key_findings": [],
+                "research_patent_alignment": "Analysis unavailable",
+                "innovation_opportunities": [],
+                "market_research_gaps": [],
+                "future_directions": []
+            }
 
     def generate_search_keywords(self, query: str) -> List[str]:
         """Generate optimal search keywords from the user's query."""
@@ -20,17 +75,17 @@ class AIAnalyzer:
                     "content": """You are a research expert. Extract exactly 4 focused keywords that capture 
                     different aspects of the query. Return a JSON object with 'keywords' array. The keywords should 
                     cover both broad and specific aspects of the research topic.
-
+                    
                     Examples:
                     Query: "A mobile phone that detects users' facial expressions and adjusts text size"
                     Keywords: ["Adaptive display", "Facial recognition", "Mobile accessibility", "Human-computer interaction"]
-
+                    
                     Query: "A coffee maker that detects empty carafe and turns off heating"
                     Keywords: ["Smart appliances", "Coffee maker automation", "Safety mechanisms", "Automatic shutoff"]
-
+                    
                     Query: "A vehicle tire with built-in pump using centrifugal forces"
                     Keywords: ["Self-inflating tire", "Centrifugal pump", "Automotive innovation", "Tire pressure system"]
-
+                    
                     The response should be in format: {"keywords": ["term1", "term2", "term3", "term4"]}"""
                 }, {
                     "role": "user",

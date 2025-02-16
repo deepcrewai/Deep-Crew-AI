@@ -3,7 +3,13 @@ import plotly.express as px
 from api_client import OpenAlexClient
 from ai_analyzer import AIAnalyzer
 from patent_client import PatentSearchClient
-from components import render_search_section, render_analysis_section, handle_pdf_export, render_patent_results # Added import for render_patent_results
+from components import (
+    render_search_section, 
+    render_analysis_section, 
+    render_patent_results,
+    render_combined_results,
+    handle_pdf_export
+)
 from utils import setup_page
 
 def main():
@@ -34,6 +40,7 @@ def main():
         st.session_state.selected_stages = []
         st.session_state.patent_results = None
         st.session_state.patent_analysis = None
+        st.session_state.combined_analysis = None
 
     # Stage selection
     col1, col2, col3, col4, col5 = st.columns(5)
@@ -60,6 +67,11 @@ def main():
         selected_stages.append("Funding")
     if compliance:
         selected_stages.append("Compliance")
+
+    # Add Results tab if we have both research and patent results
+    if (st.session_state.search_results is not None and 
+        st.session_state.patent_results is not None):
+        selected_stages.append("Results")
 
     st.session_state.selected_stages = selected_stages
 
@@ -110,23 +122,26 @@ def main():
                     if st.session_state.patent_results:
                         render_patent_results(st.session_state.patent_results, st.session_state.patent_analysis)
 
-                        # AI Analysis
-                        if st.session_state.patent_analysis:
-                            st.subheader("AI Analysis")
+                elif selected_stages[idx] == "Results":
+                    # Generate combined analysis if not already done
+                    if (st.session_state.combined_analysis is None and 
+                        st.session_state.search_results is not None and 
+                        st.session_state.patent_results is not None):
+                        with st.spinner("🔄 Generating comprehensive analysis..."):
+                            ai_analyzer = AIAnalyzer()
+                            st.session_state.combined_analysis = ai_analyzer.analyze_combined_results(
+                                st.session_state.search_results,
+                                st.session_state.patent_results
+                            )
 
-                            st.markdown("### 🔬 Overview")
-                            st.write(st.session_state.patent_analysis.get("summary", ""))
-
-                            st.markdown("### 📈 Trends")
-                            for trend in st.session_state.patent_analysis.get("trends", []):
-                                st.markdown(f"• {trend}")
-
-                            st.markdown("### 💡 Opportunities")
-                            for opp in st.session_state.patent_analysis.get("opportunities", []):
-                                st.markdown(f"• {opp}")
-
-                            st.markdown("### 🏢 Competition")
-                            st.write(st.session_state.patent_analysis.get("competition", ""))
+                    if st.session_state.combined_analysis:
+                        render_combined_results(
+                            st.session_state.search_results,
+                            st.session_state.patent_results,
+                            st.session_state.combined_analysis
+                        )
+                    else:
+                        st.info("Please complete both Research Agent and Patent Search to view combined analysis.")
 
                 elif selected_stages[idx] == "Networking":
                     st.info("🔄 Coming Soon")
