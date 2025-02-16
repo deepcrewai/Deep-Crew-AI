@@ -21,7 +21,18 @@ class PatentSearchClient:
             )
 
             if response.status_code == 200:
-                return response.json().get("results", [])
+                results = response.json().get("results", [])
+                formatted_results = []
+                for result in results:
+                    formatted_results.append({
+                        'patent_id': result.get('publication_number'),
+                        'title': result.get('title'),
+                        'abstract': result.get('abstract'),
+                        'filing_date': result.get('filing_date'),
+                        'inventors': ', '.join(result.get('inventors', [])),
+                        'url': f"https://patents.google.com/patent/{result.get('publication_number')}"
+                    })
+                return formatted_results
             else:
                 print(f"Error searching patents: {response.status_code}")
                 return []
