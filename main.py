@@ -26,6 +26,7 @@ def main():
         st.session_state.last_query = None
         st.session_state.selected_stages = []
         st.session_state.patent_results = None
+        st.session_state.patent_analysis = None
 
     # Main search section
     search_query = st.text_input("Enter your research query")
@@ -113,6 +114,11 @@ def main():
                     patent_results = patent_client.search_patents(search_query)
                     st.session_state.patent_results = patent_results
 
+                    # Perform AI analysis on patent results
+                    if patent_results:
+                        with st.spinner("Analyzing patents..."):
+                            st.session_state.patent_analysis = patent_client.analyze_patents(patent_results)
+
             # Display patent results
             if st.session_state.patent_results:
                 st.subheader("Patent Search Results")
@@ -124,6 +130,30 @@ def main():
                         st.write(f"Abstract: {patent.get('abstract', 'No abstract available')}")
                         if patent.get('url'):
                             st.write(f"🔗 [View Patent Details]({patent['url']})")
+
+                # Display AI Analysis
+                if st.session_state.patent_analysis:
+                    st.subheader("AI Patent Analysis")
+
+                    # Technology Landscape
+                    st.write("🔬 Technology Landscape")
+                    st.write(st.session_state.patent_analysis.get("summary", "Analysis not available"))
+
+                    # Technology Trends
+                    st.write("📈 Key Technology Trends")
+                    trends = st.session_state.patent_analysis.get("trends", [])
+                    for trend in trends:
+                        st.write(f"• {trend}")
+
+                    # Market Opportunities
+                    st.write("💡 Potential Market Opportunities")
+                    opportunities = st.session_state.patent_analysis.get("opportunities", [])
+                    for opportunity in opportunities:
+                        st.write(f"• {opportunity}")
+
+                    # Competitive Analysis
+                    st.write("🏢 Competitive Analysis")
+                    st.write(st.session_state.patent_analysis.get("competition", "Analysis not available"))
             else:
                 st.info("No patent results found. Try modifying your search terms.")
 
