@@ -68,9 +68,8 @@ def main():
     if compliance:
         selected_stages.append("Compliance")
 
-    # Add Results tab if we have both research and patent results
-    if (st.session_state.search_results is not None and 
-        st.session_state.patent_results is not None):
+    # Add Results tab if any stage is selected
+    if len(selected_stages) > 0:
         selected_stages.append("Results")
 
     st.session_state.selected_stages = selected_stages
@@ -122,26 +121,44 @@ def main():
                     if st.session_state.patent_results:
                         render_patent_results(st.session_state.patent_results, st.session_state.patent_analysis)
 
+                        # AI Analysis for Patents
+                        if st.session_state.patent_analysis:
+                            st.subheader("AI Analysis")
+
+                            st.markdown("### 🔬 Overview")
+                            st.write(st.session_state.patent_analysis.get("summary", ""))
+
+                            st.markdown("### 📈 Trends")
+                            for trend in st.session_state.patent_analysis.get("trends", []):
+                                st.markdown(f"• {trend}")
+
+                            st.markdown("### 💡 Opportunities")
+                            for opp in st.session_state.patent_analysis.get("opportunities", []):
+                                st.markdown(f"• {opp}")
+
+                            st.markdown("### 🏢 Competition")
+                            st.write(st.session_state.patent_analysis.get("competition", ""))
+
                 elif selected_stages[idx] == "Results":
                     # Generate combined analysis if not already done
-                    if (st.session_state.combined_analysis is None and 
-                        st.session_state.search_results is not None and 
-                        st.session_state.patent_results is not None):
+                    if st.session_state.combined_analysis is None:
                         with st.spinner("🔄 Generating comprehensive analysis..."):
                             ai_analyzer = AIAnalyzer()
+                            research_data = st.session_state.search_results if st.session_state.search_results else []
+                            patent_data = st.session_state.patent_results if st.session_state.patent_results else []
                             st.session_state.combined_analysis = ai_analyzer.analyze_combined_results(
-                                st.session_state.search_results,
-                                st.session_state.patent_results
+                                research_data,
+                                patent_data
                             )
 
                     if st.session_state.combined_analysis:
                         render_combined_results(
-                            st.session_state.search_results,
-                            st.session_state.patent_results,
+                            st.session_state.search_results or [],
+                            st.session_state.patent_results or [],
                             st.session_state.combined_analysis
                         )
                     else:
-                        st.info("Please complete both Research Agent and Patent Search to view combined analysis.")
+                        st.info("Please perform a search in Research Agent or Patent Search to view combined analysis.")
 
                 elif selected_stages[idx] == "Networking":
                     st.info("🔄 Coming Soon")
