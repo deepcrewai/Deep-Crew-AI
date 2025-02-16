@@ -13,8 +13,15 @@ def main():
     with open(".streamlit/custom.css") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
+    # Add logo
+    st.markdown("""
+        <div class="logo-container">
+            <img src="attached_assets/deep-crew-logo.png" alt="Deep Crew Logo">
+        </div>
+    """, unsafe_allow_html=True)
+
     # Simple header
-    st.markdown('<h1 class="main-header">Deep Crew AI: Dive Deep into Discovery</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">Dive Deep into Discovery</h1>', unsafe_allow_html=True)
 
     # Search input
     search_query = st.text_input("", placeholder="Search", help="Type your research query here.")
