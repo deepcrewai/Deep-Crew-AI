@@ -3,7 +3,7 @@ import plotly.express as px
 from api_client import OpenAlexClient
 from ai_analyzer import AIAnalyzer
 from patent_client import PatentSearchClient
-from components import render_search_section, render_analysis_section, handle_pdf_export
+from components import render_search_section, render_analysis_section, handle_pdf_export, render_patent_results # Added import for render_patent_results
 from utils import setup_page
 
 def main():
@@ -108,25 +108,7 @@ def main():
                                 st.session_state.patent_analysis = None
 
                     if st.session_state.patent_results:
-                        # Patent Results
-                        col1, col2 = st.columns(2)
-                        with col1:
-                            st.metric("Patents", len(st.session_state.patent_results))
-                        with col2:
-                            st.metric("Inventors", len(set([p['inventors'] for p in st.session_state.patent_results])))
-
-                        # Display patents
-                        for patent in st.session_state.patent_results:
-                            with st.expander(f"📄 {patent.get('title', 'Untitled Patent')}"):
-                                st.markdown(f"""
-                                **ID:** {patent.get('patent_id', 'N/A')}  
-                                **Inventors:** {patent.get('inventors', 'N/A')}  
-                                **Filing Date:** {patent.get('filing_date', 'N/A')}
-
-                                {patent.get('abstract', 'No abstract available')}
-
-                                {f"[View Details]({patent['url']})" if patent.get('url') else ''}
-                                """)
+                        render_patent_results(st.session_state.patent_results, st.session_state.patent_analysis)
 
                         # AI Analysis
                         if st.session_state.patent_analysis:

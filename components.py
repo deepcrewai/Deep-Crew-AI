@@ -146,6 +146,100 @@ def generate_pdf_report(results, analysis):
     buffer.seek(0)
     return buffer
 
+def generate_patent_pdf_report(results, analysis):
+    """Generate a PDF report of patent analysis."""
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=letter)
+    page_width, page_height = letter
+
+    def add_page_footer():
+        """Add date and link to bottom of page"""
+        c.setFont("Helvetica", 10)
+        c.drawString(50, 30, datetime.now().strftime('%Y-%m-%d'))
+        c.setFillColorRGB(0, 0, 1)
+        c.drawString(page_width - 150, 30, "deep-crew.ai")
+
+    # Add logo
+    logo = ImageReader("attached_assets/deep-crew.jpg")
+    c.drawImage(logo, page_width - 250, page_height - 100, width=200, preserveAspectRatio=True)
+
+    y = page_height - 150
+
+    # Title
+    c.setFont("Helvetica-Bold", 16)
+    c.drawString(50, y, "Patent Analysis Report")
+    y -= 30
+
+    # Date
+    c.setFont("Helvetica", 10)
+    c.drawString(50, y, f"Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+    y -= 40
+
+    # Overview
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(50, y, "Overview")
+    y -= 20
+
+    c.setFont("Helvetica", 10)
+    summary = analysis.get("summary", "No summary available")
+    summary_lines = [summary[i:i+80] for i in range(0, len(summary), 80)]
+    for line in summary_lines:
+        if y < 100:
+            add_page_footer()
+            c.showPage()
+            y = page_height - 50
+        c.drawString(50, y, line)
+        y -= 15
+    y -= 20
+
+    # Patents
+    if y < 200:
+        add_page_footer()
+        c.showPage()
+        y = page_height - 50
+
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(50, y, "Patents")
+    y -= 20
+
+    for patent in results:
+        if y < 200:
+            add_page_footer()
+            c.showPage()
+            y = page_height - 50
+
+        c.setFont("Helvetica-Bold", 10)
+        title = patent.get('title', 'Untitled Patent')
+        title_lines = [title[i:i+80] for i in range(0, len(title), 80)]
+        for line in title_lines:
+            c.drawString(50, y, line)
+            y -= 15
+
+        c.setFont("Helvetica", 10)
+        c.drawString(50, y, f"ID: {patent.get('patent_id', 'N/A')}")
+        y -= 15
+        c.drawString(50, y, f"Inventors: {patent.get('inventors', 'N/A')}")
+        y -= 15
+        c.drawString(50, y, f"Filing Date: {patent.get('filing_date', 'N/A')}")
+        y -= 20
+
+        abstract = patent.get('abstract', 'No abstract available')
+        abstract_lines = [abstract[i:i+80] for i in range(0, len(abstract), 80)]
+        for line in abstract_lines:
+            if y < 100:
+                add_page_footer()
+                c.showPage()
+                y = page_height - 50
+            c.drawString(50, y, line)
+            y -= 15
+        y -= 20
+
+    # Add footer to the last page
+    add_page_footer()
+    c.save()
+    buffer.seek(0)
+    return buffer
+
 def render_search_section(results):
     """Render the search results section."""
     metrics = calculate_metrics(results)
@@ -219,6 +313,60 @@ def render_search_section(results):
                 {paper.get('abstract', 'No abstract available')}
                 </div>
                 """, unsafe_allow_html=True)
+
+
+def render_patent_results(results, analysis):
+    """Render patent search results with export functionality."""
+    # Display metrics
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("Patents", len(results))
+    with col2:
+        st.metric("Inventors", len(set([p['inventors'] for p in results])))
+
+    # Display results header with export button
+    col1, col2 = st.columns([2, 3])
+    with col1:
+        st.subheader("Patent Results")
+    with col2:
+        # Right-align the button using a container and custom CSS
+        button_container = st.container()
+        with button_container:
+            st.markdown(
+                """
+                <style>
+                div[data-testid="stDownloadButton"] {
+                    display: flex;
+                    justify-content: flex-end;
+                }
+                </style>
+                """, 
+                unsafe_allow_html=True
+            )
+            if 'patent_pdf_generated' not in st.session_state:
+                st.session_state.patent_pdf_generated = False
+
+            st.download_button(
+                label="📑 Export Results as PDF",
+                data=generate_patent_pdf_report(results, analysis),
+                file_name="patent_report.pdf",
+                mime="application/pdf",
+                key="patent_pdf_download"
+            )
+            st.session_state.patent_pdf_generated = False
+
+    # Display patents
+    for patent in results:
+        with st.expander(f"📄 {patent.get('title', 'Untitled Patent')}"):
+            st.markdown(f"""
+            **ID:** {patent.get('patent_id', 'N/A')}  
+            **Inventors:** {patent.get('inventors', 'N/A')}  
+            **Filing Date:** {patent.get('filing_date', 'N/A')}
+
+            {patent.get('abstract', 'No abstract available')}
+
+            {f"[View Details]({patent['url']})" if patent.get('url') else ''}
+            """)
 
 def render_analysis_section(analysis):
     """Render the AI analysis section."""
