@@ -157,8 +157,28 @@ def render_search_section(results):
     col3.metric("Average Year", metrics["avg_year"])
     col4.metric("Average Citations", metrics["avg_citations"])
 
+    # Display results header with export button
+    col1, col2 = st.columns([2, 3])
+    with col1:
+        st.subheader("Search Results")
+    with col2:
+        # Initialize the session state for PDF generation if not exists
+        if 'pdf_generated' not in st.session_state:
+            st.session_state.pdf_generated = False
+
+        if st.download_button(
+            label="📑 Export Results as PDF",
+            data=generate_pdf_report(results, st.session_state.analysis),
+            file_name="research_report.pdf",
+            mime="application/pdf",
+            key="pdf_download"
+        ):
+            st.session_state.pdf_generated = True
+            st.success("PDF report generated successfully!")
+            # Reset the state for next time
+            st.session_state.pdf_generated = False
+
     # Display results
-    st.subheader("Search Results")
     for paper in results:
         similarity = paper.get('similarity_score', 0)
         with st.expander(f"{paper.get('title', 'Untitled')} (Similarity: {similarity:.2f})"):
@@ -233,26 +253,5 @@ def render_analysis_section(analysis):
     st.write(complexity.get("explanation", "No explanation available"))
 
 def handle_pdf_export(results, analysis):
-    """Handle PDF export functionality."""
-    # Initialize the session state for PDF generation if not exists
-    if 'pdf_generated' not in st.session_state:
-        st.session_state.pdf_generated = False
-
-    # Add export button at the top of the results
-    col1, col2 = st.columns([1, 5])
-    with col1:
-        if st.download_button(
-            label="📑 Export Results as PDF",
-            data=generate_pdf_report(results, analysis),
-            file_name="research_report.pdf",
-            mime="application/pdf",
-            key="pdf_download"
-        ):
-            st.session_state.pdf_generated = True
-
-    # Show success message if PDF was generated
-    with col2:
-        if st.session_state.pdf_generated:
-            st.success("PDF report generated successfully!")
-            # Reset the state for next time
-            st.session_state.pdf_generated = False
+    """This function is now deprecated as the export functionality has been moved to render_search_section"""
+    pass

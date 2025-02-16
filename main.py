@@ -90,7 +90,6 @@ def main():
 
                     if st.session_state.search_results:
                         render_search_section(st.session_state.search_results)
-                        handle_pdf_export(st.session_state.search_results, st.session_state.analysis)
                         render_analysis_section(st.session_state.analysis)
 
                 elif selected_stages[idx] == "Patent Search":
