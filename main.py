@@ -14,10 +14,10 @@ def main():
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
     # Simple header
-    st.markdown('<h1 class="main-header">Research Pipeline System</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">Deep Crew AI: Dive Deep into Discovery</h1>', unsafe_allow_html=True)
 
     # Search input
-    search_query = st.text_input("", placeholder="Enter your research query", help="Type your research query here")
+    search_query = st.text_input("", placeholder="Search", help="Type your research query here.")
 
     # Initialize session state
     if 'search_results' not in st.session_state:
@@ -63,9 +63,9 @@ def main():
             ai_analyzer = AIAnalyzer()
 
             if search_query != st.session_state.last_query:
-                with st.spinner("🔍 Analyzing query..."):
+                with st.spinner("Analizing"):
                     keywords = ai_analyzer.generate_search_keywords(search_query)
-                    st.markdown("🎯 **Keywords:** " + ", ".join(keywords))
+                    st.markdown("Researching...")
                     results = openalex_client.search(query=search_query, keywords=keywords)
 
                     if results:
