@@ -9,11 +9,10 @@ maxMessageSize = 200
 runOnSave = true
 
 [theme]
-primaryColor = "#0066FF"
-backgroundColor = "#1E1E1E"
-secondaryBackgroundColor = "#252525"
-textColor = "#FFFFFF"
-font = "Inter"
+primaryColor = "#1f77b4"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f0f2f6"
+textColor = "#262730"
 
 [browser]
 serverAddress = "0.0.0.0"
