@@ -119,7 +119,7 @@ class OpenAlexClient:
 
             # Sort only by similarity score
             enhanced_results.sort(key=lambda x: (-x['similarity_score']))
-            enhanced_results = enhanced_results[:10]  # Return top 10 most relevant results
+            enhanced_results = enhanced_results[:50]  # Return top 50 most relevant results
 
             return enhanced_results
 
