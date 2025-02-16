@@ -2,6 +2,7 @@ import streamlit as st
 import plotly.express as px
 from api_client import OpenAlexClient
 from ai_analyzer import AIAnalyzer
+from patent_client import PatentSearchClient
 from components import render_search_section, render_analysis_section, handle_pdf_export
 from utils import setup_page
 
@@ -24,6 +25,7 @@ def main():
         st.session_state.analysis = None
         st.session_state.last_query = None
         st.session_state.selected_stages = []
+        st.session_state.patent_results = None
 
     # Main search section
     search_query = st.text_input("Enter your research query")
@@ -101,8 +103,29 @@ def main():
 
         if "Patent Search" in selected_stages:
             st.header("Patent Search Analysis")
-            st.write("Connecting to Patent Search Genius...")
-            # Patent Search integration will be added here
+
+            # Initialize Patent Search client
+            patent_client = PatentSearchClient()
+
+            # Only perform patent search if it's a new query
+            if search_query != st.session_state.last_query or st.session_state.patent_results is None:
+                with st.spinner("Searching patents..."):
+                    patent_results = patent_client.search_patents(search_query)
+                    st.session_state.patent_results = patent_results
+
+            # Display patent results
+            if st.session_state.patent_results:
+                st.subheader("Patent Search Results")
+                for patent in st.session_state.patent_results:
+                    with st.expander(f"{patent.get('title', 'Untitled Patent')}"):
+                        st.write(f"Patent ID: {patent.get('patent_id', 'N/A')}")
+                        st.write(f"Inventors: {patent.get('inventors', 'N/A')}")
+                        st.write(f"Filing Date: {patent.get('filing_date', 'N/A')}")
+                        st.write(f"Abstract: {patent.get('abstract', 'No abstract available')}")
+                        if patent.get('url'):
+                            st.write(f"🔗 [View Patent Details]({patent['url']})")
+            else:
+                st.info("No patent results found. Try modifying your search terms.")
 
         if "Networking" in selected_stages:
             st.header("Networking Analysis")
