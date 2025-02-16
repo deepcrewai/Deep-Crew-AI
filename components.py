@@ -162,20 +162,31 @@ def render_search_section(results):
     with col1:
         st.subheader("Search Results")
     with col2:
-        # Initialize the session state for PDF generation if not exists
-        if 'pdf_generated' not in st.session_state:
-            st.session_state.pdf_generated = False
+        # Right-align the button using a container and custom CSS
+        button_container = st.container()
+        with button_container:
+            st.markdown(
+                """
+                <style>
+                div[data-testid="stDownloadButton"] {
+                    display: flex;
+                    justify-content: flex-end;
+                }
+                </style>
+                """, 
+                unsafe_allow_html=True
+            )
+            # Initialize the session state for PDF generation if not exists
+            if 'pdf_generated' not in st.session_state:
+                st.session_state.pdf_generated = False
 
-        if st.download_button(
-            label="📑 Export Results as PDF",
-            data=generate_pdf_report(results, st.session_state.analysis),
-            file_name="research_report.pdf",
-            mime="application/pdf",
-            key="pdf_download"
-        ):
-            st.session_state.pdf_generated = True
-            st.success("PDF report generated successfully!")
-            # Reset the state for next time
+            st.download_button(
+                label="📑 Export Results as PDF",
+                data=generate_pdf_report(results, st.session_state.analysis),
+                file_name="research_report.pdf",
+                mime="application/pdf",
+                key="pdf_download"
+            )
             st.session_state.pdf_generated = False
 
     # Display results
