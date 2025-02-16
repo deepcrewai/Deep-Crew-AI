@@ -1,0 +1,84 @@
+PQAI API Detaylı Endpoint Dokümantasyonu:
+
+Base URL: https://api.projectpq.ai
+API Key: 1afab331b39299fbe63c045eae037b73
+
+Patent Arama Endpoint'i:
+
+URL: /search/102/
+Method: GET
+Parametreler:
+q: Arama sorgusu (string, zorunlu)
+n: Sayfa başına sonuç sayısı (int, varsayılan: 10)
+type: Sonuç tipi (string, varsayılan: "patent")
+after: Belirli bir tarihten sonraki sonuçlar (format: YYYY-MM-DD)
+token: API anahtarı (string, zorunlu)
+Örnek Response:
+{
+"results": [...],
+"total": integer
+}
+Patent Detayları Endpoint'i:
+
+URL: /patents/{patent_id}
+Method: GET
+Parametreler:
+token: API anahtarı (string, zorunlu)
+Response içeriği:
+{
+"publication_number": string,
+"title": string,
+"abstract": string,
+"filing_date": string,
+"publication_date": string,
+"assignee": string,
+"inventors": array,
+"cpcs": array
+}
+Patent Çizimleri Endpoint'i:
+
+URL: /patents/{patent_id}/drawings
+Method: GET
+Parametreler: Yok
+Çizim görüntüsü URL'i: /patents/{patent_id}/drawings/{drawing_number}
+Opsiyonel parametre:
+w: Görüntü genişliği (pixel)
+Thumbnail Endpoint'i:
+
+URL: /patents/{patent_id}/thumbnails
+Method: GET
+Thumbnail görüntüsü URL'i: /patents/{patent_id}/thumbnails/{thumbnail_number}
+Opsiyonel parametre:
+w: Thumbnail genişliği (pixel)
+CPC Sınıflandırma Endpoint'i:
+
+URL: /patents/{patent_id}/classification/cpcs
+Method: GET
+Parametreler:
+token: API anahtarı (string, zorunlu)
+CPC Öneri Endpoint'i:
+
+URL: /suggest/cpcs
+Method: GET
+Parametreler:
+text: Öneri için metin (string, zorunlu)
+token: API anahtarı (string, zorunlu)
+Hata Yönetimi:
+
+Tüm endpoint'ler hata durumunda HTTP hata kodları döndürür
+Başarısız isteklerde response formatı:
+{
+"error": string,
+"message": string
+}
+Rate Limiting:
+
+API çağrıları için rate limiting bilgisi response header'larında bulunur
+Aşırı istek durumunda 429 (Too Many Requests) hatası döner
+Önemli Notlar:
+
+Tüm isteklerde API anahtarı (token) zorunludur
+Tarih formatı: YYYY-MM-DD
+Response'lar JSON formatındadır
+Tüm endpoint'ler HTTPS protokolünü kullanır
+Cross-Origin Resource Sharing (CORS) desteklenir
