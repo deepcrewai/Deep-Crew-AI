@@ -16,7 +16,7 @@ def main():
     # Add logo
     st.markdown("""
         <div class="logo-container">
-            <img src="deep-crew.jpg" alt="Deep Crew Logo">
+            <img src="attached_assets/deep-crew-logo.png" alt="Deep Crew Logo">
         </div>
     """, unsafe_allow_html=True)
 
