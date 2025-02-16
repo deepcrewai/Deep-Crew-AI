@@ -8,19 +8,19 @@ class AIAnalyzer:
         self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
         self.model = "gpt-4o"
 
-    # ... existing methods ...
-
     def analyze_combined_results(self, research_results: List[Dict], patent_results: List[Dict]) -> Dict:
-        """Analyze combined research and patent results for comprehensive insights."""
+        """Analyze combined research and patent results for comprehensive insights with enhanced detail."""
         try:
-            # Prepare combined data for analysis
+            # Prepare enhanced combined data for analysis
             combined_data = {
                 'research_papers': [
                     {
                         'title': r.get('title', ''),
                         'abstract': r.get('abstract', ''),
                         'year': r.get('publication_year', ''),
-                        'type': 'research'
+                        'type': 'research',
+                        'concepts': r.get('concepts', []),
+                        'citations': r.get('cited_by_count', 0)
                     } for r in research_results
                 ],
                 'patents': [
@@ -28,7 +28,9 @@ class AIAnalyzer:
                         'title': p.get('title', ''),
                         'abstract': p.get('abstract', ''),
                         'filing_date': p.get('filing_date', ''),
-                        'type': 'patent'
+                        'type': 'patent',
+                        'inventors': p.get('inventors', ''),
+                        'patent_id': p.get('patent_id', '')
                     } for p in patent_results
                 ]
             }
@@ -37,15 +39,48 @@ class AIAnalyzer:
                 model=self.model,
                 messages=[{
                     "role": "system",
-                    "content": """Analyze the combined research papers and patents to provide comprehensive insights.
-                    Return a JSON object with the following structure:
+                    "content": """As an expert research analyst, provide a comprehensive analysis of the research papers and patents.
+                    Include detailed insights, recommendations, and future predictions. Return a JSON object with the following structure:
                     {
-                        "comprehensive_summary": "Overall analysis of both research and patents",
-                        "key_findings": ["finding1", "finding2", ...],
-                        "research_patent_alignment": "Analysis of how research aligns with patent activity",
-                        "innovation_opportunities": ["opportunity1", "opportunity2", ...],
-                        "market_research_gaps": ["gap1", "gap2", ...],
-                        "future_directions": ["direction1", "direction2", ...]
+                        "comprehensive_summary": "Detailed overview analyzing both research papers and patents, including key themes and overall direction of the field",
+                        "key_findings": [
+                            {"finding": "description", "impact_score": 1-10, "evidence": "supporting evidence"}
+                        ],
+                        "research_patent_alignment": {
+                            "overview": "Detailed analysis of how research aligns with patent activity",
+                            "gaps": ["specific gaps between research and patents"],
+                            "opportunities": ["specific opportunities based on gaps"]
+                        },
+                        "innovation_opportunities": [
+                            {"opportunity": "description", "potential_impact": "high/medium/low", "implementation_timeline": "short/medium/long", "required_resources": "description"}
+                        ],
+                        "market_research_gaps": [
+                            {"gap": "description", "market_potential": 1-10, "recommended_approach": "description"}
+                        ],
+                        "technology_assessment": {
+                            "maturity_level": "description",
+                            "readiness_score": 1-10,
+                            "development_stages": ["stage descriptions"]
+                        },
+                        "risk_analysis": {
+                            "technical_risks": ["risk descriptions"],
+                            "market_risks": ["risk descriptions"],
+                            "mitigation_strategies": ["strategy descriptions"]
+                        },
+                        "investment_recommendations": [
+                            {"area": "description", "potential_roi": "high/medium/low", "timeframe": "description", "required_investment": "estimation"}
+                        ],
+                        "future_directions": [
+                            {"direction": "description", "probability": 1-10, "impact": "description", "timeline": "short/medium/long"}
+                        ],
+                        "collaboration_opportunities": [
+                            {"type": "description", "potential_partners": ["suggestions"], "expected_benefits": ["benefits"]}
+                        ],
+                        "industry_implications": {
+                            "affected_sectors": ["sector names"],
+                            "impact_analysis": ["detailed impact descriptions"],
+                            "adaptation_strategies": ["strategy descriptions"]
+                        }
                     }"""
                 }, {
                     "role": "user",
@@ -59,10 +94,15 @@ class AIAnalyzer:
             return {
                 "comprehensive_summary": "Error performing combined analysis",
                 "key_findings": [],
-                "research_patent_alignment": "Analysis unavailable",
+                "research_patent_alignment": {"overview": "Analysis unavailable", "gaps": [], "opportunities": []},
                 "innovation_opportunities": [],
                 "market_research_gaps": [],
-                "future_directions": []
+                "technology_assessment": {"maturity_level": "Unknown", "readiness_score": 0, "development_stages": []},
+                "risk_analysis": {"technical_risks": [], "market_risks": [], "mitigation_strategies": []},
+                "investment_recommendations": [],
+                "future_directions": [],
+                "collaboration_opportunities": [],
+                "industry_implications": {"affected_sectors": [], "impact_analysis": [], "adaptation_strategies": []}
             }
 
     def generate_search_keywords(self, query: str) -> List[str]:
@@ -98,7 +138,6 @@ class AIAnalyzer:
         except Exception as e:
             print(f"Error generating keywords: {e}")
             return [query]  # Fallback to original query
-
     def analyze_results(self, results: List[Dict]) -> Dict:
         """Analyze search results using AI."""
         analysis = {

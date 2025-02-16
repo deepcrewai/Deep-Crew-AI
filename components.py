@@ -416,41 +416,115 @@ def handle_pdf_export(results, analysis):
     pass
 
 def render_combined_results(research_results, patent_results, combined_analysis):
-    """Render combined analysis of research and patent results."""
+    """Render enhanced combined analysis of research and patent results."""
     st.header("Comprehensive Analysis")
 
     # Summary
     st.subheader("Overview")
     st.write(combined_analysis.get("comprehensive_summary", "No summary available"))
 
-    # Key Findings
+    # Key Findings with Impact Scores
     st.subheader("Key Findings")
-    for finding in combined_analysis.get("key_findings", []):
-        st.markdown(f"• {finding}")
+    findings = combined_analysis.get("key_findings", [])
+    for finding in findings:
+        with st.expander(f"🔍 Finding (Impact Score: {finding.get('impact_score', 'N/A')}/10)"):
+            st.write(finding.get('finding', ''))
+            st.write("**Evidence:**", finding.get('evidence', ''))
 
     # Research-Patent Alignment
     st.subheader("Research & Patent Alignment")
-    st.write(combined_analysis.get("research_patent_alignment", "No alignment analysis available"))
+    alignment = combined_analysis.get("research_patent_alignment", {})
+    st.write(alignment.get("overview", "No alignment analysis available"))
 
-    # Innovation Opportunities
     col1, col2 = st.columns(2)
     with col1:
-        st.subheader("Innovation Opportunities")
-        for opp in combined_analysis.get("innovation_opportunities", []):
+        st.write("**Gaps:**")
+        for gap in alignment.get("gaps", []):
+            st.markdown(f"• {gap}")
+    with col2:
+        st.write("**Opportunities:**")
+        for opp in alignment.get("opportunities", []):
             st.markdown(f"• {opp}")
 
+    # Technology Assessment
+    st.subheader("Technology Assessment")
+    tech_assessment = combined_analysis.get("technology_assessment", {})
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("Technology Readiness", f"{tech_assessment.get('readiness_score', 0)}/10")
+        st.write("**Maturity Level:**", tech_assessment.get("maturity_level", "Unknown"))
     with col2:
-        st.subheader("Market & Research Gaps")
-        for gap in combined_analysis.get("market_research_gaps", []):
-            st.markdown(f"• {gap}")
+        st.write("**Development Stages:**")
+        for stage in tech_assessment.get("development_stages", []):
+            st.markdown(f"• {stage}")
+
+    # Innovation Opportunities
+    st.subheader("Innovation Opportunities")
+    for opp in combined_analysis.get("innovation_opportunities", []):
+        with st.expander(f"💡 {opp.get('opportunity', 'Opportunity')} ({opp.get('potential_impact', 'N/A')} impact)"):
+            st.write(f"**Implementation Timeline:** {opp.get('implementation_timeline', 'N/A')}")
+            st.write(f"**Required Resources:** {opp.get('required_resources', 'N/A')}")
+
+    # Risk Analysis
+    st.subheader("Risk Analysis")
+    risks = combined_analysis.get("risk_analysis", {})
+    tab1, tab2, tab3 = st.tabs(["Technical Risks", "Market Risks", "Mitigation Strategies"])
+
+    with tab1:
+        for risk in risks.get("technical_risks", []):
+            st.markdown(f"• {risk}")
+    with tab2:
+        for risk in risks.get("market_risks", []):
+            st.markdown(f"• {risk}")
+    with tab3:
+        for strategy in risks.get("mitigation_strategies", []):
+            st.markdown(f"• {strategy}")
+
+    # Investment Recommendations
+    st.subheader("Investment Recommendations")
+    for rec in combined_analysis.get("investment_recommendations", []):
+        with st.expander(f"💰 {rec.get('area', 'Investment Area')} (ROI: {rec.get('potential_roi', 'N/A')})"):
+            st.write(f"**Timeframe:** {rec.get('timeframe', 'N/A')}")
+            st.write(f"**Required Investment:** {rec.get('required_investment', 'N/A')}")
 
     # Future Directions
     st.subheader("Future Directions")
     for direction in combined_analysis.get("future_directions", []):
-        st.markdown(f"• {direction}")
+        with st.expander(f"🔮 {direction.get('direction', 'Direction')} (Probability: {direction.get('probability', 'N/A')}/10)"):
+            st.write(f"**Impact:** {direction.get('impact', 'N/A')}")
+            st.write(f"**Timeline:** {direction.get('timeline', 'N/A')}")
+
+    # Collaboration Opportunities
+    st.subheader("Collaboration Opportunities")
+    for collab in combined_analysis.get("collaboration_opportunities", []):
+        with st.expander(f"🤝 {collab.get('type', 'Collaboration')}"):
+            st.write("**Potential Partners:**")
+            for partner in collab.get("potential_partners", []):
+                st.markdown(f"• {partner}")
+            st.write("**Expected Benefits:**")
+            for benefit in collab.get("expected_benefits", []):
+                st.markdown(f"• {benefit}")
+
+    # Industry Implications
+    st.subheader("Industry Implications")
+    implications = combined_analysis.get("industry_implications", {})
+
+    st.write("**Affected Sectors:**")
+    cols = st.columns(3)
+    sectors = implications.get("affected_sectors", [])
+    for i, sector in enumerate(sectors):
+        cols[i % 3].markdown(f"• {sector}")
+
+    st.write("**Impact Analysis:**")
+    for impact in implications.get("impact_analysis", []):
+        st.markdown(f"• {impact}")
+
+    st.write("**Adaptation Strategies:**")
+    for strategy in implications.get("adaptation_strategies", []):
+        st.markdown(f"• {strategy}")
 
     # Statistics
-    st.subheader("Statistics")
+    st.subheader("Document Statistics")
     col1, col2, col3 = st.columns(3)
     with col1:
         st.metric("Research Papers", len(research_results))
