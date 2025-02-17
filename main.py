@@ -100,32 +100,7 @@ def main():
                                 st.session_state.analysis = None
 
                     if st.session_state.search_results:
-                        # Sort results by similarity score
-                        sorted_results = sorted(
-                            st.session_state.search_results,
-                            key=lambda x: x.get('similarity_score', 0),
-                            reverse=True
-                        )
-                        # Take top results
-                        top_results = sorted_results[:10]  # Show top 10 most similar results
-
-                        st.markdown("### 🎯 Most Relevant Research Papers")
-                        for result in top_results:
-                            similarity_score = result.get('similarity_score', 0)
-                            st.markdown(f"""
-                            ---
-                            #### 📄 {result.get('title', 'Untitled')}
-                            **Similarity Score:** {similarity_score:.2f}
-
-                            **Authors:** {', '.join(result.get('authors', []))}
-
-                            **Abstract:** {result.get('abstract', 'No abstract available')}
-
-                            **Year:** {result.get('publication_year', 'N/A')}
-
-                            **DOI:** {result.get('doi', 'No DOI available')}
-                            """)
-
+                        render_search_section(st.session_state.search_results)
                         render_analysis_section(st.session_state.analysis)
 
                 elif selected_stages[idx] == "Patent Search":
