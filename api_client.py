@@ -113,13 +113,17 @@ class OpenAlexClient:
                     max_abstract_sim = max(abstract_similarities) if abstract_similarities else 0.0
                     paper_data['similarity_score'] = (0.7 * max_title_sim) + (0.3 * max_abstract_sim)
                 else:
-                    paper_data['similarity_score'] = 0.0
+                    # If no keywords provided, calculate similarity with original query
+                    title_sim = self._calculate_similarity(paper_data['title'], query)
+                    abstract_sim = self._calculate_similarity(paper_data['abstract'], query)
+                    paper_data['similarity_score'] = (0.7 * title_sim) + (0.3 * abstract_sim)
 
-                enhanced_results.append(paper_data)
+                # Only include results with similarity score >= 1.0
+                if paper_data['similarity_score'] >= 1.0:
+                    enhanced_results.append(paper_data)
 
-            # Sort only by similarity score
+            # Sort by similarity score
             enhanced_results.sort(key=lambda x: (-x['similarity_score']))
-            enhanced_results = enhanced_results[:50]  # Return top 50 most relevant results
 
             return enhanced_results
 
