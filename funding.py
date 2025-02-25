@@ -166,22 +166,57 @@ class FundingAgent:
     def generate_opportunity_heatmap(self, opportunities: List[Dict]) -> None:
         """Generate a heatmap visualization of funding opportunities."""
         try:
-            # Convert opportunities to DataFrame for visualization
-            df = pd.DataFrame(opportunities)
-            
-            # Create a heatmap using plotly
+            # Create a summary of opportunities by potential and timeline
+            summary_data = {
+                "potential": [],
+                "timeline": [],
+                "count": []
+            }
+
+            for opp in opportunities:
+                potential = opp.get("potential", "Unknown")
+                timeline = opp.get("timeline", "Unknown")
+
+                # Find if this combination already exists
+                found = False
+                for i in range(len(summary_data["potential"])):
+                    if summary_data["potential"][i] == potential and summary_data["timeline"][i] == timeline:
+                        summary_data["count"][i] += 1
+                        found = True
+                        break
+
+                if not found:
+                    summary_data["potential"].append(potential)
+                    summary_data["timeline"].append(timeline)
+                    summary_data["count"].append(1)
+
+            # Convert to DataFrame
+            df = pd.DataFrame(summary_data)
+
+            # Create heatmap
             fig = px.density_heatmap(
                 df,
-                x="region",
-                y="amount",
-                title="Funding Opportunity Heatmap",
-                labels={"region": "Region", "amount": "Funding Amount"},
-                color_continuous_scale="Viridis"
+                x="timeline",
+                y="potential",
+                z="count",
+                title="Opportunity Distribution by Potential and Timeline",
+                labels={
+                    "timeline": "Timeline",
+                    "potential": "Potential Impact",
+                    "count": "Number of Opportunities"
+                }
             )
-            
+
+            # Customize layout
+            fig.update_layout(
+                xaxis_title="Timeline",
+                yaxis_title="Potential Impact",
+                coloraxis_colorbar_title="Count"
+            )
+
             # Display the heatmap
             st.plotly_chart(fig)
-            
+
         except Exception as e:
             st.error(f"Error generating heatmap: {str(e)}")
 
