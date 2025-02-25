@@ -76,6 +76,11 @@ def main():
     st.session_state.selected_stages = selected_stages
 
     if search_query:
+        # Check if any stages are selected
+        if not selected_stages:
+            st.warning("Please select at least one research stage to proceed.")
+            return
+
         # Create tabs for selected stages
         tabs = st.tabs(selected_stages)
 
@@ -167,6 +172,8 @@ def main():
                     render_funding_section(search_query)
                 elif selected_stages[idx] == "Compliance":
                     st.info("✓ Coming Soon")
+    else:
+        st.info("Enter a search query to begin your research journey.")
 
 if __name__ == "__main__":
     main()
