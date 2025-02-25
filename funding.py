@@ -65,10 +65,10 @@ class FundingAgent:
                     Return a JSON object with the following structure:
                     {
                         "trending_areas": [
-                            {"area": "area name", "growth_rate": "percentage", "funding_volume": "amount"}
+                            {"area": "area name", "growth_rate": 15.5, "funding_volume": 1000000}
                         ],
                         "top_funders": [
-                            {"name": "funder name", "focus_areas": ["area1", "area2"], "typical_amount": "amount range", "success_rate": "percentage"}
+                            {"name": "funder name", "focus_areas": ["area1", "area2"], "typical_amount": "amount range", "success_rate": 85}
                         ],
                         "emerging_opportunities": [
                             {"opportunity": "description", "potential": "High/Medium/Low", "timeline": "Short/Medium/Long"}
@@ -79,8 +79,8 @@ class FundingAgent:
                             "monthly_distribution": {"January": 10, "February": 15}
                         },
                         "sector_analysis": {
-                            "market_size": "total market size",
-                            "growth_rate": "annual growth rate",
+                            "market_size": "$500B",
+                            "growth_rate": "15%",
                             "key_players": ["player1", "player2"],
                             "investment_distribution": {
                                 "Research": 30,
@@ -95,19 +95,23 @@ class FundingAgent:
                             }
                         },
                         "success_factors": ["factor1", "factor2"]
-                    }"""
+                    }
+                    Note: growth_rate should be a float number (e.g. 15.5 for 15.5%)
+                    funding_volume should be an integer representing the amount in dollars
+                    success_rate should be an integer percentage (e.g. 85 for 85%)
+                    All numerical values in distributions should be integers"""
                 }, {
                     "role": "user",
                     "content": research_area
                 }],
                 response_format={"type": "json_object"}
             )
-
+            
             return json.loads(response.choices[0].message.content)
         except Exception as e:
             print(f"Error analyzing funding trends: {str(e)}")
             return {}
-
+    
     def get_regional_insights(self, region: str) -> Dict:
         """Get funding insights for a specific region."""
         try:
@@ -240,21 +244,34 @@ def render_funding_section(research_query: str):
                     st.markdown("#### 🚀 Trending Areas")
                     trending_areas = trends.get("trending_areas", [])
                     if trending_areas:
+                        # Convert data to proper numeric types
+                        for area in trending_areas:
+                            try:
+                                # Ensure growth_rate and funding_volume are numeric
+                                area['growth_rate'] = float(str(area['growth_rate']).replace('%', ''))
+                                area['funding_volume'] = float(str(area['funding_volume']).replace('$', '').replace(',', ''))
+                            except (ValueError, TypeError) as e:
+                                print(f"Error converting trending area values: {e}")
+                                continue
+
                         df_trending = pd.DataFrame(trending_areas)
-                        fig_trending = px.scatter(
-                            df_trending,
-                            x="growth_rate",
-                            y="funding_volume",
-                            size="funding_volume",
-                            text="area",
-                            title="Trending Research Areas",
-                            labels={
-                                "growth_rate": "Growth Rate",
-                                "funding_volume": "Funding Volume",
-                                "area": "Research Area"
-                            }
-                        )
-                        st.plotly_chart(fig_trending)
+                        if not df_trending.empty:
+                            fig_trending = px.scatter(
+                                df_trending,
+                                x="growth_rate",
+                                y="funding_volume",
+                                size=[1] * len(df_trending),  # Use constant size instead
+                                text="area",
+                                title="Trending Research Areas",
+                                labels={
+                                    "growth_rate": "Growth Rate (%)",
+                                    "funding_volume": "Funding Volume ($)",
+                                    "area": "Research Area"
+                                }
+                            )
+                            st.plotly_chart(fig_trending)
+                        else:
+                            st.warning("No valid trending areas data available for visualization")
 
                     # Funding Cycles Line Chart
                     st.markdown("#### 📅 Funding Cycles")
