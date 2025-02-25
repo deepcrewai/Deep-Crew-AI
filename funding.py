@@ -314,7 +314,17 @@ def render_funding_section(research_query: str):
     st.markdown("## 💰 Funding Analysis")
 
     # Region selection
-    regions = ["North America", "Europe", "Asia"]
+    regions = [
+        "Global",
+        "North America",
+        "Europe",
+        "Asia",
+        "Africa",
+        "South America",
+        "Oceania",
+        "Middle East",
+        "Southeast Asia"
+    ]
     selected_region = st.selectbox("Select Region", regions)
 
     # Main tabs
