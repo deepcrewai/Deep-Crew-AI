@@ -69,63 +69,73 @@ def main():
 
     with col1:
         is_research_selected = st.session_state.selected_icons.get('research', False)
-        st.markdown(f"""
-            <div class="icon-card{' selected' if is_research_selected else ''}">
-                <i class="fas fa-search"></i>
-                <span>Research</span>
-            </div>
-        """, unsafe_allow_html=True)
-        if st.button("", key="research_btn"):
-            st.session_state.selected_icons['research'] = not is_research_selected
-            st.experimental_rerun()
+        container = st.container()
+        with container:
+            st.markdown(f"""
+                <div class="icon-card{' selected' if is_research_selected else ''}">
+                    <i class="fas fa-search"></i>
+                    <span>Research</span>
+                </div>
+            """, unsafe_allow_html=True)
+            if st.button("Research", key="research_btn", help="Select Research stage"):
+                st.session_state.selected_icons['research'] = not is_research_selected
+                st.experimental_rerun()
 
     with col2:
         is_patents_selected = st.session_state.selected_icons.get('patents', False)
-        st.markdown(f"""
-            <div class="icon-card{' selected' if is_patents_selected else ''}">
-                <i class="fas fa-file-contract"></i>
-                <span>Patents</span>
-            </div>
-        """, unsafe_allow_html=True)
-        if st.button("", key="patents_btn"):
-            st.session_state.selected_icons['patents'] = not is_patents_selected
-            st.experimental_rerun()
+        container = st.container()
+        with container:
+            st.markdown(f"""
+                <div class="icon-card{' selected' if is_patents_selected else ''}">
+                    <i class="fas fa-file-contract"></i>
+                    <span>Patents</span>
+                </div>
+            """, unsafe_allow_html=True)
+            if st.button("Patents", key="patents_btn", help="Select Patents stage"):
+                st.session_state.selected_icons['patents'] = not is_patents_selected
+                st.experimental_rerun()
 
     with col3:
         is_funding_selected = st.session_state.selected_icons.get('funding', False)
-        st.markdown(f"""
-            <div class="icon-card{' selected' if is_funding_selected else ''}">
-                <i class="fas fa-hand-holding-usd"></i>
-                <span>Funding</span>
-            </div>
-        """, unsafe_allow_html=True)
-        if st.button("", key="funding_btn"):
-            st.session_state.selected_icons['funding'] = not is_funding_selected
-            st.experimental_rerun()
+        container = st.container()
+        with container:
+            st.markdown(f"""
+                <div class="icon-card{' selected' if is_funding_selected else ''}">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <span>Funding</span>
+                </div>
+            """, unsafe_allow_html=True)
+            if st.button("Funding", key="funding_btn", help="Select Funding stage"):
+                st.session_state.selected_icons['funding'] = not is_funding_selected
+                st.experimental_rerun()
 
     with col4:
         is_network_selected = st.session_state.selected_icons.get('network', False)
-        st.markdown(f"""
-            <div class="icon-card{' selected' if is_network_selected else ''}">
-                <i class="fas fa-network-wired"></i>
-                <span>Network</span>
-            </div>
-        """, unsafe_allow_html=True)
-        if st.button("", key="network_btn"):
-            st.session_state.selected_icons['network'] = not is_network_selected
-            st.experimental_rerun()
+        container = st.container()
+        with container:
+            st.markdown(f"""
+                <div class="icon-card{' selected' if is_network_selected else ''}">
+                    <i class="fas fa-network-wired"></i>
+                    <span>Network</span>
+                </div>
+            """, unsafe_allow_html=True)
+            if st.button("Network", key="network_btn", help="Select Network stage"):
+                st.session_state.selected_icons['network'] = not is_network_selected
+                st.experimental_rerun()
 
     with col5:
         is_compliance_selected = st.session_state.selected_icons.get('compliance', False)
-        st.markdown(f"""
-            <div class="icon-card{' selected' if is_compliance_selected else ''}">
-                <i class="fas fa-shield-alt"></i>
-                <span>Compliance</span>
-            </div>
-        """, unsafe_allow_html=True)
-        if st.button("", key="compliance_btn"):
-            st.session_state.selected_icons['compliance'] = not is_compliance_selected
-            st.experimental_rerun()
+        container = st.container()
+        with container:
+            st.markdown(f"""
+                <div class="icon-card{' selected' if is_compliance_selected else ''}">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Compliance</span>
+                </div>
+            """, unsafe_allow_html=True)
+            if st.button("Compliance", key="compliance_btn", help="Select Compliance stage"):
+                st.session_state.selected_icons['compliance'] = not is_compliance_selected
+                st.experimental_rerun()
 
     # Get selected stages based on icon selections
     selected_stages = []

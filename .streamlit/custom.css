@@ -33,12 +33,13 @@
     border-radius: 16px;
     padding: 1.75rem 1rem;
     margin: 0.25rem;
-    cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: 2px solid transparent;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     min-height: 120px;
     overflow: hidden;
+    cursor: pointer;
+    z-index: 1;
 }
 
 .icon-card:hover {
@@ -59,11 +60,7 @@
     color: #2563EB;
     margin-bottom: 1rem;
     transition: all 0.3s ease;
-}
-
-.icon-card:hover i {
-    transform: scale(1.1);
-    color: #1D4ED8;
+    pointer-events: none;
 }
 
 /* Text styles */
@@ -72,9 +69,10 @@
     font-weight: 600;
     color: #4B5563;
     text-align: center;
+    pointer-events: none;
 }
 
-/* Hide actual Streamlit button */
+/* Hide actual Streamlit button but keep it clickable */
 .stButton {
     position: absolute !important;
     top: 0 !important;
@@ -83,7 +81,7 @@
     height: 100% !important;
     opacity: 0 !important;
     cursor: pointer !important;
-    z-index: 100 !important;
+    z-index: 2 !important;
 }
 
 .stButton > button {
@@ -92,6 +90,7 @@
     padding: 0 !important;
     background: transparent !important;
     border: none !important;
+    cursor: pointer !important;
 }
 
 /* Selected state indicator */
@@ -105,25 +104,18 @@
     border-radius: 50%;
     background-color: #2563EB;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    pointer-events: none;
 }
 
-/* Active indicator line */
-.icon-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background-color: #2563EB;
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-    transform-origin: left;
+/* Animation for hover effect */
+@keyframes iconFloat {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+    100% { transform: translateY(0); }
 }
 
-.icon-card:hover::after,
-.icon-card.selected::after {
-    transform: scaleX(1);
+.icon-card:hover i {
+    animation: iconFloat 1s ease infinite;
 }
 
 /* Variables */
@@ -175,15 +167,4 @@
     font-size: 1.25rem;
     font-weight: 500;
     margin: 1rem 0;
-}
-
-/* Animation for hover effect */
-@keyframes iconFloat {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-3px); }
-    100% { transform: translateY(0); }
-}
-
-.icon-card:hover i {
-    animation: iconFloat 1s ease infinite;
 }
