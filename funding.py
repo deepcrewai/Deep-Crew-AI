@@ -1,5 +1,6 @@
 import streamlit as st
 import plotly.express as px
+import plotly.graph_objects as go
 from typing import Dict, List
 from openai import OpenAI
 import os
@@ -10,7 +11,7 @@ class FundingAgent:
     def __init__(self):
         self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
         self.model = "gpt-4o"  # Latest model as of May 13, 2024
-        
+
     def get_funding_opportunities(self, research_area: str, region: str = None) -> List[Dict]:
         """Find relevant funding opportunities based on research area and region."""
         try:
@@ -54,7 +55,7 @@ class FundingAgent:
             return []
     
     def analyze_funding_trends(self, research_area: str) -> Dict:
-        """Analyze current funding trends in the specified research area."""
+        """Analyze current funding trends in the specified research area with enhanced AI analysis."""
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
@@ -63,12 +64,36 @@ class FundingAgent:
                     "content": """Analyze current funding trends in the specified research area. 
                     Return a JSON object with the following structure:
                     {
-                        "trending_areas": ["area1", "area2", "area3"],
-                        "top_funders": [
-                            {"name": "funder name", "focus_areas": ["area1", "area2"], "typical_amount": "amount range"}
+                        "trending_areas": [
+                            {"area": "area name", "growth_rate": "percentage", "funding_volume": "amount"}
                         ],
-                        "emerging_opportunities": ["opportunity1", "opportunity2"],
-                        "funding_cycles": {"peak_months": ["month1", "month2"], "preparation_time": "recommended time"},
+                        "top_funders": [
+                            {"name": "funder name", "focus_areas": ["area1", "area2"], "typical_amount": "amount range", "success_rate": "percentage"}
+                        ],
+                        "emerging_opportunities": [
+                            {"opportunity": "description", "potential": "High/Medium/Low", "timeline": "Short/Medium/Long"}
+                        ],
+                        "funding_cycles": {
+                            "peak_months": ["month1", "month2"],
+                            "preparation_time": "recommended time",
+                            "monthly_distribution": {"January": 10, "February": 15}
+                        },
+                        "sector_analysis": {
+                            "market_size": "total market size",
+                            "growth_rate": "annual growth rate",
+                            "key_players": ["player1", "player2"],
+                            "investment_distribution": {
+                                "Research": 30,
+                                "Development": 25,
+                                "Commercialization": 45
+                            },
+                            "regional_distribution": {
+                                "North America": 40,
+                                "Europe": 30,
+                                "Asia": 20,
+                                "Others": 10
+                            }
+                        },
                         "success_factors": ["factor1", "factor2"]
                     }"""
                 }, {
@@ -77,12 +102,12 @@ class FundingAgent:
                 }],
                 response_format={"type": "json_object"}
             )
-            
+
             return json.loads(response.choices[0].message.content)
         except Exception as e:
             print(f"Error analyzing funding trends: {str(e)}")
             return {}
-    
+
     def get_regional_insights(self, region: str) -> Dict:
         """Get funding insights for a specific region."""
         try:
@@ -176,18 +201,94 @@ def render_funding_section(research_query: str):
                 trends = funding_agent.analyze_funding_trends(research_query)
 
                 if trends:
+                    # AI Analysis Summary
+                    st.markdown("#### 🤖 AI Analysis")
+                    sector_analysis = trends.get("sector_analysis", {})
+
+                    metrics_col1, metrics_col2, metrics_col3 = st.columns(3)
+                    with metrics_col1:
+                        st.metric("Market Size", sector_analysis.get("market_size", "N/A"))
+                    with metrics_col2:
+                        st.metric("Growth Rate", sector_analysis.get("growth_rate", "N/A"))
+                    with metrics_col3:
+                        st.metric("Key Players", len(sector_analysis.get("key_players", [])))
+
+                    # Investment Distribution Pie Chart
+                    st.markdown("#### 📈 Investment Distribution")
+                    investment_data = sector_analysis.get("investment_distribution", {})
+                    if investment_data:
+                        fig_investment = px.pie(
+                            values=list(investment_data.values()),
+                            names=list(investment_data.keys()),
+                            title="Investment Distribution by Category"
+                        )
+                        st.plotly_chart(fig_investment)
+
+                    # Regional Distribution Bar Chart
+                    st.markdown("#### 🌍 Regional Distribution")
+                    regional_data = sector_analysis.get("regional_distribution", {})
+                    if regional_data:
+                        fig_regional = px.bar(
+                            x=list(regional_data.keys()),
+                            y=list(regional_data.values()),
+                            title="Funding Distribution by Region",
+                            labels={"x": "Region", "y": "Percentage"}
+                        )
+                        st.plotly_chart(fig_regional)
+
+                    # Trending Areas Bubble Chart
+                    st.markdown("#### 🚀 Trending Areas")
+                    trending_areas = trends.get("trending_areas", [])
+                    if trending_areas:
+                        df_trending = pd.DataFrame(trending_areas)
+                        fig_trending = px.scatter(
+                            df_trending,
+                            x="growth_rate",
+                            y="funding_volume",
+                            size="funding_volume",
+                            text="area",
+                            title="Trending Research Areas",
+                            labels={
+                                "growth_rate": "Growth Rate",
+                                "funding_volume": "Funding Volume",
+                                "area": "Research Area"
+                            }
+                        )
+                        st.plotly_chart(fig_trending)
+
+                    # Funding Cycles Line Chart
+                    st.markdown("#### 📅 Funding Cycles")
+                    monthly_distribution = trends.get("funding_cycles", {}).get("monthly_distribution", {})
+                    if monthly_distribution:
+                        fig_cycles = px.line(
+                            x=list(monthly_distribution.keys()),
+                            y=list(monthly_distribution.values()),
+                            title="Monthly Funding Distribution",
+                            labels={"x": "Month", "y": "Funding Activity"}
+                        )
+                        st.plotly_chart(fig_cycles)
+
+                    # Display key insights
+                    st.markdown("#### 🔍 Key Insights")
                     col1, col2 = st.columns(2)
                     with col1:
-                        st.markdown("#### Trending Areas")
-                        for area in trends.get("trending_areas", []):
-                            st.markdown(f"• {area}")
+                        st.markdown("**Top Funders**")
+                        for funder in trends.get("top_funders", []):
+                            st.markdown(f"""
+                            • **{funder['name']}**
+                              - Focus: {', '.join(funder['focus_areas'])}
+                              - Typical Amount: {funder['typical_amount']}
+                              - Success Rate: {funder['success_rate']}
+                            """)
 
                     with col2:
-                        st.markdown("#### Top Funders")
-                        for funder in trends.get("top_funders", []):
-                            st.markdown(f"• **{funder['name']}**")
-                            st.markdown(f"  - Focus: {', '.join(funder['focus_areas'])}")
-                            st.markdown(f"  - Typical Amount: {funder['typical_amount']}")
+                        st.markdown("**Emerging Opportunities**")
+                        for opp in trends.get("emerging_opportunities", []):
+                            st.markdown(f"""
+                            • **{opp['opportunity']}**
+                              - Potential: {opp['potential']}
+                              - Timeline: {opp['timeline']}
+                            """)
 
         # Success Rates Sub-tab
         with trend_tabs[1]:
