@@ -126,13 +126,6 @@
     transform: scaleX(1);
 }
 
-/* Base styles */
-.stApp {
-    font-family: 'Inter', sans-serif;
-    color: var(--text-color);
-    background-color: var(--bg-color);
-}
-
 /* Variables */
 :root {
     --primary-color: #2563EB;
@@ -143,4 +136,54 @@
     --border-color: #E2E8F0;
     --success-color: #10B981;
     --warning-color: #F59E0B;
+}
+
+/* Base styles */
+.stApp {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+}
+
+/* Content section */
+.content-section {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    border: 1px solid var(--border-color);
+}
+
+/* Results container */
+.results-container {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin: 1.5rem 0;
+}
+
+.results-container h2 {
+    color: var(--text-color);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.results-container h3 {
+    color: var(--text-color);
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin: 1rem 0;
+}
+
+/* Animation for hover effect */
+@keyframes iconFloat {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+    100% { transform: translateY(0); }
+}
+
+.icon-card:hover i {
+    animation: iconFloat 1s ease infinite;
 }

@@ -39,7 +39,7 @@ def main():
         label_visibility="collapsed"
     )
 
-    # Initialize session state for icon selections
+    # Initialize session state for icon selections if not exists
     if 'selected_icons' not in st.session_state:
         st.session_state.selected_icons = {
             'research': False,
@@ -48,6 +48,20 @@ def main():
             'network': False,
             'compliance': False
         }
+
+    # Initialize other session states
+    if 'search_results' not in st.session_state:
+        st.session_state.search_results = None
+    if 'analysis' not in st.session_state:
+        st.session_state.analysis = None
+    if 'last_query' not in st.session_state:
+        st.session_state.last_query = None
+    if 'patent_results' not in st.session_state:
+        st.session_state.patent_results = None
+    if 'patent_analysis' not in st.session_state:
+        st.session_state.patent_analysis = None
+    if 'combined_analysis' not in st.session_state:
+        st.session_state.combined_analysis = None
 
     # Stage selection with better layout
     st.markdown("### Choose Research Stages")
@@ -115,23 +129,20 @@ def main():
 
     # Get selected stages based on icon selections
     selected_stages = []
-
-    # Allow multiple selections
     for icon, is_selected in st.session_state.selected_icons.items():
         if is_selected:
             selected_stages.append(icon.capitalize())
 
-    # Only add Results tab if more than one stage is selected
-    if len(selected_stages) > 1:
-        selected_stages.append("Results")
-
-    st.session_state.selected_stages = selected_stages
-
+    # Create tabs for selected stages if we have a search query
     if search_query:
         # Check if any stages are selected
         if not selected_stages:
             st.warning("Please select at least one research stage to proceed.")
             return
+
+        # Only add Results tab if more than one stage is selected
+        if len(selected_stages) > 1:
+            selected_stages.append("Results")
 
         # Create tabs for selected stages
         tabs = st.tabs(selected_stages)
@@ -208,15 +219,11 @@ def main():
                             )
 
                     if st.session_state.combined_analysis:
-                        st.markdown("## 🔄 Combined Analysis")
-
-                        # Research and Patent Analysis
                         render_combined_results(
                             st.session_state.search_results or [],
                             st.session_state.patent_results or [],
                             st.session_state.combined_analysis
                         )
-
                         # Funding Analysis
                         st.markdown("## 💰 Global Funding Analysis")
                         funding_agent = FundingAgent()
