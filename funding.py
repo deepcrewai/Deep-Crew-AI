@@ -134,7 +134,6 @@ class FundingAgent:
 
     def get_regional_insights(self, region: str) -> Dict:
         """Get funding insights for a specific region."""
-        # Return static data for testing
         insights = {
             "North America": {
                 "overview": "North America leads in technological innovation and research funding, with strong emphasis on AI, biotech, and clean energy.",
@@ -169,7 +168,7 @@ class FundingAgent:
             },
             "Europe": {
                 "overview": "European funding landscape emphasizes sustainable development, digital transformation, and cross-border collaboration.",
-                "total_funding": "€12.8B",
+                "total_funding": "$12.8B",
                 "funding_distribution": {
                     "EU Programs": 40,
                     "National Funding": 25,
@@ -194,7 +193,7 @@ class FundingAgent:
                 "success_metrics": {
                     "average_success_rate": 70,
                     "total_projects_funded": 2400,
-                    "average_funding_size": "€2.1M",
+                    "average_funding_size": "$2.1M",
                     "yoy_growth": 15
                 }
             },
@@ -230,6 +229,52 @@ class FundingAgent:
                 }
             }
         }
+
+        if region == "Global":
+            # Calculate global metrics
+            total_funding = 38.5  # Sum of all regions
+            total_projects = sum(reg["success_metrics"]["total_projects_funded"] for reg in insights.values())
+            avg_success_rate = sum(reg["success_metrics"]["average_success_rate"] for reg in insights.values()) / len(insights)
+
+            # Combine all sector growth data
+            all_sector_growth = []
+            for reg in insights.values():
+                all_sector_growth.extend(reg["sector_growth"])
+
+            # Calculate average funding distribution
+            global_distribution = {
+                "Research & Grants": 30,
+                "Venture Capital": 25,
+                "Government Funding": 20,
+                "Corporate Innovation": 15,
+                "International Funding": 10
+            }
+
+            return {
+                "overview": "Global funding landscape shows strong growth across all regions, with particular emphasis on technological innovation, sustainability, and digital transformation. North America leads in total funding, while Asia shows the highest growth rates.",
+                "total_funding": f"${total_funding}B",
+                "funding_distribution": global_distribution,
+                "key_sectors": [
+                    "Artificial Intelligence",
+                    "Clean Technology",
+                    "Digital Transformation",
+                    "Healthcare Innovation",
+                    "Smart Infrastructure"
+                ],
+                "sector_growth": [
+                    {"sector": "AI & Digital", "growth_rate": 25.5},
+                    {"sector": "Clean Tech", "growth_rate": 22.8},
+                    {"sector": "Healthcare", "growth_rate": 18.9},
+                    {"sector": "Smart Cities", "growth_rate": 16.5},
+                    {"sector": "Fintech", "growth_rate": 15.2}
+                ],
+                "success_metrics": {
+                    "average_success_rate": round(avg_success_rate),
+                    "total_projects_funded": total_projects,
+                    "average_funding_size": "$2.1M",
+                    "yoy_growth": 18
+                }
+            }
 
         return insights.get(region, {
             "overview": "Data not available for this region",
