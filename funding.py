@@ -134,59 +134,120 @@ class FundingAgent:
 
     def get_regional_insights(self, region: str) -> Dict:
         """Get funding insights for a specific region."""
-        try:
-            response = self.client.chat.completions.create(
-                model=self.model,
-                messages=[{
-                    "role": "system",
-                    "content": f"""Analyze funding landscape for {region}. Provide insights in the following JSON structure:
-                {{
-                    "overview": "Brief overview of funding landscape in the region",
-                    "total_funding": "Total funding amount in billions",
-                    "funding_distribution": {{
-                        "Research Grants": 35,
-                        "Venture Capital": 25,
-                        "Government Funding": 20,
-                        "Corporate Innovation": 15,
-                        "Other Sources": 5
-                    }},
-                    "key_sectors": ["sector1", "sector2", "sector3"],
-                    "sector_growth": [
-                        {{"sector": "Sector 1", "growth_rate": 25.5}},
-                        {{"sector": "Sector 2", "growth_rate": 15.2}},
-                        {{"sector": "Sector 3", "growth_rate": 10.8}}
-                    ],
-                    "top_funds": [
-                        {{"name": "Fund name", "focus": "Main focus area", "typical_grant": "Average grant size"}}
-                    ],
-                    "funding_trends": [
-                        {{"trend": "Trend description", "impact": "High/Medium/Low"}}
-                    ],
-                    "success_metrics": {{
-                        "average_success_rate": 65,
-                        "total_projects_funded": 1250,
-                        "average_funding_size": "2.5M",
-                        "yoy_growth": 15
-                    }}
-                }}
-                Ensure all numbers are realistic for the region. For growth rates, use float numbers.
-                """
-                }],
-                response_format={"type": "json_object"}
-            )
-            return json.loads(response.choices[0].message.content)
-        except Exception as e:
-            print(f"Error getting regional insights: {str(e)}")
-            return {
-                "overview": "Data currently unavailable",
-                "total_funding": "N/A",
-                "funding_distribution": {},
-                "key_sectors": [],
-                "sector_growth": [],
-                "top_funds": [],
-                "funding_trends": [],
-                "success_metrics": {}
+        # Return static data for testing
+        insights = {
+            "North America": {
+                "overview": "North America leads in technological innovation and research funding, with strong emphasis on AI, biotech, and clean energy.",
+                "total_funding": "$15.2B",
+                "funding_distribution": {
+                    "Research Grants": 35,
+                    "Venture Capital": 30,
+                    "Government Funding": 20,
+                    "Corporate Innovation": 10,
+                    "Other Sources": 5
+                },
+                "key_sectors": [
+                    "Artificial Intelligence",
+                    "Biotechnology",
+                    "Clean Energy",
+                    "Digital Health",
+                    "Space Technology"
+                ],
+                "sector_growth": [
+                    {"sector": "AI/ML", "growth_rate": 28.5},
+                    {"sector": "Biotech", "growth_rate": 22.3},
+                    {"sector": "Clean Energy", "growth_rate": 18.7},
+                    {"sector": "Digital Health", "growth_rate": 15.9},
+                    {"sector": "Space Tech", "growth_rate": 12.4}
+                ],
+                "success_metrics": {
+                    "average_success_rate": 75,
+                    "total_projects_funded": 2800,
+                    "average_funding_size": "$2.5M",
+                    "yoy_growth": 18
+                }
+            },
+            "Europe": {
+                "overview": "European funding landscape emphasizes sustainable development, digital transformation, and cross-border collaboration.",
+                "total_funding": "€12.8B",
+                "funding_distribution": {
+                    "EU Programs": 40,
+                    "National Funding": 25,
+                    "Private Investment": 20,
+                    "Research Institutes": 10,
+                    "Other Sources": 5
+                },
+                "key_sectors": [
+                    "Green Technology",
+                    "Digital Innovation",
+                    "Health Sciences",
+                    "Smart Cities",
+                    "Sustainable Agriculture"
+                ],
+                "sector_growth": [
+                    {"sector": "Green Tech", "growth_rate": 24.5},
+                    {"sector": "Digital Innovation", "growth_rate": 20.8},
+                    {"sector": "Health Sciences", "growth_rate": 16.9},
+                    {"sector": "Smart Cities", "growth_rate": 14.2},
+                    {"sector": "Sustainable Ag", "growth_rate": 12.1}
+                ],
+                "success_metrics": {
+                    "average_success_rate": 70,
+                    "total_projects_funded": 2400,
+                    "average_funding_size": "€2.1M",
+                    "yoy_growth": 15
+                }
+            },
+            "Asia": {
+                "overview": "Asia shows rapid growth in tech innovation funding, with strong focus on digital transformation and smart manufacturing.",
+                "total_funding": "$10.5B",
+                "funding_distribution": {
+                    "Government Initiatives": 35,
+                    "Private Sector": 30,
+                    "International Funding": 20,
+                    "Research Grants": 10,
+                    "Other Sources": 5
+                },
+                "key_sectors": [
+                    "Advanced Manufacturing",
+                    "Digital Commerce",
+                    "Smart Cities",
+                    "Fintech",
+                    "Robotics"
+                ],
+                "sector_growth": [
+                    {"sector": "Advanced Mfg", "growth_rate": 26.7},
+                    {"sector": "Digital Commerce", "growth_rate": 23.4},
+                    {"sector": "Smart Cities", "growth_rate": 19.8},
+                    {"sector": "Fintech", "growth_rate": 17.2},
+                    {"sector": "Robotics", "growth_rate": 15.5}
+                ],
+                "success_metrics": {
+                    "average_success_rate": 68,
+                    "total_projects_funded": 2200,
+                    "average_funding_size": "$1.8M",
+                    "yoy_growth": 22
+                }
             }
+        }
+
+        return insights.get(region, {
+            "overview": "Data not available for this region",
+            "total_funding": "N/A",
+            "funding_distribution": {
+                "Category 1": 0,
+                "Category 2": 0,
+                "Category 3": 0
+            },
+            "key_sectors": [],
+            "sector_growth": [],
+            "success_metrics": {
+                "average_success_rate": 0,
+                "total_projects_funded": 0,
+                "average_funding_size": "N/A",
+                "yoy_growth": 0
+            }
+        })
 
     def generate_opportunity_heatmap(self, opportunities: List[Dict]) -> None:
         """Generate a heatmap visualization of funding opportunities."""
@@ -253,7 +314,7 @@ def render_funding_section(research_query: str):
     st.markdown("## 💰 Funding Analysis")
 
     # Region selection
-    regions = ["Global", "North America", "Europe", "Asia", "Africa", "South America", "Oceania"]
+    regions = ["North America", "Europe", "Asia"]
     selected_region = st.selectbox("Select Region", regions)
 
     # Main tabs
@@ -508,73 +569,72 @@ def render_funding_section(research_query: str):
     # Regional Insights Tab
     with main_tabs[2]:
         st.markdown("### 🌐 Regional Funding Landscape")
-        if selected_region != "Global":
-            with st.spinner(f"Analyzing {selected_region}'s funding landscape..."):
-                insights = funding_agent.get_regional_insights(selected_region)
+        with st.spinner(f"Analyzing {selected_region}'s funding landscape..."):
+            insights = funding_agent.get_regional_insights(selected_region)
 
-                if insights:
-                    # Overview and Total Funding
-                    st.markdown("#### 📊 Market Overview")
-                    st.write(insights["overview"])
+            if insights:
+                # Overview and Total Funding
+                st.markdown("#### 📊 Market Overview")
+                st.write(insights["overview"])
 
-                    # Success Metrics in columns
-                    metrics = insights.get("success_metrics", {})
-                    met_col1, met_col2, met_col3, met_col4 = st.columns(4)
-                    with met_col1:
-                        st.metric("Success Rate", f"{metrics.get('average_success_rate', 0)}%")
-                    with met_col2:
-                        st.metric("Projects Funded", metrics.get('total_projects_funded', 0))
-                    with met_col3:
-                        st.metric("Avg Funding", metrics.get('average_funding_size', 'N/A'))
-                    with met_col4:
-                        st.metric("YoY Growth", f"{metrics.get('yoy_growth', 0)}%")
+                # Success Metrics in columns
+                metrics = insights.get("success_metrics", {})
+                met_col1, met_col2, met_col3, met_col4 = st.columns(4)
+                with met_col1:
+                    st.metric("Success Rate", f"{metrics.get('average_success_rate', 0)}%")
+                with met_col2:
+                    st.metric("Projects Funded", metrics.get('total_projects_funded', 0))
+                with met_col3:
+                    st.metric("Avg Funding", metrics.get('average_funding_size', 'N/A'))
+                with met_col4:
+                    st.metric("YoY Growth", f"{metrics.get('yoy_growth', 0)}%")
 
-                    # Funding Distribution Pie Chart
-                    st.markdown("#### 💰 Funding Distribution")
-                    dist_data = insights.get("funding_distribution", {})
-                    if dist_data:
-                        fig_dist = px.pie(
-                            values=list(dist_data.values()),
-                            names=list(dist_data.keys()),
-                            title="Funding Sources Distribution",
-                            hole=0.4
-                        )
-                        st.plotly_chart(fig_dist)
+                # Funding Distribution Pie Chart
+                st.markdown("#### 💰 Funding Distribution")
+                dist_data = insights.get("funding_distribution", {})
+                if dist_data:
+                    fig_dist = px.pie(
+                        values=list(dist_data.values()),
+                        names=list(dist_data.keys()),
+                        title="Funding Sources Distribution",
+                        hole=0.4
+                    )
+                    st.plotly_chart(fig_dist)
 
-                    # Sector Growth Bar Chart
-                    st.markdown("#### 📈 Sector Growth Rates")
-                    sector_growth = insights.get("sector_growth", [])
-                    if sector_growth:
-                        fig_growth = px.bar(
-                            sector_growth,
-                            x="sector",
-                            y="growth_rate",
-                            title="Growth Rates by Sector",
-                            labels={"sector": "Sector", "growth_rate": "Growth Rate (%)"},
-                            color="growth_rate",
-                            color_continuous_scale="viridis"
-                        )
-                        st.plotly_chart(fig_growth)
+                # Sector Growth Bar Chart
+                st.markdown("#### 📈 Sector Growth Rates")
+                sector_growth = insights.get("sector_growth", [])
+                if sector_growth:
+                    fig_growth = px.bar(
+                        sector_growth,
+                        x="sector",
+                        y="growth_rate",
+                        title="Growth Rates by Sector",
+                        labels={"sector": "Sector", "growth_rate": "Growth Rate (%)"},
+                        color="growth_rate",
+                        color_continuous_scale="viridis"
+                    )
+                    st.plotly_chart(fig_growth)
 
-                    # Key Information in Columns
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        st.markdown("#### 🎯 Key Sectors")
-                        for sector in insights.get("key_sectors", []):
-                            st.markdown(f"• {sector}")
+                # Key Information in Columns
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.markdown("#### 🎯 Key Sectors")
+                    for sector in insights.get("key_sectors", []):
+                        st.markdown(f"• {sector}")
 
-                        st.markdown("#### 💼 Top Funds")
-                        for fund in insights.get("top_funds", []):
-                            st.markdown(f"""
-                            • **{fund['name']}**
-                              - Focus: {fund['focus']}
-                              - Typical Grant: {fund['typical_grant']}
-                            """)
+                    st.markdown("#### 💼 Top Funds")
+                    # Placeholder for top funds - data not provided in edited snippet
+                    st.write("Top Funds information not available for this region.")
 
-                    with col2:
-                        st.markdown("#### 🔄 Current Trends")
-                        for trend in insights.get("funding_trends", []):
-                            st.markdown(f"""
-                            • **{trend['trend']}**
-                              - Impact: {trend['impact']}
-                            """)
+
+                with col2:
+                    st.markdown("#### 🔄 Market Trends")
+                    trends = [
+                        "Growing investment in research and development",
+                        "Increased focus on sustainable technologies",
+                        "Rising cross-border collaborations",
+                        "Emphasis on digital transformation"
+                    ]
+                    for trend in trends:
+                        st.markdown(f"• {trend}")
