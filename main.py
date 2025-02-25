@@ -70,7 +70,7 @@ def main():
         ), unsafe_allow_html=True)
         if st.button("", key="research"):
             st.session_state.selected_icons['research'] = not is_research_selected
-            st.experimental_rerun()
+            st.rerun()
 
     # Patents Icon
     with col2:
@@ -82,7 +82,7 @@ def main():
         ), unsafe_allow_html=True)
         if st.button("", key="patents"):
             st.session_state.selected_icons['patents'] = not is_patents_selected
-            st.experimental_rerun()
+            st.rerun()
 
     # Funding Icon
     with col3:
@@ -94,7 +94,7 @@ def main():
         ), unsafe_allow_html=True)
         if st.button("", key="funding"):
             st.session_state.selected_icons['funding'] = not is_funding_selected
-            st.experimental_rerun()
+            st.rerun()
 
     # Network Icon
     with col4:
@@ -106,7 +106,7 @@ def main():
         ), unsafe_allow_html=True)
         if st.button("", key="network"):
             st.session_state.selected_icons['network'] = not is_network_selected
-            st.experimental_rerun()
+            st.rerun()
 
     # Compliance Icon
     with col5:
@@ -118,7 +118,7 @@ def main():
         ), unsafe_allow_html=True)
         if st.button("", key="compliance"):
             st.session_state.selected_icons['compliance'] = not is_compliance_selected
-            st.experimental_rerun()
+            st.rerun()
 
     # Get selected stages based on icon selections
     selected_stages = []
