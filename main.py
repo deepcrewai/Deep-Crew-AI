@@ -109,6 +109,8 @@ def main():
 
     # Get selected stages based on icon selections
     selected_stages = []
+
+    # Allow multiple selections
     if st.session_state.selected_icons.get('research', False):
         selected_stages.append("Research")
     if st.session_state.selected_icons.get('patents', False):
@@ -120,8 +122,8 @@ def main():
     if st.session_state.selected_icons.get('compliance', False):
         selected_stages.append("Compliance")
 
-    # Add Results tab if any stage is selected
-    if len(selected_stages) > 0:
+    # Only add Results tab if more than one stage is selected
+    if len(selected_stages) > 1:
         selected_stages.append("Results")
 
     st.session_state.selected_stages = selected_stages
