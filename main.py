@@ -56,6 +56,11 @@ def main():
             'compliance': False
         }
 
+    # Initialize other session states if they don't exist
+    for state in ['search_results', 'analysis', 'last_query', 'patent_results', 'patent_analysis', 'combined_analysis']:
+        if state not in st.session_state:
+            st.session_state[state] = None
+
     # Stage selection
     st.markdown("### Choose Research Stages")
     col1, col2, col3, col4, col5 = st.columns(5)
