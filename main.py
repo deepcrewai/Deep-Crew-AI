@@ -54,26 +54,51 @@ def main():
     col1, col2, col3, col4, col5 = st.columns(5)
 
     with col1:
-        research_agent = st.checkbox("🔍 Research", value=True)
+        st.markdown("""
+            <div class="icon-checkbox">
+                <i class="fas fa-search"></i>
+            </div>
+        """, unsafe_allow_html=True)
+        research_agent = st.checkbox("Research", value=True)
     with col2:
-        patent_search = st.checkbox("📜 Patents")
+        st.markdown("""
+            <div class="icon-checkbox">
+                <i class="fas fa-file-contract"></i>
+            </div>
+        """, unsafe_allow_html=True)
+        patent_search = st.checkbox("Patents")
     with col3:
-        funding = st.checkbox("💰 Funding")
+        st.markdown("""
+            <div class="icon-checkbox">
+                <i class="fas fa-hand-holding-usd"></i>
+            </div>
+        """, unsafe_allow_html=True)
+        funding = st.checkbox("Funding")
     with col4:
-        networking = st.checkbox("🤝 Network")
+        st.markdown("""
+            <div class="icon-checkbox">
+                <i class="fas fa-network-wired"></i>
+            </div>
+        """, unsafe_allow_html=True)
+        networking = st.checkbox("Network")
     with col5:
-        compliance = st.checkbox("✓ Compliance")
+        st.markdown("""
+            <div class="icon-checkbox">
+                <i class="fas fa-shield-check"></i>
+            </div>
+        """, unsafe_allow_html=True)
+        compliance = st.checkbox("Compliance")
 
     # Store selected stages
     selected_stages = []
     if research_agent:
-        selected_stages.append("Research Agent")
+        selected_stages.append("Research")
     if patent_search:
-        selected_stages.append("Patent Search")
+        selected_stages.append("Patents")
     if funding:
         selected_stages.append("Funding")
     if networking:
-        selected_stages.append("Networking")
+        selected_stages.append("Network")
     if compliance:
         selected_stages.append("Compliance")
 
@@ -94,7 +119,7 @@ def main():
 
         for idx, tab in enumerate(tabs):
             with tab:
-                if selected_stages[idx] == "Research Agent":
+                if selected_stages[idx] == "Research":
                     openalex_client = OpenAlexClient()
                     ai_analyzer = AIAnalyzer()
 
@@ -117,7 +142,7 @@ def main():
                         render_search_section(st.session_state.search_results)
                         render_analysis_section(st.session_state.analysis)
 
-                elif selected_stages[idx] == "Patent Search":
+                elif selected_stages[idx] == "Patents":
                     patent_client = PatentSearchClient()
 
                     if search_query != st.session_state.last_query or st.session_state.patent_results is None:
@@ -243,7 +268,7 @@ def main():
                     else:
                         st.info("Please perform a search in Research Agent or Patent Search to view combined analysis.")
 
-                elif selected_stages[idx] == "Networking":
+                elif selected_stages[idx] == "Network":
                     st.info("🔄 Coming Soon")
                 elif selected_stages[idx] == "Funding":
                     render_funding_section(search_query)
