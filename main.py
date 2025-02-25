@@ -11,7 +11,7 @@ from components import (
     handle_pdf_export
 )
 from utils import setup_page
-from funding import render_funding_section
+from funding import render_funding_section, FundingAgent # Assuming FundingAgent is defined here
 
 def main():
     setup_page()
@@ -158,11 +158,80 @@ def main():
                             )
 
                     if st.session_state.combined_analysis:
+                        st.markdown("## 🔄 Combined Analysis")
+
+                        # Research and Patent Analysis
                         render_combined_results(
                             st.session_state.search_results or [],
                             st.session_state.patent_results or [],
                             st.session_state.combined_analysis
                         )
+
+                        # Funding Analysis
+                        st.markdown("## 💰 Global Funding Analysis")
+                        funding_agent = FundingAgent()
+                        global_insights = funding_agent.get_regional_insights("Global")
+
+                        # Overview
+                        st.markdown("### 📊 Market Overview")
+                        st.write(global_insights["overview"])
+
+                        # Success Metrics
+                        metrics = global_insights.get("success_metrics", {})
+                        met_col1, met_col2, met_col3, met_col4 = st.columns(4)
+                        with met_col1:
+                            st.metric("Success Rate", f"{metrics.get('average_success_rate', 0)}%")
+                        with met_col2:
+                            st.metric("Projects Funded", metrics.get('total_projects_funded', 0))
+                        with met_col3:
+                            st.metric("Avg Funding", metrics.get('average_funding_size', 'N/A'))
+                        with met_col4:
+                            st.metric("YoY Growth", f"{metrics.get('yoy_growth', 0)}%")
+
+                        # Funding Distribution
+                        st.markdown("### 💰 Global Funding Distribution")
+                        dist_data = global_insights.get("funding_distribution", {})
+                        if dist_data:
+                            fig_dist = px.pie(
+                                values=list(dist_data.values()),
+                                names=list(dist_data.keys()),
+                                title="Global Funding Sources Distribution",
+                                hole=0.4
+                            )
+                            st.plotly_chart(fig_dist)
+
+                        # Sector Growth
+                        st.markdown("### 📈 Global Sector Growth")
+                        sector_growth = global_insights.get("sector_growth", [])
+                        if sector_growth:
+                            fig_growth = px.bar(
+                                sector_growth,
+                                x="sector",
+                                y="growth_rate",
+                                title="Global Growth Rates by Sector",
+                                labels={"sector": "Sector", "growth_rate": "Growth Rate (%)"},
+                                color="growth_rate",
+                                color_continuous_scale="viridis"
+                            )
+                            st.plotly_chart(fig_growth)
+
+                        # Key Sectors and Trends
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            st.markdown("### 🎯 Key Global Sectors")
+                            for sector in global_insights.get("key_sectors", []):
+                                st.markdown(f"• {sector}")
+
+                        with col2:
+                            st.markdown("### 🔄 Global Market Trends")
+                            trends = [
+                                "Growing investment in research and development",
+                                "Increased focus on sustainable technologies",
+                                "Rising cross-border collaborations",
+                                "Emphasis on digital transformation"
+                            ]
+                            for trend in trends:
+                                st.markdown(f"• {trend}")
                     else:
                         st.info("Please perform a search in Research Agent or Patent Search to view combined analysis.")
 
