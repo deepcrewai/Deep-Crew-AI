@@ -41,7 +41,13 @@ def main():
 
     # Initialize session state for icon selections
     if 'selected_icons' not in st.session_state:
-        st.session_state.selected_icons = {'research': True}  # Research is selected by default
+        st.session_state.selected_icons = {
+            'research': False,
+            'patents': False,
+            'funding': False,
+            'network': False,
+            'compliance': False
+        }
 
     # Stage selection with better layout
     st.markdown("### Choose Research Stages")
@@ -111,16 +117,9 @@ def main():
     selected_stages = []
 
     # Allow multiple selections
-    if st.session_state.selected_icons.get('research', False):
-        selected_stages.append("Research")
-    if st.session_state.selected_icons.get('patents', False):
-        selected_stages.append("Patents")
-    if st.session_state.selected_icons.get('funding', False):
-        selected_stages.append("Funding")
-    if st.session_state.selected_icons.get('network', False):
-        selected_stages.append("Network")
-    if st.session_state.selected_icons.get('compliance', False):
-        selected_stages.append("Compliance")
+    for icon, is_selected in st.session_state.selected_icons.items():
+        if is_selected:
+            selected_stages.append(icon.capitalize())
 
     # Only add Results tab if more than one stage is selected
     if len(selected_stages) > 1:

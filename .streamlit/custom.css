@@ -126,17 +126,6 @@
     transform: scaleX(1);
 }
 
-/* Animation for icons */
-@keyframes iconFloat {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-3px); }
-    100% { transform: translateY(0); }
-}
-
-.icon-card:hover i {
-    animation: iconFloat 1s ease infinite;
-}
-
 /* Base styles */
 .stApp {
     font-family: 'Inter', sans-serif;
