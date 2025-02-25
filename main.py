@@ -11,6 +11,7 @@ from components import (
     handle_pdf_export
 )
 from utils import setup_page
+from funding import render_funding_section
 
 def main():
     setup_page()
@@ -49,9 +50,9 @@ def main():
     with col2:
         patent_search = st.checkbox("Patent Search")
     with col3:
-        networking = st.checkbox("Networking")
-    with col4:
         funding = st.checkbox("Funding")
+    with col4:
+        networking = st.checkbox("Networking")
     with col5:
         compliance = st.checkbox("Compliance")
 
@@ -61,10 +62,10 @@ def main():
         selected_stages.append("Research Agent")
     if patent_search:
         selected_stages.append("Patent Search")
-    if networking:
-        selected_stages.append("Networking")
     if funding:
         selected_stages.append("Funding")
+    if networking:
+        selected_stages.append("Networking")
     if compliance:
         selected_stages.append("Compliance")
 
@@ -163,7 +164,7 @@ def main():
                 elif selected_stages[idx] == "Networking":
                     st.info("🔄 Coming Soon")
                 elif selected_stages[idx] == "Funding":
-                    st.info("💰 Coming Soon")
+                    render_funding_section(search_query)
                 elif selected_stages[idx] == "Compliance":
                     st.info("✓ Coming Soon")
 
