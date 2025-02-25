@@ -43,13 +43,43 @@
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
+/* Result Container styles */
+.results-container {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    margin: 1.5rem 0;
+}
+
+.results-container h2 {
+    color: var(--text-color);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.results-container h3 {
+    color: var(--text-color);
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin: 1rem 0;
+}
+
 /* Card styles */
-div.stMarkdown {
+.stMarkdown {
+    background: var(--card-bg);
+    border-radius: 12px;
+    margin: 1rem 0;
+}
+
+/* Content sections */
+.content-section {
     background: var(--card-bg);
     border-radius: 12px;
     padding: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     margin: 1rem 0;
+    border: 1px solid var(--border-color);
 }
 
 /* Button styles */
@@ -99,20 +129,21 @@ div.stMarkdown {
     background-color: var(--primary-color);
 }
 
-/* Select box styling */
-.stSelectbox > div > div {
-    background-color: white;
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    padding: 0.5rem;
-}
-
 /* Chart container styling */
 [data-testid="stPlotlyChart"] > div {
     border-radius: 12px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     background-color: var(--card-bg);
     padding: 1rem;
+    margin: 1rem 0;
+}
+
+/* Select box styling */
+.stSelectbox > div > div {
+    background-color: white;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.5rem;
 }
 
 /* Expander styling */
@@ -145,5 +176,9 @@ div.stMarkdown {
 
     .stButton > button {
         width: 100%;
+    }
+
+    .results-container {
+        padding: 1rem;
     }
 }
