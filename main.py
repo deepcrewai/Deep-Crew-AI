@@ -78,7 +78,7 @@ def main():
                 </div>
             </div>
         """, unsafe_allow_html=True)
-        if st.button("Research", key="research"):
+        if st.button("", key="research"):
             st.session_state.selected_icons['research'] = not is_research_selected
             st.experimental_rerun()
 
@@ -93,7 +93,7 @@ def main():
                 </div>
             </div>
         """, unsafe_allow_html=True)
-        if st.button("Patents", key="patents"):
+        if st.button("", key="patents"):
             st.session_state.selected_icons['patents'] = not is_patents_selected
             st.experimental_rerun()
 
@@ -108,7 +108,7 @@ def main():
                 </div>
             </div>
         """, unsafe_allow_html=True)
-        if st.button("Funding", key="funding"):
+        if st.button("", key="funding"):
             st.session_state.selected_icons['funding'] = not is_funding_selected
             st.experimental_rerun()
 
@@ -123,7 +123,7 @@ def main():
                 </div>
             </div>
         """, unsafe_allow_html=True)
-        if st.button("Network", key="network"):
+        if st.button("", key="network"):
             st.session_state.selected_icons['network'] = not is_network_selected
             st.experimental_rerun()
 
@@ -138,7 +138,7 @@ def main():
                 </div>
             </div>
         """, unsafe_allow_html=True)
-        if st.button("Compliance", key="compliance"):
+        if st.button("", key="compliance"):
             st.session_state.selected_icons['compliance'] = not is_compliance_selected
             st.experimental_rerun()
 
