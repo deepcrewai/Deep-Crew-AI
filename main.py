@@ -39,72 +39,105 @@ def main():
         label_visibility="collapsed"
     )
 
-    # Initialize session state
-    if 'search_results' not in st.session_state:
-        st.session_state.search_results = None
-        st.session_state.analysis = None
-        st.session_state.last_query = None
-        st.session_state.selected_stages = []
-        st.session_state.patent_results = None
-        st.session_state.patent_analysis = None
-        st.session_state.combined_analysis = None
+    # Initialize session state for icon selections
+    if 'selected_icons' not in st.session_state:
+        st.session_state.selected_icons = {'research': True}  # Research is selected by default
 
     # Stage selection with better layout
     st.markdown("### Choose Research Stages")
     col1, col2, col3, col4, col5 = st.columns(5)
 
     with col1:
-        st.markdown("""
-            <div class="icon-checkbox">
-                <i class="fas fa-search"></i>
-                <span>Research</span>
-            </div>
-        """, unsafe_allow_html=True)
-        research_agent = st.checkbox("", value=True, key="research_checkbox", label_visibility="collapsed")
-    with col2:
-        st.markdown("""
-            <div class="icon-checkbox">
-                <i class="fas fa-file-contract"></i>
-                <span>Patents</span>
-            </div>
-        """, unsafe_allow_html=True)
-        patent_search = st.checkbox("", key="patents_checkbox", label_visibility="collapsed")
-    with col3:
-        st.markdown("""
-            <div class="icon-checkbox">
-                <i class="fas fa-hand-holding-usd"></i>
-                <span>Funding</span>
-            </div>
-        """, unsafe_allow_html=True)
-        funding = st.checkbox("", key="funding_checkbox", label_visibility="collapsed")
-    with col4:
-        st.markdown("""
-            <div class="icon-checkbox">
-                <i class="fas fa-network-wired"></i>
-                <span>Network</span>
-            </div>
-        """, unsafe_allow_html=True)
-        networking = st.checkbox("", key="network_checkbox", label_visibility="collapsed")
-    with col5:
-        st.markdown("""
-            <div class="icon-checkbox">
-                <i class="fas fa-shield-alt"></i>
-                <span>Compliance</span>
-            </div>
-        """, unsafe_allow_html=True)
-        compliance = st.checkbox("", key="compliance_checkbox", label_visibility="collapsed")
+        is_research_selected = st.session_state.selected_icons.get('research', False)
+        button_container = st.container()
+        with button_container:
+            st.markdown(f"""
+                <div class="icon-container">
+                    <div class="icon-checkbox{' selected' if is_research_selected else ''}">
+                        <i class="fas fa-search"></i>
+                        <span>Research</span>
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
+            if st.button("", key="research_btn"):
+                st.session_state.selected_icons['research'] = not is_research_selected
+                st.experimental_rerun()
 
-    # Store selected stages
+    with col2:
+        is_patents_selected = st.session_state.selected_icons.get('patents', False)
+        button_container = st.container()
+        with button_container:
+            st.markdown(f"""
+                <div class="icon-container">
+                    <div class="icon-checkbox{' selected' if is_patents_selected else ''}">
+                        <i class="fas fa-file-contract"></i>
+                        <span>Patents</span>
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
+            if st.button("", key="patents_btn"):
+                st.session_state.selected_icons['patents'] = not is_patents_selected
+                st.experimental_rerun()
+
+    with col3:
+        is_funding_selected = st.session_state.selected_icons.get('funding', False)
+        button_container = st.container()
+        with button_container:
+            st.markdown(f"""
+                <div class="icon-container">
+                    <div class="icon-checkbox{' selected' if is_funding_selected else ''}">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <span>Funding</span>
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
+            if st.button("", key="funding_btn"):
+                st.session_state.selected_icons['funding'] = not is_funding_selected
+                st.experimental_rerun()
+
+    with col4:
+        is_network_selected = st.session_state.selected_icons.get('network', False)
+        button_container = st.container()
+        with button_container:
+            st.markdown(f"""
+                <div class="icon-container">
+                    <div class="icon-checkbox{' selected' if is_network_selected else ''}">
+                        <i class="fas fa-network-wired"></i>
+                        <span>Network</span>
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
+            if st.button("", key="network_btn"):
+                st.session_state.selected_icons['network'] = not is_network_selected
+                st.experimental_rerun()
+
+    with col5:
+        is_compliance_selected = st.session_state.selected_icons.get('compliance', False)
+        button_container = st.container()
+        with button_container:
+            st.markdown(f"""
+                <div class="icon-container">
+                    <div class="icon-checkbox{' selected' if is_compliance_selected else ''}">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Compliance</span>
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
+            if st.button("", key="compliance_btn"):
+                st.session_state.selected_icons['compliance'] = not is_compliance_selected
+                st.experimental_rerun()
+
+    # Get selected stages based on icon selections
     selected_stages = []
-    if research_agent:
+    if st.session_state.selected_icons.get('research', False):
         selected_stages.append("Research")
-    if patent_search:
+    if st.session_state.selected_icons.get('patents', False):
         selected_stages.append("Patents")
-    if funding:
+    if st.session_state.selected_icons.get('funding', False):
         selected_stages.append("Funding")
-    if networking:
+    if st.session_state.selected_icons.get('network', False):
         selected_stages.append("Network")
-    if compliance:
+    if st.session_state.selected_icons.get('compliance', False):
         selected_stages.append("Compliance")
 
     # Add Results tab if any stage is selected
@@ -164,8 +197,7 @@ def main():
 
                     if st.session_state.patent_results:
                         render_patent_results(st.session_state.patent_results, st.session_state.patent_analysis)
-
-                        # AI Analysis for Patents
+                        # AI Analysis for Patents 
                         if st.session_state.patent_analysis:
                             st.subheader("AI Analysis")
 
@@ -184,7 +216,6 @@ def main():
                             st.write(st.session_state.patent_analysis.get("competition", ""))
 
                 elif selected_stages[idx] == "Results":
-                    # Generate combined analysis if not already done
                     if st.session_state.combined_analysis is None:
                         with st.spinner("🔄 Generating comprehensive analysis..."):
                             ai_analyzer = AIAnalyzer()
