@@ -15,20 +15,20 @@ from funding import render_funding_section, FundingAgent
 
 def create_icon_box(icon_class: str, label: str, is_selected: bool) -> str:
     """Helper function to create icon HTML"""
-    return f"""
+    return f'''
         <div class="icon-wrapper">
-            <div class="icon-box{' selected' if is_selected else ''}">
+            <button class="icon-box{' selected' if is_selected else ''}" type="button">
                 <i class="{icon_class}"></i>
                 <span>{label}</span>
-            </div>
+            </button>
         </div>
-    """
+    '''
 
 def main():
     setup_page()
 
-    # Add Font Awesome to the page
-    st.markdown("""
+    # Add Font Awesome and custom styles
+    st.markdown('''
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <div style='text-align: center; padding: 2rem 0;'>
             <div class='deep-crew-title'>DEEP CREW</div>
@@ -37,7 +37,7 @@ def main():
                 Discover insights, analyze patents, and explore funding opportunities with AI-powered research tools
             </p>
         </div>
-    """, unsafe_allow_html=True)
+    ''', unsafe_allow_html=True)
 
     # Search input
     search_query = st.text_input(
@@ -74,7 +74,7 @@ def main():
             "Research",
             is_research_selected
         ), unsafe_allow_html=True)
-        if st.button("", key="research"):
+        if st.button("Research", key="research"):
             st.session_state.selected_icons['research'] = not is_research_selected
             st.rerun()
 
@@ -86,7 +86,7 @@ def main():
             "Patents",
             is_patents_selected
         ), unsafe_allow_html=True)
-        if st.button("", key="patents"):
+        if st.button("Patents", key="patents"):
             st.session_state.selected_icons['patents'] = not is_patents_selected
             st.rerun()
 
@@ -98,7 +98,7 @@ def main():
             "Funding",
             is_funding_selected
         ), unsafe_allow_html=True)
-        if st.button("", key="funding"):
+        if st.button("Funding", key="funding"):
             st.session_state.selected_icons['funding'] = not is_funding_selected
             st.rerun()
 
@@ -110,7 +110,7 @@ def main():
             "Network",
             is_network_selected
         ), unsafe_allow_html=True)
-        if st.button("", key="network"):
+        if st.button("Network", key="network"):
             st.session_state.selected_icons['network'] = not is_network_selected
             st.rerun()
 
@@ -122,7 +122,7 @@ def main():
             "Compliance",
             is_compliance_selected
         ), unsafe_allow_html=True)
-        if st.button("", key="compliance"):
+        if st.button("Compliance", key="compliance"):
             st.session_state.selected_icons['compliance'] = not is_compliance_selected
             st.rerun()
 
