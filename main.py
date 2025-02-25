@@ -11,7 +11,7 @@ from components import (
     handle_pdf_export
 )
 from utils import setup_page
-from funding import render_funding_section, FundingAgent # Assuming FundingAgent is defined here
+from funding import render_funding_section, FundingAgent
 
 def main():
     setup_page()
@@ -20,18 +20,23 @@ def main():
     with open(".streamlit/custom.css") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-    # Add logo
+    # Modern header with description
     st.markdown("""
-        <div class="logo-container">
-            <img src="attached_assets/deep-crew-logo.png" alt="Deep Crew Logo">
+        <div style='text-align: center; padding: 2rem 0;'>
+            <h1 class='main-header'>Research & Innovation Hub</h1>
+            <p style='font-size: 1.2rem; color: #64748B; max-width: 600px; margin: 0 auto;'>
+                Discover insights, analyze patents, and explore funding opportunities with AI-powered research tools
+            </p>
         </div>
     """, unsafe_allow_html=True)
 
-    # Simple header
-    st.markdown('<h1 class="main-header">Dive Deep into Discovery</h1>', unsafe_allow_html=True)
-
-    # Search input
-    search_query = st.text_input("", placeholder="Search", help="Type your research query here.", label_visibility="collapsed")
+    # Search input with better styling
+    search_query = st.text_input(
+        "",
+        placeholder="Enter your research topic...",
+        help="Type your research query here",
+        label_visibility="collapsed"
+    )
 
     # Initialize session state
     if 'search_results' not in st.session_state:
@@ -43,18 +48,20 @@ def main():
         st.session_state.patent_analysis = None
         st.session_state.combined_analysis = None
 
-    # Stage selection
+    # Stage selection with better layout
+    st.markdown("### Choose Research Stages")
     col1, col2, col3, col4, col5 = st.columns(5)
+
     with col1:
-        research_agent = st.checkbox("Research Agent", value=True)
+        research_agent = st.checkbox("🔍 Research", value=True)
     with col2:
-        patent_search = st.checkbox("Patent Search")
+        patent_search = st.checkbox("📜 Patents")
     with col3:
-        funding = st.checkbox("Funding")
+        funding = st.checkbox("💰 Funding")
     with col4:
-        networking = st.checkbox("Networking")
+        networking = st.checkbox("🤝 Network")
     with col5:
-        compliance = st.checkbox("Compliance")
+        compliance = st.checkbox("✓ Compliance")
 
     # Store selected stages
     selected_stages = []
