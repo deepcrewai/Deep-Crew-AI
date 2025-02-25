@@ -56,35 +56,40 @@ def main():
     with col1:
         st.markdown("""
             <div class="icon-checkbox">
-                <i class="fas fa-search"></i> Research
+                <i class="fas fa-search"></i>
+                <span>Research</span>
             </div>
         """, unsafe_allow_html=True)
         research_agent = st.checkbox("", value=True, key="research_checkbox", label_visibility="collapsed")
     with col2:
         st.markdown("""
             <div class="icon-checkbox">
-                <i class="fas fa-file-contract"></i> Patents
+                <i class="fas fa-file-contract"></i>
+                <span>Patents</span>
             </div>
         """, unsafe_allow_html=True)
         patent_search = st.checkbox("", key="patents_checkbox", label_visibility="collapsed")
     with col3:
         st.markdown("""
             <div class="icon-checkbox">
-                <i class="fas fa-hand-holding-usd"></i> Funding
+                <i class="fas fa-hand-holding-usd"></i>
+                <span>Funding</span>
             </div>
         """, unsafe_allow_html=True)
         funding = st.checkbox("", key="funding_checkbox", label_visibility="collapsed")
     with col4:
         st.markdown("""
             <div class="icon-checkbox">
-                <i class="fas fa-network-wired"></i> Network
+                <i class="fas fa-network-wired"></i>
+                <span>Network</span>
             </div>
         """, unsafe_allow_html=True)
         networking = st.checkbox("", key="network_checkbox", label_visibility="collapsed")
     with col5:
         st.markdown("""
             <div class="icon-checkbox">
-                <i class="fas fa-shield-alt"></i> Compliance
+                <i class="fas fa-shield-alt"></i>
+                <span>Compliance</span>
             </div>
         """, unsafe_allow_html=True)
         compliance = st.checkbox("", key="compliance_checkbox", label_visibility="collapsed")
