@@ -1,7 +1,18 @@
 /* Global styles */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
-:root {
+/* Deep Crew Title */
+.deep-crew-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #4B5563;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+::root {
     --primary-color: #2563EB;
     --secondary-color: #4F46E5;
     --text-color: #1E293B;

@@ -23,6 +23,7 @@ def main():
     # Modern header with description
     st.markdown("""
         <div style='text-align: center; padding: 2rem 0;'>
+            <div class='deep-crew-title'>DEEP CREW</div>
             <h1 class='main-header'>Research & Innovation Hub</h1>
             <p style='font-size: 1.2rem; color: #64748B; max-width: 600px; margin: 0 auto;'>
                 Discover insights, analyze patents, and explore funding opportunities with AI-powered research tools
