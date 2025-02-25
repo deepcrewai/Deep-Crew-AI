@@ -56,38 +56,38 @@ def main():
     with col1:
         st.markdown("""
             <div class="icon-checkbox">
-                <i class="fas fa-search"></i>
+                <i class="fas fa-search"></i> Research
             </div>
         """, unsafe_allow_html=True)
-        research_agent = st.checkbox("Research", value=True)
+        research_agent = st.checkbox("", value=True, label_visibility="collapsed")
     with col2:
         st.markdown("""
             <div class="icon-checkbox">
-                <i class="fas fa-file-contract"></i>
+                <i class="fas fa-file-contract"></i> Patents
             </div>
         """, unsafe_allow_html=True)
-        patent_search = st.checkbox("Patents")
+        patent_search = st.checkbox("", label_visibility="collapsed")
     with col3:
         st.markdown("""
             <div class="icon-checkbox">
-                <i class="fas fa-hand-holding-usd"></i>
+                <i class="fas fa-hand-holding-usd"></i> Funding
             </div>
         """, unsafe_allow_html=True)
-        funding = st.checkbox("Funding")
+        funding = st.checkbox("", label_visibility="collapsed")
     with col4:
         st.markdown("""
             <div class="icon-checkbox">
-                <i class="fas fa-network-wired"></i>
+                <i class="fas fa-network-wired"></i> Network
             </div>
         """, unsafe_allow_html=True)
-        networking = st.checkbox("Network")
+        networking = st.checkbox("", label_visibility="collapsed")
     with col5:
         st.markdown("""
             <div class="icon-checkbox">
-                <i class="fas fa-shield-check"></i>
+                <i class="fas fa-shield-alt"></i> Compliance
             </div>
         """, unsafe_allow_html=True)
-        compliance = st.checkbox("Compliance")
+        compliance = st.checkbox("", label_visibility="collapsed")
 
     # Store selected stages
     selected_stages = []
