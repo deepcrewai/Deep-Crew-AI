@@ -20,7 +20,7 @@ class FundingAgent:
                 "region": region if region else "global",
                 "request": "Find relevant funding opportunities"
             }
-            
+
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[{
@@ -48,12 +48,12 @@ class FundingAgent:
                 }],
                 response_format={"type": "json_object"}
             )
-            
+
             return json.loads(response.choices[0].message.content).get("opportunities", [])
         except Exception as e:
             print(f"Error finding funding opportunities: {str(e)}")
             return []
-    
+
     def analyze_funding_trends(self, research_area: str) -> Dict:
         """Analyze current funding trends in the specified research area with enhanced AI analysis."""
         try:
@@ -126,12 +126,12 @@ class FundingAgent:
                 }],
                 response_format={"type": "json_object"}
             )
-            
+
             return json.loads(response.choices[0].message.content)
         except Exception as e:
             print(f"Error analyzing funding trends: {str(e)}")
             return {}
-    
+
     def get_regional_insights(self, region: str) -> Dict:
         """Get funding insights for a specific region."""
         try:
@@ -143,15 +143,33 @@ class FundingAgent:
                 {{
                     "overview": "Brief overview of funding landscape in the region",
                     "total_funding": "Total funding amount in billions",
+                    "funding_distribution": {{
+                        "Research Grants": 35,
+                        "Venture Capital": 25,
+                        "Government Funding": 20,
+                        "Corporate Innovation": 15,
+                        "Other Sources": 5
+                    }},
                     "key_sectors": ["sector1", "sector2", "sector3"],
+                    "sector_growth": [
+                        {{"sector": "Sector 1", "growth_rate": 25.5}},
+                        {{"sector": "Sector 2", "growth_rate": 15.2}},
+                        {{"sector": "Sector 3", "growth_rate": 10.8}}
+                    ],
                     "top_funds": [
                         {{"name": "Fund name", "focus": "Main focus area", "typical_grant": "Average grant size"}}
                     ],
                     "funding_trends": [
                         {{"trend": "Trend description", "impact": "High/Medium/Low"}}
-                    ]
+                    ],
+                    "success_metrics": {{
+                        "average_success_rate": 65,
+                        "total_projects_funded": 1250,
+                        "average_funding_size": "2.5M",
+                        "yoy_growth": 15
+                    }}
                 }}
-                Keep it realistic and focused on current market conditions.
+                Ensure all numbers are realistic for the region. For growth rates, use float numbers.
                 """
                 }],
                 response_format={"type": "json_object"}
@@ -162,9 +180,12 @@ class FundingAgent:
             return {
                 "overview": "Data currently unavailable",
                 "total_funding": "N/A",
+                "funding_distribution": {},
                 "key_sectors": [],
+                "sector_growth": [],
                 "top_funds": [],
-                "funding_trends": []
+                "funding_trends": [],
+                "success_metrics": {}
             }
 
     def generate_opportunity_heatmap(self, opportunities: List[Dict]) -> None:
@@ -223,6 +244,7 @@ class FundingAgent:
 
         except Exception as e:
             st.error(f"Error generating heatmap: {str(e)}")
+
 
 def render_funding_section(research_query: str):
     """Render the funding section in the Streamlit app."""
@@ -491,29 +513,68 @@ def render_funding_section(research_query: str):
                 insights = funding_agent.get_regional_insights(selected_region)
 
                 if insights:
-                    st.markdown("#### Overview")
+                    # Overview and Total Funding
+                    st.markdown("#### 📊 Market Overview")
                     st.write(insights["overview"])
 
-                    st.metric("Total Available Funding", insights["total_funding"])
+                    # Success Metrics in columns
+                    metrics = insights.get("success_metrics", {})
+                    met_col1, met_col2, met_col3, met_col4 = st.columns(4)
+                    with met_col1:
+                        st.metric("Success Rate", f"{metrics.get('average_success_rate', 0)}%")
+                    with met_col2:
+                        st.metric("Projects Funded", metrics.get('total_projects_funded', 0))
+                    with met_col3:
+                        st.metric("Avg Funding", metrics.get('average_funding_size', 'N/A'))
+                    with met_col4:
+                        st.metric("YoY Growth", f"{metrics.get('yoy_growth', 0)}%")
 
+                    # Funding Distribution Pie Chart
+                    st.markdown("#### 💰 Funding Distribution")
+                    dist_data = insights.get("funding_distribution", {})
+                    if dist_data:
+                        fig_dist = px.pie(
+                            values=list(dist_data.values()),
+                            names=list(dist_data.keys()),
+                            title="Funding Sources Distribution",
+                            hole=0.4
+                        )
+                        st.plotly_chart(fig_dist)
+
+                    # Sector Growth Bar Chart
+                    st.markdown("#### 📈 Sector Growth Rates")
+                    sector_growth = insights.get("sector_growth", [])
+                    if sector_growth:
+                        fig_growth = px.bar(
+                            sector_growth,
+                            x="sector",
+                            y="growth_rate",
+                            title="Growth Rates by Sector",
+                            labels={"sector": "Sector", "growth_rate": "Growth Rate (%)"},
+                            color="growth_rate",
+                            color_continuous_scale="viridis"
+                        )
+                        st.plotly_chart(fig_growth)
+
+                    # Key Information in Columns
                     col1, col2 = st.columns(2)
                     with col1:
-                        st.markdown("#### Key Sectors")
-                        for sector in insights["key_sectors"]:
+                        st.markdown("#### 🎯 Key Sectors")
+                        for sector in insights.get("key_sectors", []):
                             st.markdown(f"• {sector}")
 
-                    with col2:
-                        st.markdown("#### Top Funds")
-                        for fund in insights["top_funds"]:
+                        st.markdown("#### 💼 Top Funds")
+                        for fund in insights.get("top_funds", []):
                             st.markdown(f"""
                             • **{fund['name']}**
                               - Focus: {fund['focus']}
                               - Typical Grant: {fund['typical_grant']}
                             """)
 
-                    st.markdown("#### Current Trends")
-                    for trend in insights["funding_trends"]:
-                        st.markdown(f"""
-                        • **{trend['trend']}**
-                          Impact: {trend['impact']}
-                        """)
+                    with col2:
+                        st.markdown("#### 🔄 Current Trends")
+                        for trend in insights.get("funding_trends", []):
+                            st.markdown(f"""
+                            • **{trend['trend']}**
+                              - Impact: {trend['impact']}
+                            """)
