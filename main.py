@@ -27,8 +27,9 @@ def create_icon_box(icon_class: str, label: str, is_selected: bool) -> str:
 def main():
     setup_page()
 
-    # Modern header with description
+    # Add Font Awesome to the page
     st.markdown("""
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <div style='text-align: center; padding: 2rem 0;'>
             <div class='deep-crew-title'>DEEP CREW</div>
             <h1 class='main-header'>Research & Innovation Hub</h1>

@@ -1,22 +1,5 @@
 /* Global styles */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
-
-.deep-crew-title {
-    font-size: 2.5rem;
-    font-weight: 600;
-    color: #4B5563;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-}
-
-.main-header {
-    color: #64748B;
-    font-size: 1.5rem;
-    font-weight: 500;
-    margin: 0.5rem 0;
-}
 
 /* Icon styles */
 .icon-wrapper {
@@ -69,7 +52,6 @@
 
 .icon-box.selected i {
     color: #1D4ED8;
-    transform: scale(1.1);
 }
 
 .icon-box.selected span {
@@ -94,6 +76,27 @@
     cursor: pointer !important;
     margin: 0 !important;
     padding: 0 !important;
+}
+
+/* Base styles */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.deep-crew-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #4B5563;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.main-header {
+    color: #64748B;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0.5rem 0;
 }
 
 /* Content styles */
@@ -123,13 +126,6 @@
     --border-color: #E2E8F0;
     --success-color: #10B981;
     --warning-color: #F59E0B;
-}
-
-/* Base styles */
-.stApp {
-    font-family: 'Inter', sans-serif;
-    color: var(--text-color);
-    background-color: var(--bg-color);
 }
 
 .results-container h2 {
