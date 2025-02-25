@@ -94,6 +94,26 @@ class FundingAgent:
                                 "Others": 10
                             }
                         },
+                        "sector_success_rates": {
+                            "analysis": "Detailed analysis of success rates across sectors",
+                            "rates": {
+                                "Healthcare": 75,
+                                "Technology": 65,
+                                "Energy": 55,
+                                "Manufacturing": 45,
+                                "Agriculture": 40
+                            },
+                            "key_factors": [
+                                {"factor": "Market Demand", "impact": "High"},
+                                {"factor": "Technical Feasibility", "impact": "Medium"},
+                                {"factor": "Competition Level", "impact": "High"}
+                            ],
+                            "recommendations": [
+                                "recommendation1",
+                                "recommendation2",
+                                "recommendation3"
+                            ]
+                        },
                         "success_factors": ["factor1", "factor2"]
                     }
                     Note: growth_rate should be a float number (e.g. 15.5 for 15.5%)
@@ -106,7 +126,7 @@ class FundingAgent:
                 }],
                 response_format={"type": "json_object"}
             )
-            
+
             return json.loads(response.choices[0].message.content)
         except Exception as e:
             print(f"Error analyzing funding trends: {str(e)}")
@@ -311,13 +331,47 @@ def render_funding_section(research_query: str):
         with trend_tabs[1]:
             st.markdown("### 📈 Success Rates Analysis")
             if trends:
-                st.markdown("#### Funding Cycles")
+                st.markdown("#### 🎯 Sector Success Analysis")
+                sector_success = trends.get("sector_success_rates", {})
+
+                # AI Analysis
+                st.markdown("**AI Analysis**")
+                st.write(sector_success.get("analysis", ""))
+
+                # Success Rates by Sector Bar Chart
+                sector_rates = sector_success.get("rates", {})
+                if sector_rates:
+                    fig_success = px.bar(
+                        x=list(sector_rates.keys()),
+                        y=list(sector_rates.values()),
+                        title="Success Rates by Sector",
+                        labels={"x": "Sector", "y": "Success Rate (%)"},
+                        color=list(sector_rates.values()),
+                        color_continuous_scale="viridis"
+                    )
+                    fig_success.update_layout(showlegend=False)
+                    st.plotly_chart(fig_success)
+
+                # Key Success Factors
                 col1, col2 = st.columns(2)
                 with col1:
+                    st.markdown("**Key Impact Factors**")
+                    for factor in sector_success.get("key_factors", []):
+                        st.markdown(f"• **{factor['factor']}**: {factor['impact']} Impact")
+
+                with col2:
+                    st.markdown("**Strategic Recommendations**")
+                    for rec in sector_success.get("recommendations", []):
+                        st.markdown(f"• {rec}")
+
+                # Funding Cycles
+                st.markdown("#### 📅 Funding Cycles")
+                cycles_col1, cycles_col2 = st.columns(2)
+                with cycles_col1:
                     st.markdown("**Peak Application Months**")
                     for month in trends.get("funding_cycles", {}).get("peak_months", []):
                         st.markdown(f"• {month}")
-                with col2:
+                with cycles_col2:
                     st.markdown("**Success Factors**")
                     for factor in trends.get("success_factors", []):
                         st.markdown(f"• {factor}")
