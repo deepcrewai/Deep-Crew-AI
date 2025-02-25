@@ -126,7 +126,7 @@ class FundingAgent:
                 }],
                 response_format={"type": "json_object"}
             )
-
+            
             return json.loads(response.choices[0].message.content)
         except Exception as e:
             print(f"Error analyzing funding trends: {str(e)}")
@@ -380,13 +380,68 @@ def render_funding_section(research_query: str):
         with trend_tabs[2]:
             st.markdown("### 🌍 Market Analysis")
             if trends:
-                st.markdown("#### Emerging Opportunities")
-                for opp in trends.get("emerging_opportunities", []):
-                    st.markdown(f"• {opp}")
+                # Market Metrics
+                st.markdown("#### 📊 Market Overview")
+                sector_analysis = trends.get("sector_analysis", {})
 
-                # Add opportunity heatmap
+                # Market metrics in columns
+                metrics_col1, metrics_col2, metrics_col3 = st.columns(3)
+                with metrics_col1:
+                    st.metric("Market Size", sector_analysis.get("market_size", "N/A"))
+                with metrics_col2:
+                    st.metric("Growth Rate", sector_analysis.get("growth_rate", "N/A"))
+                with metrics_col3:
+                    st.metric("Key Players", len(sector_analysis.get("key_players", [])))
+
+                # Investment Distribution Chart
+                st.markdown("#### 💰 Investment Distribution")
+                investment_dist = sector_analysis.get("investment_distribution", {})
+                if investment_dist:
+                    fig_investment = px.pie(
+                        values=list(investment_dist.values()),
+                        names=list(investment_dist.keys()),
+                        title="Investment Distribution by Category",
+                        hole=0.4  # Makes it a donut chart
+                    )
+                    st.plotly_chart(fig_investment)
+
+                # Regional Distribution Chart
+                st.markdown("#### 🌐 Regional Distribution")
+                regional_dist = sector_analysis.get("regional_distribution", {})
+                if regional_dist:
+                    fig_regional = px.bar(
+                        x=list(regional_dist.keys()),
+                        y=list(regional_dist.values()),
+                        title="Regional Market Distribution",
+                        labels={"x": "Region", "y": "Market Share (%)"},
+                        color=list(regional_dist.values()),
+                        color_continuous_scale="viridis"
+                    )
+                    fig_regional.update_layout(showlegend=False)
+                    st.plotly_chart(fig_regional)
+
+                # Emerging Opportunities
+                st.markdown("#### 🚀 Emerging Opportunities")
+                opportunities = trends.get("emerging_opportunities", [])
                 if opportunities:
-                    st.markdown("#### Funding Distribution")
+                    for opp in opportunities:
+                        with st.expander(f"💡 {opp['opportunity']}"):
+                            st.markdown(f"""
+                            - **Potential Impact:** {opp['potential']}
+                            - **Timeline:** {opp['timeline']}
+                            """)
+
+                # Key Players Analysis
+                st.markdown("#### 🏢 Key Market Players")
+                key_players = sector_analysis.get("key_players", [])
+                if key_players:
+                    st.write("Major organizations shaping the market:")
+                    for player in key_players:
+                        st.markdown(f"• {player}")
+
+                # Add opportunity heatmap if available
+                if opportunities:
+                    st.markdown("#### 🗺️ Opportunity Distribution")
                     funding_agent.generate_opportunity_heatmap(opportunities)
 
     # Regional Insights Tab
