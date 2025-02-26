@@ -105,14 +105,14 @@ def main():
         ), unsafe_allow_html=True)
 
     # Handle stage selection from query params
-    query_params = st.experimental_get_query_params()
-    if 'stage' in query_params:
-        stage = query_params['stage'][0]
+    params = st.query_params
+    if 'stage' in params:
+        stage = params['stage'][0]
         if stage in st.session_state.selected_stages:
             st.session_state.selected_stages.remove(stage)
         else:
             st.session_state.selected_stages.add(stage)
-        st.experimental_set_query_params()
+        st.query_params.clear()
 
     selected_stages = list(st.session_state.selected_stages)
 
