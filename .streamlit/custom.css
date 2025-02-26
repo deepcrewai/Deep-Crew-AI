@@ -13,20 +13,9 @@
     padding: 1.5rem;
     margin: 0.5rem 0;
     transition: all 0.2s ease;
-    cursor: pointer;
     min-height: 120px;
-}
-
-.stage-selector:hover {
-    transform: translateY(-2px);
-    border-color: #2563EB;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.stage-selector.selected {
-    background-color: #EEF2FF;
-    border-color: #2563EB;
-    box-shadow: 0 0 0 2px #2563EB;
+    position: relative;
+    z-index: 1;
 }
 
 .stage-selector i {
@@ -42,6 +31,12 @@
     text-align: center;
 }
 
+.stage-selector.selected {
+    background-color: #EEF2FF;
+    border-color: #2563EB;
+    box-shadow: 0 0 0 2px #2563EB;
+}
+
 .stage-selector.selected i {
     color: #1D4ED8;
 }
@@ -49,6 +44,30 @@
 .stage-selector.selected .stage-label {
     color: #1D4ED8;
     font-weight: 600;
+}
+
+/* Streamlit button customization */
+.stButton {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 2 !important;
+}
+
+.stButton > button {
+    width: 100% !important;
+    height: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+    opacity: 0 !important;
+}
+
+/* Hide button text */
+.stButton > button > div {
+    display: none !important;
 }
 
 /* Title styles */
@@ -68,7 +87,7 @@
     margin: 0.5rem 0;
 }
 
-/* Content styles */
+/* Content section styles */
 .content-section {
     background: white;
     border-radius: 12px;
@@ -95,40 +114,4 @@
     --border-color: #E2E8F0;
     --success-color: #10B981;
     --warning-color: #F59E0B;
-}
-
-/* Hide Streamlit button styles */
-.stButton {
-    position: absolute !important;
-    width: 100% !important;
-    height: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-.stButton > button {
-    width: 100% !important;
-    height: 100% !important;
-    opacity: 0 !important;
-    cursor: pointer !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    color: transparent !important;
-    background: transparent !important;
-    border: none !important;
-    font-size: 1px !important;
-}
-
-/* Hide button text completely */
-.stButton > button > div,
-.stButton > button > p,
-.stButton > button > span {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    height: 0 !important;
-    width: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
 }

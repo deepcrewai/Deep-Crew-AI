@@ -13,11 +13,12 @@ from components import (
 from utils import setup_page
 from funding import render_funding_section, FundingAgent
 
-def create_stage_selector(icon_class: str, label: str, is_selected: bool) -> str:
-    """Create HTML for a stage selector button"""
+def create_stage_button(icon_class: str, label: str, stage_key: str) -> str:
+    """Create HTML for a stage button"""
+    is_selected = stage_key in st.session_state.get('selected_stages', set())
     selected_class = "selected" if is_selected else ""
     return f"""
-        <div class="stage-selector" data-stage="{label.lower()}" onclick="handleStageClick(this)">
+        <div class="stage-selector {selected_class}">
             <i class="{icon_class}"></i>
             <div class="stage-label">{label}</div>
         </div>
@@ -30,19 +31,6 @@ def main():
     st.markdown("""
         <head>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-            <script>
-                function handleStageClick(element) {
-                    const stage = element.getAttribute('data-stage');
-                    const data = {stage: stage};
-                    fetch('/_stcore/component/toggle_stage', {
-                        method: 'POST',
-                        body: JSON.stringify(data),
-                        headers: {'Content-Type': 'application/json'}
-                    }).then(() => {
-                        window.location.reload();
-                    });
-                }
-            </script>
         </head>
         <div style='text-align: center; padding: 2rem 0;'>
             <div class='deep-crew-title'>DEEP CREW</div>
@@ -69,50 +57,25 @@ def main():
     st.markdown("### Choose Research Stages")
     col1, col2, col3, col4, col5 = st.columns(5)
 
-    with col1:
-        st.markdown(create_stage_selector(
-            "fas fa-search",
-            "Research",
-            "research" in st.session_state.selected_stages
-        ), unsafe_allow_html=True)
+    stages = {
+        'research': ('fas fa-search', 'Research'),
+        'patents': ('fas fa-file-contract', 'Patents'),
+        'funding': ('fas fa-hand-holding-usd', 'Funding'),
+        'network': ('fas fa-network-wired', 'Network'),
+        'compliance': ('fas fa-shield-alt', 'Compliance')
+    }
 
-    with col2:
-        st.markdown(create_stage_selector(
-            "fas fa-file-contract",
-            "Patents",
-            "patents" in st.session_state.selected_stages
-        ), unsafe_allow_html=True)
+    columns = {'research': col1, 'patents': col2, 'funding': col3, 'network': col4, 'compliance': col5}
 
-    with col3:
-        st.markdown(create_stage_selector(
-            "fas fa-hand-holding-usd",
-            "Funding",
-            "funding" in st.session_state.selected_stages
-        ), unsafe_allow_html=True)
-
-    with col4:
-        st.markdown(create_stage_selector(
-            "fas fa-network-wired",
-            "Network",
-            "network" in st.session_state.selected_stages
-        ), unsafe_allow_html=True)
-
-    with col5:
-        st.markdown(create_stage_selector(
-            "fas fa-shield-alt",
-            "Compliance",
-            "compliance" in st.session_state.selected_stages
-        ), unsafe_allow_html=True)
-
-    # Handle stage selection from query params
-    params = st.query_params
-    if 'stage' in params:
-        stage = params['stage'][0]
-        if stage in st.session_state.selected_stages:
-            st.session_state.selected_stages.remove(stage)
-        else:
-            st.session_state.selected_stages.add(stage)
-        st.query_params.clear()
+    for stage_key, (icon, label) in stages.items():
+        with columns[stage_key]:
+            st.markdown(create_stage_button(icon, label, stage_key), unsafe_allow_html=True)
+            if st.button(label, key=f"btn_{stage_key}"):
+                if stage_key in st.session_state.selected_stages:
+                    st.session_state.selected_stages.remove(stage_key)
+                else:
+                    st.session_state.selected_stages.add(stage_key)
+                st.rerun()
 
     selected_stages = list(st.session_state.selected_stages)
 
@@ -125,10 +88,10 @@ def main():
 
         # Only add Results tab if more than one stage is selected
         if len(selected_stages) > 1:
-            selected_stages.append("Results")
+            selected_stages.append("results")
 
         # Create tabs for selected stages
-        tabs = st.tabs(selected_stages)
+        tabs = st.tabs([stage.capitalize() for stage in selected_stages])
 
         for idx, tab in enumerate(tabs):
             with tab:
