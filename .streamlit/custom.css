@@ -24,7 +24,6 @@
     border-radius: 12px;
     padding: 1rem;
     transition: all 0.2s ease;
-    cursor: pointer;
 }
 
 .icon-box:hover {
@@ -43,32 +42,54 @@
     font-size: 24px;
     color: #2563EB;
     margin-bottom: 8px;
+    pointer-events: none;
 }
 
-.icon-box span {
+.icon-box span.icon-label {
     font-size: 14px;
     color: #4B5563;
     font-weight: 500;
+    pointer-events: none;
 }
 
 .icon-box.selected i {
     color: #1D4ED8;
 }
 
-.icon-box.selected span {
+.icon-box.selected span.icon-label {
     color: #1D4ED8;
     font-weight: 600;
 }
 
-/* Hide Streamlit button */
-.stButton > button {
+/* Button container */
+.button-container {
     position: absolute;
-    width: 100%;
-    height: 100%;
     top: 0;
     left: 0;
-    opacity: 0;
-    cursor: pointer;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+}
+
+/* Hide Streamlit button styles */
+.stButton {
+    position: absolute !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.stButton > button {
+    width: 100% !important;
+    height: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
 }
 
 /* Title styles */
@@ -115,4 +136,11 @@
     --border-color: #E2E8F0;
     --success-color: #10B981;
     --warning-color: #F59E0B;
+}
+
+/* Base styles */
+.stApp {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-color);
+    background-color: var(--bg-color);
 }
