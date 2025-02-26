@@ -20,9 +20,8 @@ def create_icon_box(icon_class: str, label: str, is_selected: bool) -> str:
         <div class="icon-wrapper">
             <div class="icon-box {selected_class}">
                 <i class="{icon_class}"></i>
-                <span class="icon-label">{label}</span>
+                <div class="icon-label">{label}</div>
             </div>
-            <div class="button-container"></div>
         </div>
     """
 
