@@ -15,21 +15,24 @@ from funding import render_funding_section, FundingAgent
 
 def create_icon_box(icon_class: str, label: str, is_selected: bool) -> str:
     """Helper function to create icon HTML"""
-    return f'''
+    selected_class = "selected" if is_selected else ""
+    return f"""
         <div class="icon-wrapper">
-            <button class="icon-box{' selected' if is_selected else ''}" type="button">
+            <div class="icon-box {selected_class}">
                 <i class="{icon_class}"></i>
                 <span>{label}</span>
-            </button>
+            </div>
         </div>
-    '''
+    """
 
 def main():
     setup_page()
 
     # Add Font Awesome and custom styles
-    st.markdown('''
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    st.markdown("""
+        <head>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        </head>
         <div style='text-align: center; padding: 2rem 0;'>
             <div class='deep-crew-title'>DEEP CREW</div>
             <h1 class='main-header'>Research & Innovation Hub</h1>
@@ -37,7 +40,7 @@ def main():
                 Discover insights, analyze patents, and explore funding opportunities with AI-powered research tools
             </p>
         </div>
-    ''', unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
     # Search input
     search_query = st.text_input(
