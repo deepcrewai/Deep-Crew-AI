@@ -1,20 +1,8 @@
 /* Global styles */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
-/* Icon styles */
-.icon-wrapper {
-    position: relative;
-    width: 100%;
-    min-height: 120px;
-    margin: 0.5rem 0;
-}
-
-.icon-box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+/* Stage selector styles */
+.stage-selector {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -22,79 +10,45 @@
     background: white;
     border: 2px solid #E5E7EB;
     border-radius: 12px;
-    padding: 1rem;
+    padding: 1.5rem;
+    margin: 0.5rem 0;
     transition: all 0.2s ease;
     cursor: pointer;
+    min-height: 120px;
 }
 
-.icon-box:hover {
+.stage-selector:hover {
     transform: translateY(-2px);
     border-color: #2563EB;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.icon-box.selected {
+.stage-selector.selected {
     background-color: #EEF2FF;
     border-color: #2563EB;
     box-shadow: 0 0 0 2px #2563EB;
 }
 
-.icon-box i {
+.stage-selector i {
     font-size: 24px;
     color: #2563EB;
     margin-bottom: 0.5rem;
 }
 
-.icon-box .icon-label {
+.stage-selector .stage-label {
     font-size: 14px;
     color: #4B5563;
     font-weight: 500;
     text-align: center;
 }
 
-.icon-box.selected i {
+.stage-selector.selected i {
     color: #1D4ED8;
 }
 
-.icon-box.selected .icon-label {
+.stage-selector.selected .stage-label {
     color: #1D4ED8;
     font-weight: 600;
-}
-
-/* Hide Streamlit button styles */
-.stButton {
-    position: absolute !important;
-    width: 100% !important;
-    height: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-.stButton > button {
-    width: 100% !important;
-    height: 100% !important;
-    opacity: 0 !important;
-    cursor: pointer !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    color: transparent !important;
-    background: transparent !important;
-    border: none !important;
-    font-size: 1px !important;
-}
-
-/* Hide button text completely */
-.stButton > button > div,
-.stButton > button > p,
-.stButton > button > span {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    height: 0 !important;
-    width: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
 }
 
 /* Title styles */
@@ -141,4 +95,40 @@
     --border-color: #E2E8F0;
     --success-color: #10B981;
     --warning-color: #F59E0B;
+}
+
+/* Hide Streamlit button styles */
+.stButton {
+    position: absolute !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.stButton > button {
+    width: 100% !important;
+    height: 100% !important;
+    opacity: 0 !important;
+    cursor: pointer !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    font-size: 1px !important;
+}
+
+/* Hide button text completely */
+.stButton > button > div,
+.stButton > button > p,
+.stButton > button > span {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
 }

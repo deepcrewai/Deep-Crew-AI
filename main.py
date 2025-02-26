@@ -5,7 +5,7 @@ from ai_analyzer import AIAnalyzer
 from patent_client import PatentSearchClient
 from components import (
     render_search_section, 
-    render_analysis_section, 
+    render_analysis_section,
     render_patent_results,
     render_combined_results,
     handle_pdf_export
@@ -13,15 +13,13 @@ from components import (
 from utils import setup_page
 from funding import render_funding_section, FundingAgent
 
-def create_icon_box(icon_class: str, label: str, is_selected: bool) -> str:
-    """Helper function to create icon HTML"""
+def create_stage_selector(icon_class: str, label: str, is_selected: bool) -> str:
+    """Create HTML for a stage selector button"""
     selected_class = "selected" if is_selected else ""
     return f"""
-        <div class="icon-wrapper">
-            <div class="icon-box {selected_class}">
-                <i class="{icon_class}"></i>
-                <div class="icon-label">{label}</div>
-            </div>
+        <div class="stage-selector" data-stage="{label.lower()}" onclick="handleStageClick(this)">
+            <i class="{icon_class}"></i>
+            <div class="stage-label">{label}</div>
         </div>
     """
 
@@ -32,6 +30,19 @@ def main():
     st.markdown("""
         <head>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+            <script>
+                function handleStageClick(element) {
+                    const stage = element.getAttribute('data-stage');
+                    const data = {stage: stage};
+                    fetch('/_stcore/component/toggle_stage', {
+                        method: 'POST',
+                        body: JSON.stringify(data),
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                }
+            </script>
         </head>
         <div style='text-align: center; padding: 2rem 0;'>
             <div class='deep-crew-title'>DEEP CREW</div>
@@ -50,90 +61,60 @@ def main():
         label_visibility="collapsed"
     )
 
-    # Initialize session state
-    if 'selected_icons' not in st.session_state:
-        st.session_state.selected_icons = {
-            'research': False,
-            'patents': False,
-            'funding': False,
-            'network': False,
-            'compliance': False
-        }
+    # Initialize session state for selected stages
+    if 'selected_stages' not in st.session_state:
+        st.session_state.selected_stages = set()
 
-    # Initialize other session states if they don't exist
-    for state in ['search_results', 'analysis', 'last_query', 'patent_results', 'patent_analysis', 'combined_analysis']:
-        if state not in st.session_state:
-            st.session_state[state] = None
-
-    # Stage selection
+    # Create stage selectors
     st.markdown("### Choose Research Stages")
     col1, col2, col3, col4, col5 = st.columns(5)
 
-    # Research Icon
     with col1:
-        is_research_selected = st.session_state.selected_icons.get('research', False)
-        st.markdown(create_icon_box(
+        st.markdown(create_stage_selector(
             "fas fa-search",
             "Research",
-            is_research_selected
+            "research" in st.session_state.selected_stages
         ), unsafe_allow_html=True)
-        if st.button(" ", key="research"):
-            st.session_state.selected_icons['research'] = not is_research_selected
-            st.rerun()
 
-    # Patents Icon
     with col2:
-        is_patents_selected = st.session_state.selected_icons.get('patents', False)
-        st.markdown(create_icon_box(
+        st.markdown(create_stage_selector(
             "fas fa-file-contract",
             "Patents",
-            is_patents_selected
+            "patents" in st.session_state.selected_stages
         ), unsafe_allow_html=True)
-        if st.button(" ", key="patents"):
-            st.session_state.selected_icons['patents'] = not is_patents_selected
-            st.rerun()
 
-    # Funding Icon
     with col3:
-        is_funding_selected = st.session_state.selected_icons.get('funding', False)
-        st.markdown(create_icon_box(
+        st.markdown(create_stage_selector(
             "fas fa-hand-holding-usd",
             "Funding",
-            is_funding_selected
+            "funding" in st.session_state.selected_stages
         ), unsafe_allow_html=True)
-        if st.button(" ", key="funding"):
-            st.session_state.selected_icons['funding'] = not is_funding_selected
-            st.rerun()
 
-    # Network Icon
     with col4:
-        is_network_selected = st.session_state.selected_icons.get('network', False)
-        st.markdown(create_icon_box(
+        st.markdown(create_stage_selector(
             "fas fa-network-wired",
             "Network",
-            is_network_selected
+            "network" in st.session_state.selected_stages
         ), unsafe_allow_html=True)
-        if st.button(" ", key="network"):
-            st.session_state.selected_icons['network'] = not is_network_selected
-            st.rerun()
 
-    # Compliance Icon
     with col5:
-        is_compliance_selected = st.session_state.selected_icons.get('compliance', False)
-        st.markdown(create_icon_box(
+        st.markdown(create_stage_selector(
             "fas fa-shield-alt",
             "Compliance",
-            is_compliance_selected
+            "compliance" in st.session_state.selected_stages
         ), unsafe_allow_html=True)
-        if st.button(" ", key="compliance"):
-            st.session_state.selected_icons['compliance'] = not is_compliance_selected
-            st.rerun()
 
-    # Get selected stages based on icon selections
-    selected_stages = []
-    for icon, is_selected in st.session_state.selected_icons.items():
-        if is_selected:
-            selected_stages.append(icon.capitalize())
+    # Handle stage selection from query params
+    query_params = st.experimental_get_query_params()
+    if 'stage' in query_params:
+        stage = query_params['stage'][0]
+        if stage in st.session_state.selected_stages:
+            st.session_state.selected_stages.remove(stage)
+        else:
+            st.session_state.selected_stages.add(stage)
+        st.experimental_set_query_params()
+
+    selected_stages = list(st.session_state.selected_stages)
 
     # Create tabs for selected stages if we have a search query
     if search_query:
@@ -151,11 +132,11 @@ def main():
 
         for idx, tab in enumerate(tabs):
             with tab:
-                if selected_stages[idx] == "Research":
+                if selected_stages[idx] == "research":
                     openalex_client = OpenAlexClient()
                     ai_analyzer = AIAnalyzer()
 
-                    if search_query != st.session_state.last_query:
+                    if search_query != st.session_state.get('last_query', ''):
                         with st.spinner("Analyzing..."):
                             keywords = ai_analyzer.generate_search_keywords(search_query)
                             st.markdown("Researching...")
@@ -170,14 +151,14 @@ def main():
                                 st.session_state.search_results = None
                                 st.session_state.analysis = None
 
-                    if st.session_state.search_results:
+                    if st.session_state.get('search_results'):
                         render_search_section(st.session_state.search_results)
                         render_analysis_section(st.session_state.analysis)
 
-                elif selected_stages[idx] == "Patents":
+                elif selected_stages[idx] == "patents":
                     patent_client = PatentSearchClient()
 
-                    if search_query != st.session_state.last_query or st.session_state.patent_results is None:
+                    if search_query != st.session_state.get('last_query', '') or st.session_state.get('patent_results') is None:
                         with st.spinner("🔍 Searching patents..."):
                             patent_results = patent_client.search_patents(search_query)
                             if patent_results:
@@ -189,10 +170,10 @@ def main():
                                 st.session_state.patent_results = None
                                 st.session_state.patent_analysis = None
 
-                    if st.session_state.patent_results:
+                    if st.session_state.get('patent_results'):
                         render_patent_results(st.session_state.patent_results, st.session_state.patent_analysis)
                         # AI Analysis for Patents 
-                        if st.session_state.patent_analysis:
+                        if st.session_state.get('patent_analysis'):
                             st.subheader("AI Analysis")
 
                             st.markdown("### 🔬 Overview")
@@ -209,21 +190,21 @@ def main():
                             st.markdown("### 🏢 Competition")
                             st.write(st.session_state.patent_analysis.get("competition", ""))
 
-                elif selected_stages[idx] == "Results":
-                    if st.session_state.combined_analysis is None:
+                elif selected_stages[idx] == "results":
+                    if st.session_state.get('combined_analysis') is None:
                         with st.spinner("🔄 Generating comprehensive analysis..."):
                             ai_analyzer = AIAnalyzer()
-                            research_data = st.session_state.search_results if st.session_state.search_results else []
-                            patent_data = st.session_state.patent_results if st.session_state.patent_results else []
+                            research_data = st.session_state.get('search_results') if st.session_state.get('search_results') else []
+                            patent_data = st.session_state.get('patent_results') if st.session_state.get('patent_results') else []
                             st.session_state.combined_analysis = ai_analyzer.analyze_combined_results(
                                 research_data,
                                 patent_data
                             )
 
-                    if st.session_state.combined_analysis:
+                    if st.session_state.get('combined_analysis'):
                         render_combined_results(
-                            st.session_state.search_results or [],
-                            st.session_state.patent_results or [],
+                            st.session_state.get('search_results') or [],
+                            st.session_state.get('patent_results') or [],
                             st.session_state.combined_analysis
                         )
                         # Funding Analysis
@@ -294,11 +275,11 @@ def main():
                     else:
                         st.info("Please perform a search in Research Agent or Patent Search to view combined analysis.")
 
-                elif selected_stages[idx] == "Network":
+                elif selected_stages[idx] == "network":
                     st.info("🔄 Coming Soon")
-                elif selected_stages[idx] == "Funding":
+                elif selected_stages[idx] == "funding":
                     render_funding_section(search_query)
-                elif selected_stages[idx] == "Compliance":
+                elif selected_stages[idx] == "compliance":
                     st.info("✓ Coming Soon")
     else:
         st.info("Enter a search query to begin your research journey.")
