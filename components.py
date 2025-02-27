@@ -441,10 +441,10 @@ def generate_patent_pdf_report(results, analysis):
     return buffer
 
 def render_search_section(results):
-    """Render the modernized search results section."""
+    """Render the modernized search results section with detailed paper information."""
     metrics = calculate_metrics(results)
 
-    # Modern metrics cards
+    # Modern metrics cards with updated styling
     st.markdown("""
         <style>
         .metric-card {
@@ -469,75 +469,6 @@ def render_search_section(results):
             font-size: 0.9rem;
             color: #5f6368;
         }
-        </style>
-    """, unsafe_allow_html=True)
-
-    col1, col2, col3, col4 = st.columns(4)
-    metrics_data = [
-        {"label": "Total Papers", "value": metrics["total_papers"]},
-        {"label": "Total Citations", "value": metrics["total_citations"]},
-        {"label": "Average Year", "value": metrics["avg_year"]},
-        {"label": "Average Citations", "value": metrics["avg_citations"]}
-    ]
-
-    for col, metric in zip([col1, col2, col3, col4], metrics_data):
-        with col:
-            st.markdown(f"""
-                <div class="metric-card">
-                    <div class="metric-value">{metric['value']}</div>
-                    <div class="metric-label">{metric['label']}</div>
-                </div>
-            """, unsafe_allow_html=True)
-
-    # Modern results header with export button
-    st.markdown("""
-        <style>
-        .results-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 2rem 0 1rem;
-        }
-        .results-title {
-            font-size: 1.5rem;
-            font-weight: 500;
-            color: #202124;
-        }
-        .export-button {
-            background-color: #1a73e8;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 24px;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-        }
-        .export-button:hover {
-            background-color: #1557b0;
-            box-shadow: 0 1px 6px rgba(32,33,36,.28);
-        }
-        </style>
-        <div class="results-header">
-            <div class="results-title">Search Results</div>
-        </div>
-    """, unsafe_allow_html=True)
-
-    # Export button
-    if 'pdf_generated' not in st.session_state:
-        st.session_state.pdf_generated = False
-
-    st.download_button(
-        label="📑 Export Results as PDF",
-        data=generate_pdf_report(results, st.session_state.analysis),
-        file_name="research_report.pdf",
-        mime="application/pdf",
-        key="pdf_download",
-        use_container_width=False
-    )
-
-    # Modern paper cards
-    st.markdown("""
-        <style>
         .paper-card {
             background: white;
             border-radius: 12px;
@@ -550,56 +481,173 @@ def render_search_section(results):
             box-shadow: 0 2px 6px rgba(0,0,0,0.15);
         }
         .paper-title {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 500;
             color: #202124;
             margin-bottom: 0.5rem;
         }
-        .paper-citation {
-            font-size: 0.9rem;
-            color: #5f6368;
-            margin-bottom: 1rem;
-        }
-        .paper-abstract {
-            font-size: 0.95rem;
-            color: #202124;
-            line-height: 1.5;
+        .paper-section {
+            margin: 1rem 0;
             padding: 1rem;
             background: #f8f9fa;
             border-radius: 8px;
         }
-        .paper-metrics {
+        .paper-section-title {
+            font-weight: 500;
+            color: #1a73e8;
+            margin-bottom: 0.5rem;
+        }
+        .paper-metadata {
             display: flex;
             gap: 1rem;
-            margin-top: 1rem;
+            flex-wrap: wrap;
+            margin: 0.5rem 0;
+        }
+        .metadata-item {
+            background: #e8f0fe;
+            padding: 0.25rem 0.75rem;
+            border-radius: 16px;
             font-size: 0.9rem;
-            color: #5f6368;
+            color: #1967d2;
         }
-        .paper-link {
-            color: #1a73e8;
-            text-decoration: none;
+        .author-list {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 0.5rem 0;
         }
-        .paper-link:hover {
-            text-decoration: underline;
+        .author-item {
+            background: #f1f3f4;
+            padding: 0.25rem 0.75rem;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            color: #202124;
+        }
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+        }
+        .concept-item {
+            background: #e6f4ea;
+            padding: 0.25rem 0.75rem;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            color: #137333;
+            text-align: center;
         }
         </style>
     """, unsafe_allow_html=True)
 
+    # Metrics display
+    col1, col2, col3, col4 = st.columns(4)
+    metrics_data = [
+        {"label": "Toplam Makale", "value": metrics["total_papers"]},
+        {"label": "Toplam Atıf", "value": metrics["total_citations"]},
+        {"label": "Ortalama Yıl", "value": metrics["avg_year"]},
+        {"label": "Ortalama Atıf", "value": metrics["avg_citations"]}
+    ]
+
+    for col, metric in zip([col1, col2, col3, col4], metrics_data):
+        with col:
+            st.markdown(f"""
+                <div class="metric-card">
+                    <div class="metric-value">{metric['value']}</div>
+                    <div class="metric-label">{metric['label']}</div>
+                </div>
+            """, unsafe_allow_html=True)
+
+    # Results header
+    st.markdown("""
+        <div style="margin: 2rem 0 1rem">
+            <h2 style="color: #202124; font-size: 1.5rem; font-weight: 500;">Araştırma Sonuçları</h2>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # Export button
+    if 'pdf_generated' not in st.session_state:
+        st.session_state.pdf_generated = False
+
+    st.download_button(
+        label="📑 PDF Olarak İndir",
+        data=generate_pdf_report(results, st.session_state.analysis),
+        file_name="research_report.pdf",
+        mime="application/pdf",
+        key="pdf_download",
+        use_container_width=False
+    )
+
+    # Display detailed paper information
     for paper in results:
-        similarity = paper.get('similarity_score', 0)
         st.markdown(f"""
             <div class="paper-card">
-                <div class="paper-title">{paper.get('title', 'Untitled')}</div>
-                <div class="paper-citation">{format_citation(paper)}</div>
-                <div class="paper-abstract">{paper.get('abstract', 'No abstract available')}</div>
-                <div class="paper-metrics">
-                    <span>Similarity: {similarity:.2f}</span>
-                    <span>Citations: {paper.get('cited_by_count', 0)}</span>
-                    {'<a href="' + paper['url'] + '" class="paper-link" target="_blank">View Paper</a>' if paper.get('url') else ''}
+                <!-- 1. Makale Temel Bilgileri -->
+                <div class="paper-title">{paper.get('title', 'Başlıksız')}</div>
+                <div class="paper-section">
+                    <div class="paper-section-title">Temel Bilgiler</div>
+                    <div class="paper-metadata">
+                        <span class="metadata-item">📅 {paper.get('publication_year', 'N/A')}</span>
+                        <span class="metadata-item">🔍 DOI: {paper.get('doi', 'N/A')}</span>
+                        <span class="metadata-item">📖 {paper.get('type', 'Makale')}</span>
+                    </div>
+                    <p style="margin-top: 1rem;">{paper.get('abstract', 'Özet bulunmamaktadır.')}</p>
+                </div>
+
+                <!-- 2. Yazar Bilgileri -->
+                <div class="paper-section">
+                    <div class="paper-section-title">Yazarlar ve Kurumlar</div>
+                    <div class="author-list">
+                        {' '.join([f'<span class="author-item">👤 {author}</span>' 
+                                 for author in paper.get('authorships', [{'author': {'display_name': 'Anonim'}}])])
+                        }
+                    </div>
+                    <div class="paper-metadata">
+                        {' '.join([f'<span class="metadata-item">🏛️ {inst.get("display_name", "Bilinmeyen Kurum")}</span>'
+                                 for inst in paper.get('institutions', [])])
+                        }
+                    </div>
+                </div>
+
+                <!-- 3. Bibliyometrik Veriler -->
+                <div class="paper-section">
+                    <div class="paper-section-title">Etki Metrikleri</div>
+                    <div class="paper-metadata">
+                        <span class="metadata-item">📊 Atıf Sayısı: {paper.get('cited_by_count', 0)}</span>
+                        <span class="metadata-item">🔄 Referans Sayısı: {len(paper.get('referenced_works', []))}</span>
+                        <span class="metadata-item">📈 Etki Puanı: {paper.get('score', 'N/A')}</span>
+                    </div>
+                </div>
+
+                <!-- 4. Dergi/Yayın Bilgileri -->
+                <div class="paper-section">
+                    <div class="paper-section-title">Yayın Detayları</div>
+                    <div class="paper-metadata">
+                        <span class="metadata-item">📰 {paper.get('host_venue', {}).get('display_name', 'N/A')}</span>
+                        <span class="metadata-item">🔖 ISSN: {paper.get('host_venue', {}).get('issn_l', 'N/A')}</span>
+                        <span class="metadata-item">📘 Yayıncı: {paper.get('host_venue', {}).get('publisher', 'N/A')}</span>
+                    </div>
+                </div>
+
+                <!-- 5. Araştırma Alanları -->
+                <div class="paper-section">
+                    <div class="paper-section-title">Konu Başlıkları ve Alanlar</div>
+                    <div class="concepts-grid">
+                        {' '.join([f'<span class="concept-item">{concept.get("display_name", "")}</span>'
+                                 for concept in paper.get('concepts', [])])
+                        }
+                    </div>
+                </div>
+
+                <!-- Bağlantılar -->
+                <div style="margin-top: 1rem; text-align: right;">
+                    <a href="{paper.get('url', '#')}" target="_blank" 
+                       style="color: #1a73e8; text-decoration: none; font-weight: 500;">
+                        Makaleyi Görüntüle →
+                    </a>
                 </div>
             </div>
         """, unsafe_allow_html=True)
-
 
 def render_patent_results(results, analysis):
     """Render patent search results with export functionality."""
