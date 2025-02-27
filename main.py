@@ -79,11 +79,11 @@ def main():
 
                 /* Custom button styling */
                 div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button {
-                    background-color: #1a73e8;
-                    border: 1px solid #1a73e8;
+                    background-color: white;
+                    border: 1px solid #dfe1e5;
                     border-radius: 8px;
                     padding: 0.75rem 1.5rem;
-                    color: white;
+                    color: #202124;
                     font-weight: 500;
                     cursor: pointer;
                     transition: all 0.2s ease;
@@ -96,14 +96,13 @@ def main():
 
                 div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button:hover {
                     box-shadow: 0 1px 6px rgba(32,33,36,.28);
-                    background-color: #1557b0;
-                    border-color: #1557b0;
+                    border-color: #1a73e8;
                 }
 
                 div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button[data-selected="true"] {
-                    background-color: white;
+                    background-color: #1a73e8;
                     border-color: #1a73e8;
-                    color: #1a73e8;
+                    color: white;
                 }
 
                 /* Tab styling */
