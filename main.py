@@ -95,101 +95,9 @@ def main():
                     text-align: center;
                 }
 
-                /* Existing styles... */
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-                @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;500;600;700&display=swap');
-                @import url('https://fonts.googleapis.com/css2?family=OpenDyslexic:wght@400;700&display=swap');
+                /* Remaining styles... */
                 .st-bt {
                     background-color: transparent !important;
-                }
-
-                .main-container {
-                    max-width: 800px;
-                    margin: 3rem auto;
-                    text-align: center;
-                    font-family: 'Inter', sans-serif;
-                }
-
-                .logo-title {
-                    font-size: 2.75rem;
-                    font-weight: 700;
-                    padding: 1.25rem 0px 1rem;
-                    font-family: "Source Sans Pro", sans-serif;
-                    color: black;
-                }
-
-                .main-header {
-                    font-size: 2.5rem;
-                    font-weight: 500;
-                    color: #202124;
-                    margin: 1rem 0;
-                    font-family: 'Inter', sans-serif;
-                }
-
-                .subtitle {
-                    font-size: 1.1rem;
-                    color: #5f6368;
-                    margin-bottom: 2rem;
-                }
-
-                /* Search box styling */
-                .stTextInput > div > div {
-                    background-color: #fff;
-                    border-radius: 24px !important;
-                    border: none !important;
-                    box-shadow: none;
-                    padding: 0 1rem;
-                    transition: all 0.3s ease;
-                }
-
-                .stTextInput > div > div:hover,
-                .stTextInput > div > div:focus-within {
-                    box-shadow: 0 1px 6px rgba(32,33,36,.28);
-                }
-
-                /* Stage buttons container */
-                .stage-buttons {
-                    display: flex;
-                    justify-content: space-between;
-                    margin: 2rem 0;
-                    gap: 1rem;
-                }
-
-                /* Custom button styling */
-                div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button {
-                    background-color: rgb(255, 255, 255);
-                    border: 1px solid #dfe1e5;
-                    border-radius: 8px;
-                    padding: 0.75rem 1.5rem;
-                    color: #202124;
-                    font-weight: 500;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                    width: 100%;
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 0.5rem;
-                }
-
-                div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button:hover {
-                    box-shadow: 0 1px 6px rgba(32,33,36,.28);
-                    border-color: rgb(31, 119, 180);
-                    color: rgb(31, 119, 180);
-                }
-
-                div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button[data-selected="true"] {
-                    background-color: rgb(31, 119, 180);
-                    border-color: rgb(31, 119, 180);
-                    color: white;
-                }
-
-                /* Tab styling */
-                .stTabs {
-                    background: #fff;
-                    border-radius: 12px;
-                    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-                    margin-top: 2rem;
                 }
 
                 /* High Contrast Mode */
@@ -229,67 +137,34 @@ def main():
                     font-family: 'OpenDyslexic', sans-serif !important;
                 }
             </style>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    // Create and append the accessibility button and menu to the body
-                    const button = document.createElement('button');
-                    button.className = 'accessibility-button';
-                    button.setAttribute('aria-label', 'Accessibility Options');
-                    button.innerHTML = '<i class="fas fa-universal-access"></i>';
-
-                    const menu = document.createElement('div');
-                    menu.className = 'accessibility-menu';
-                    menu.innerHTML = `
-                        <div class="accessibility-option" onclick="toggleAccessibility('high-contrast')">
-                            <i class="fas fa-adjust"></i> High Contrast
-                        </div>
-                        <div class="accessibility-option" onclick="toggleAccessibility('negative-contrast')">
-                            <i class="fas fa-moon"></i> Negative Contrast
-                        </div>
-                        <div class="accessibility-option" onclick="toggleAccessibility('light-background')">
-                            <i class="fas fa-sun"></i> Light Background
-                        </div>
-                        <div class="accessibility-option" onclick="toggleAccessibility('links-underline')">
-                            <i class="fas fa-underline"></i> Links Underline
-                        </div>
-                        <div class="accessibility-option" onclick="toggleAccessibility('readable-font')">
-                            <i class="fas fa-font"></i> Readable Font
-                        </div>
-                        <div class="accessibility-option" onclick="resetAccessibility()">
-                            <i class="fas fa-undo"></i> Reset
-                        </div>
-                    `;
-
-                    document.body.appendChild(button);
-                    document.body.appendChild(menu);
-
-                    button.addEventListener('click', function() {
-                        menu.classList.toggle('show');
-                    });
-                });
-
-                function toggleAccessibility(option) {
-                    document.body.classList.toggle(option);
-                    const streamlit = window.parent.streamlit;
-                    streamlit.setComponentValue({
-                        option: option,
-                        state: document.body.classList.contains(option)
-                    });
-                }
-
-                function resetAccessibility() {
-                    ['high-contrast', 'negative-contrast', 'light-background', 'links-underline', 'readable-font'].forEach(option => {
-                        document.body.classList.remove(option);
-                    });
-                    const streamlit = window.parent.streamlit;
-                    streamlit.setComponentValue({
-                        option: 'reset',
-                        state: true
-                    });
-                }
-            </script>
         </head>
+        <div id="accessibility-container">
+            <button class="accessibility-button" onclick="document.querySelector('.accessibility-menu').classList.toggle('show')" aria-label="Accessibility Options">
+                <i class="fas fa-universal-access"></i>
+            </button>
+
+            <div class="accessibility-menu">
+                <div class="accessibility-option" onclick="document.body.classList.toggle('high-contrast')">
+                    <i class="fas fa-adjust"></i> High Contrast
+                </div>
+                <div class="accessibility-option" onclick="document.body.classList.toggle('negative-contrast')">
+                    <i class="fas fa-moon"></i> Negative Contrast
+                </div>
+                <div class="accessibility-option" onclick="document.body.classList.toggle('light-background')">
+                    <i class="fas fa-sun"></i> Light Background
+                </div>
+                <div class="accessibility-option" onclick="document.body.classList.toggle('links-underline')">
+                    <i class="fas fa-underline"></i> Links Underline
+                </div>
+                <div class="accessibility-option" onclick="document.body.classList.toggle('readable-font')">
+                    <i class="fas fa-font"></i> Readable Font
+                </div>
+                <div class="accessibility-option" onclick="
+                    ['high-contrast', 'negative-contrast', 'light-background', 'links-underline', 'readable-font'].forEach(c => document.body.classList.remove(c))">
+                    <i class="fas fa-undo"></i> Reset
+                </div>
+            </div>
+        </div>
         <div class="main-container">
             <div class="logo-title">DEEP CREW</div>
             <h1 class="main-header">Research & Innovation Hub</h1>
