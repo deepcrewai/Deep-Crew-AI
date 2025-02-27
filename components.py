@@ -1,4 +1,11 @@
 import streamlit as st
+import plotly.express as px
+from utils import format_citation, calculate_metrics
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from datetime import datetime
+from reportlab.lib.utils import ImageReader
 
 def generate_pdf_report(results, analysis):
     """Generate a PDF report of AI analysis."""
@@ -394,6 +401,7 @@ def render_search_section(results):
         """, unsafe_allow_html=True)
 
 
+
 def render_patent_results(results, analysis):
     """Render patent search results with export functionality."""
     # Display metrics
@@ -659,78 +667,106 @@ def render_accessibility_menu():
 
         # Screen Reader
         if st.toggle("🔊 Ekran Okuyucu (Alt+S)", value=st.session_state.get('screen_reader', False), key='screen_reader'):
-            # Add screen reader functionality using components.html
             st.components.v1.html("""
+                <div id="screenReaderContainer"></div>
                 <script>
-                    // Speech synthesis initialization
+                    // Initialize speech synthesis
                     if ('speechSynthesis' in window) {
                         const synth = window.speechSynthesis;
                         let speaking = false;
 
+                        // Initialize voices
+                        let voices = [];
+                        function loadVoices() {
+                            voices = synth.getVoices();
+                            const turkishVoice = voices.find(voice => voice.lang.includes('tr'));
+                            if (turkishVoice) {
+                                console.log('Turkish voice found:', turkishVoice.name);
+                            }
+                        }
+
+                        synth.onvoiceschanged = loadVoices;
+                        loadVoices();
+
+                        // Speak function
                         function speak(text) {
                             if (!text || typeof text !== 'string') return;
 
-                            // Cancel any ongoing speech
+                            // Cancel previous speech
                             if (speaking) {
                                 synth.cancel();
                             }
 
-                            // Create and configure utterance
+                            // Create utterance
                             const utterance = new SpeechSynthesisUtterance(text);
+
+                            // Try to set Turkish voice
+                            const turkishVoice = voices.find(voice => voice.lang.includes('tr'));
+                            if (turkishVoice) {
+                                utterance.voice = turkishVoice;
+                            }
+
                             utterance.lang = 'tr-TR';
                             utterance.rate = 1;
                             utterance.pitch = 1;
                             utterance.volume = 1;
 
-                            // Handle speech events
+                            // Speech events
                             utterance.onstart = () => { speaking = true; };
                             utterance.onend = () => { speaking = false; };
-                            utterance.onerror = () => { speaking = false; };
+                            utterance.onerror = (e) => { 
+                                speaking = false;
+                                console.error('Speech error:', e);
+                            };
 
-                            // Speak the text
+                            // Speak
                             synth.speak(utterance);
+                            console.log('Speaking:', text);
                         }
 
-                        // Function to handle focused elements
-                        function handleFocusedElement(element) {
-                            const textToRead = 
-                                element.getAttribute('aria-label') ||
-                                element.title ||
-                                element.textContent ||
-                                element.value ||
-                                element.placeholder;
+                        // Function to handle element text
+                        function getElementText(element) {
+                            return element.getAttribute('aria-label') || 
+                                   element.title ||
+                                   element.textContent ||
+                                   element.value ||
+                                   element.placeholder;
+                        }
 
-                            if (textToRead) {
-                                speak(textToRead.trim());
+                        // Focus handler
+                        function handleFocus(event) {
+                            const element = event.target;
+                            const text = getElementText(element);
+                            if (text && text.trim()) {
+                                speak(text.trim());
                             }
                         }
 
-                        // Add focus event listeners
-                        document.addEventListener('focusin', (e) => {
-                            if (e.target) {
-                                handleFocusedElement(e.target);
-                            }
-                        });
+                        // Add event listeners
+                        document.addEventListener('focusin', handleFocus);
 
                         // Manual trigger with Alt+S
                         document.addEventListener('keydown', (e) => {
                             if (e.altKey && e.key.toLowerCase() === 's') {
-                                const activeElement = document.activeElement;
-                                if (activeElement) {
-                                    handleFocusedElement(activeElement);
+                                const element = document.activeElement;
+                                const text = getElementText(element);
+                                if (text && text.trim()) {
+                                    speak(text.trim());
                                 }
                             }
                         });
 
-                        // Observe DOM changes for dynamic content
+                        // Observer for dynamic content
                         const observer = new MutationObserver((mutations) => {
                             mutations.forEach((mutation) => {
                                 if (mutation.type === 'childList') {
                                     mutation.addedNodes.forEach((node) => {
-                                        if (node.nodeType === 1) {
-                                            const ariaLabel = node.getAttribute('aria-label');
-                                            if (ariaLabel) {
-                                                speak(ariaLabel);
+                                        if (node.nodeType === 1 && // Element node
+                                            (node.getAttribute('data-testid') || 
+                                             node.getAttribute('aria-label'))) {
+                                            const text = getElementText(node);
+                                            if (text && text.trim()) {
+                                                speak(text.trim());
                                             }
                                         }
                                     });
@@ -738,40 +774,23 @@ def render_accessibility_menu():
                             });
                         });
 
-                        // Start observing once DOM is loaded
-                        document.addEventListener('DOMContentLoaded', () => {
-                            observer.observe(document.body, {
-                                childList: true,
-                                subtree: true,
-                                attributes: true,
-                                attributeFilter: ['aria-label']
-                            });
+                        // Start observing
+                        observer.observe(document.body, {
+                            childList: true,
+                            subtree: true,
+                            attributes: true,
+                            attributeFilter: ['aria-label', 'value']
                         });
 
-                        // Add keyboard navigation
-                        document.addEventListener('keydown', (e) => {
-                            if (e.altKey) {
-                                const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-                                const elements = Array.from(document.querySelectorAll(focusableElements));
-                                const currentElement = document.activeElement;
-                                const currentIndex = elements.indexOf(currentElement);
-
-                                if (e.key === 'ArrowRight') {
-                                    const nextIndex = (currentIndex + 1) % elements.length;
-                                    elements[nextIndex].focus();
-                                    e.preventDefault();
-                                } else if (e.key === 'ArrowLeft') {
-                                    const prevIndex = currentIndex <= 0 ? elements.length - 1 : currentIndex - 1;
-                                    elements[prevIndex].focus();
-                                    e.preventDefault();
-                                }
-                            }
-                        });
+                        // Test speech on load
+                        speak("Ekran okuyucu aktif");
                     } else {
-                        console.warn('Speech Synthesis is not supported in this browser');
+                        console.warn('Speech Synthesis API is not supported');
+                        document.getElementById('screenReaderContainer').textContent = 
+                            'Bu tarayıcıda ekran okuyucu desteklenmiyor.';
                     }
                 </script>
-            """, height=0)
+            """, height=1)
 
         # Keyboard Shortcuts Info
         with st.expander("⌨️ Klavye Kısayolları"):
@@ -790,11 +809,3 @@ def render_accessibility_menu():
             for key in ['high_contrast', 'negative_contrast', 'screen_reader']:
                 st.session_state[key] = False
             st.rerun()
-
-import plotly.express as px
-from utils import format_citation, calculate_metrics
-from io import BytesIO
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
-from datetime import datetime
-from reportlab.lib.utils import ImageReader
