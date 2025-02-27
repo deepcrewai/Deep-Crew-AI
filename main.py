@@ -135,66 +135,6 @@ def main():
                     margin-bottom: 2rem;
                 }
 
-                /* Search box styling */
-                .stTextInput > div > div {
-                    background-color: #fff;
-                    border-radius: 24px !important;
-                    border: none !important;
-                    box-shadow: none;
-                    padding: 0 1rem;
-                    transition: all 0.3s ease;
-                }
-
-                .stTextInput > div > div:hover,
-                .stTextInput > div > div:focus-within {
-                    box-shadow: 0 1px 6px rgba(32,33,36,.28);
-                }
-
-                /* Stage buttons container */
-                .stage-buttons {
-                    display: flex;
-                    justify-content: space-between;
-                    margin: 2rem 0;
-                    gap: 1rem;
-                }
-
-                /* Custom button styling */
-                div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button {
-                    background-color: rgb(255, 255, 255);
-                    border: 1px solid #dfe1e5;
-                    border-radius: 8px;
-                    padding: 0.75rem 1.5rem;
-                    color: #202124;
-                    font-weight: 500;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                    width: 100%;
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 0.5rem;
-                }
-
-                div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button:hover {
-                    box-shadow: 0 1px 6px rgba(32,33,36,.28);
-                    border-color: rgb(31, 119, 180);
-                    color: rgb(31, 119, 180);
-                }
-
-                div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button[data-selected="true"] {
-                    background-color: rgb(31, 119, 180);
-                    border-color: rgb(31, 119, 180);
-                    color: white;
-                }
-
-                /* Tab styling */
-                .stTabs {
-                    background: #fff;
-                    border-radius: 12px;
-                    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-                    margin-top: 2rem;
-                }
-
                 /* High Contrast Mode */
                 body.high-contrast {
                     background: black !important;
