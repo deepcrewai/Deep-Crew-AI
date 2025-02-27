@@ -728,9 +728,6 @@ def render_accessibility_menu():
                             // Get all page elements
                             const elements = document.querySelectorAll('[data-testid], button, input, select, a, p, h1, h2, h3, h4, h5, h6, .main-header, .subtitle');
 
-                            // Initialize an array to store text to read
-                            const textToRead = [];
-
                             elements.forEach(element => {
                                 // Set tabindex for keyboard navigation
                                 element.setAttribute('tabindex', '0');
@@ -744,14 +741,19 @@ def render_accessibility_menu():
                                 if (text && text.trim()) {
                                     // Add proper ARIA label
                                     element.setAttribute('aria-label', text.trim());
-                                    textToRead.push(text.trim());
                                 }
-                            });
 
-                            // Read initial content
-                            if (textToRead.length > 0) {
-                                speak("Page loaded. " + textToRead[0]);
-                            }
+                                // Add mouse enter event listener
+                                element.addEventListener('mouseenter', function() {
+                                    const elementText = this.getAttribute('aria-label') || 
+                                                      this.textContent || 
+                                                      this.value || 
+                                                      this.placeholder;
+                                    if (elementText && elementText.trim()) {
+                                        speak(elementText.trim());
+                                    }
+                                });
+                            });
                         }
 
                         // Initialize screen reader
@@ -759,10 +761,22 @@ def render_accessibility_menu():
                             // Announce activation
                             speak("Screen reader activated");
 
-                            // Set up page content after a short delay
-                            setTimeout(readPageContent, 1000);
+                            // Add hover event listener to document
+                            document.addEventListener('mouseover', function(e) {
+                                const element = e.target;
+                                if (element) {
+                                    const text = element.getAttribute('aria-label') || 
+                                               element.textContent || 
+                                               element.value || 
+                                               element.placeholder;
 
-                            // Add event listeners
+                                    if (text && text.trim()) {
+                                        speak(text.trim());
+                                    }
+                                }
+                            }, true);
+
+                            // Add focus event listener
                             document.addEventListener('focusin', function(e) {
                                 const element = e.target;
                                 if (element) {
@@ -798,23 +812,8 @@ def render_accessibility_menu():
                             const observer = new MutationObserver(function(mutations) {
                                 mutations.forEach(function(mutation) {
                                     if (mutation.type === 'childList') {
-                                        mutation.addedNodes.forEach(function(node) {
-                                            if (node.nodeType === 1) { // Element node
-                                                const text = node.getAttribute('aria-label') || 
-                                                           node.textContent;
-
-                                                if (text && text.trim()) {
-                                                    // Add ARIA label and announce new content
-                                                    node.setAttribute('aria-label', text.trim());
-                                                    node.setAttribute('tabindex', '0');
-
-                                                    // Only announce if it's a Streamlit element
-                                                    if (node.getAttribute('data-testid')) {
-                                                        speak(text.trim());
-                                                    }
-                                                }
-                                            }
-                                        });
+                                        // Run readPageContent for new elements
+                                        readPageContent();
                                     }
                                 });
                             });
@@ -827,6 +826,9 @@ def render_accessibility_menu():
                                 attributes: true,
                                 attributeFilter: ['aria-label', 'data-testid']
                             });
+
+                            // Initial page setup
+                            readPageContent();
                         }
 
                         // Initialize when document is ready
