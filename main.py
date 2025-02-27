@@ -32,34 +32,43 @@ def main():
         <head>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
             <style>
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-                @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;500;600;700&display=swap');
-                @import url('https://fonts.googleapis.com/css2?family=OpenDyslexic:wght@400;700&display=swap');
-
                 /* Accessibility Menu Styles */
                 .accessibility-button {
                     position: fixed;
-                    top: 20px;
-                    left: 20px;
-                    z-index: 9999;
+                    top: 0.5rem;
+                    left: 1rem;
+                    z-index: 99999;
                     background: none;
                     border: none;
                     cursor: pointer;
                     padding: 10px;
                     font-size: 24px;
                     color: #1a73e8;
+                    border-radius: 50%;
+                    width: 48px;
+                    height: 48px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: white;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                }
+
+                .accessibility-button:hover {
+                    background: #f0f3f6;
                 }
 
                 .accessibility-menu {
                     position: fixed;
-                    top: 70px;
-                    left: 20px;
+                    top: 4rem;
+                    left: 1rem;
                     background: white;
                     border-radius: 8px;
                     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
                     padding: 15px;
-                    z-index: 9998;
+                    z-index: 99998;
                     display: none;
+                    min-width: 200px;
                 }
 
                 .accessibility-menu.show {
@@ -73,50 +82,23 @@ def main():
                     cursor: pointer;
                     transition: background 0.2s;
                     border-radius: 4px;
+                    color: #202124;
                 }
 
                 .accessibility-option:hover {
                     background: #f0f3f6;
                 }
 
-                /* High Contrast Mode */
-                body.high-contrast {
-                    background: black !important;
-                    color: white !important;
-                }
-
-                body.high-contrast * {
-                    background: black !important;
-                    color: white !important;
-                    border-color: white !important;
-                }
-
-                /* Negative Contrast */
-                body.negative-contrast {
-                    filter: invert(100%);
-                }
-
-                /* Light Background */
-                body.light-background {
-                    background: #ffffff !important;
-                    color: #000000 !important;
-                }
-
-                /* Links Underline */
-                body.links-underline a {
-                    text-decoration: underline !important;
-                }
-
-                /* Readable Font */
-                body.readable-font {
-                    font-family: 'OpenDyslexic', sans-serif !important;
-                }
-
-                body.readable-font * {
-                    font-family: 'OpenDyslexic', sans-serif !important;
+                .accessibility-option i {
+                    margin-right: 8px;
+                    width: 20px;
+                    text-align: center;
                 }
 
                 /* Existing styles... */
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;500;600;700&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=OpenDyslexic:wght@400;700&display=swap');
                 .st-bt {
                     background-color: transparent !important;
                 }
@@ -209,17 +191,86 @@ def main():
                     box-shadow: 0 1px 3px rgba(0,0,0,0.12);
                     margin-top: 2rem;
                 }
+
+                /* High Contrast Mode */
+                body.high-contrast {
+                    background: black !important;
+                    color: white !important;
+                }
+
+                body.high-contrast * {
+                    background: black !important;
+                    color: white !important;
+                    border-color: white !important;
+                }
+
+                /* Negative Contrast */
+                body.negative-contrast {
+                    filter: invert(100%);
+                }
+
+                /* Light Background */
+                body.light-background {
+                    background: #ffffff !important;
+                    color: #000000 !important;
+                }
+
+                /* Links Underline */
+                body.links-underline a {
+                    text-decoration: underline !important;
+                }
+
+                /* Readable Font */
+                body.readable-font {
+                    font-family: 'OpenDyslexic', sans-serif !important;
+                }
+
+                body.readable-font * {
+                    font-family: 'OpenDyslexic', sans-serif !important;
+                }
             </style>
 
             <script>
-                function toggleAccessibilityMenu() {
-                    const menu = document.querySelector('.accessibility-menu');
-                    menu.classList.toggle('show');
-                }
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Create and append the accessibility button and menu to the body
+                    const button = document.createElement('button');
+                    button.className = 'accessibility-button';
+                    button.setAttribute('aria-label', 'Accessibility Options');
+                    button.innerHTML = '<i class="fas fa-universal-access"></i>';
+
+                    const menu = document.createElement('div');
+                    menu.className = 'accessibility-menu';
+                    menu.innerHTML = `
+                        <div class="accessibility-option" onclick="toggleAccessibility('high-contrast')">
+                            <i class="fas fa-adjust"></i> High Contrast
+                        </div>
+                        <div class="accessibility-option" onclick="toggleAccessibility('negative-contrast')">
+                            <i class="fas fa-moon"></i> Negative Contrast
+                        </div>
+                        <div class="accessibility-option" onclick="toggleAccessibility('light-background')">
+                            <i class="fas fa-sun"></i> Light Background
+                        </div>
+                        <div class="accessibility-option" onclick="toggleAccessibility('links-underline')">
+                            <i class="fas fa-underline"></i> Links Underline
+                        </div>
+                        <div class="accessibility-option" onclick="toggleAccessibility('readable-font')">
+                            <i class="fas fa-font"></i> Readable Font
+                        </div>
+                        <div class="accessibility-option" onclick="resetAccessibility()">
+                            <i class="fas fa-undo"></i> Reset
+                        </div>
+                    `;
+
+                    document.body.appendChild(button);
+                    document.body.appendChild(menu);
+
+                    button.addEventListener('click', function() {
+                        menu.classList.toggle('show');
+                    });
+                });
 
                 function toggleAccessibility(option) {
                     document.body.classList.toggle(option);
-                    // Save state to session
                     const streamlit = window.parent.streamlit;
                     streamlit.setComponentValue({
                         option: option,
@@ -239,33 +290,6 @@ def main():
                 }
             </script>
         </head>
-
-        <!-- Accessibility Button and Menu -->
-        <button onclick="toggleAccessibilityMenu()" class="accessibility-button" aria-label="Accessibility Options">
-            <i class="fas fa-universal-access"></i>
-        </button>
-
-        <div class="accessibility-menu">
-            <div class="accessibility-option" onclick="toggleAccessibility('high-contrast')">
-                <i class="fas fa-adjust"></i>&nbsp; High Contrast
-            </div>
-            <div class="accessibility-option" onclick="toggleAccessibility('negative-contrast')">
-                <i class="fas fa-moon"></i>&nbsp; Negative Contrast
-            </div>
-            <div class="accessibility-option" onclick="toggleAccessibility('light-background')">
-                <i class="fas fa-sun"></i>&nbsp; Light Background
-            </div>
-            <div class="accessibility-option" onclick="toggleAccessibility('links-underline')">
-                <i class="fas fa-underline"></i>&nbsp; Links Underline
-            </div>
-            <div class="accessibility-option" onclick="toggleAccessibility('readable-font')">
-                <i class="fas fa-font"></i>&nbsp; Readable Font
-            </div>
-            <div class="accessibility-option" onclick="resetAccessibility()">
-                <i class="fas fa-undo"></i>&nbsp; Reset
-            </div>
-        </div>
-
         <div class="main-container">
             <div class="logo-title">DEEP CREW</div>
             <h1 class="main-header">Research & Innovation Hub</h1>
