@@ -136,23 +136,20 @@ def main():
     col1, col2, col3, col4, col5 = st.columns(5)
 
     stages = {
-        'research': ('fas fa-search', 'Research'),
-        'patents': ('fas fa-file-contract', 'Patents'),
-        'funding': ('fas fa-hand-holding-usd', 'Funding'),
-        'network': ('fas fa-network-wired', 'Network'),
-        'compliance': ('fas fa-shield-alt', 'Compliance')
+        'research': 'Research',
+        'patents': 'Patents',
+        'funding': 'Funding',
+        'network': 'Network',
+        'compliance': 'Compliance'
     }
 
     columns = [col1, col2, col3, col4, col5]
 
-    for idx, (stage_key, (icon, label)) in enumerate(stages.items()):
+    for idx, (stage_key, label) in enumerate(stages.items()):
         with columns[idx]:
             is_selected = stage_key in st.session_state.selected_stages
-            button_html = f"""
-                <i class='{icon}'></i> {label}
-            """
             if st.button(
-                button_html,
+                label,
                 key=f"btn_{stage_key}",
                 help=f"Click to select {label}",
                 use_container_width=True,
