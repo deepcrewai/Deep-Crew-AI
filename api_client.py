@@ -7,7 +7,7 @@ import trafilatura
 class OpenAlexClient:
     def __init__(self):
         self.base_url = "https://api.openalex.org"
-        self.email = "researcher@example.org"  # Updated email for better rate limits
+        self.email = "research@deepcrew.org"  # Updated email for polite pool
         self.last_request_time = 0
         self.min_request_interval = 1.0  # 1 second between requests
 
@@ -20,7 +20,7 @@ class OpenAlexClient:
             time.sleep(self.min_request_interval - time_since_last_request)
 
         headers = {
-            "User-Agent": f"mailto:{self.email}",
+            "User-Agent": f"DeepCrew Research Platform (mailto:{self.email})",
             "Accept": "application/json"
         }
 
@@ -43,36 +43,38 @@ class OpenAlexClient:
                 time.sleep(5)  # Wait 5 seconds before retry
                 return self._make_request(endpoint, params)  # Retry the request
 
-            # Try to handle the response even if it's not 200
-            try:
-                return response.json()
-            except Exception as e:
-                print(f"Error parsing response: {str(e)}")
-                return {"results": []}
+            if response.status_code == 403:
+                print("Authentication error. Checking headers:", headers)
+                return {"error": "Authentication failed", "results": []}
+
+            response.raise_for_status()  # Raise exception for other error codes
+
+            return response.json()
 
         except requests.exceptions.RequestException as e:
             print(f"API Request Error: {str(e)}")
-            return {"results": []}
-
-    def _calculate_similarity(self, text1: str, text2: str) -> float:
-        """Calculate text similarity between two strings."""
-        if not text1 or not text2:
-            return 0
-        return SequenceMatcher(None, text1.lower(), text2.lower()).ratio()
+            return {"error": str(e), "results": []}
 
     def search(self, query: str, keywords: List[str] = None) -> List[Dict]:
         """Search OpenAlex for works matching the query with improved error handling."""
         try:
-            # Base search parameters with minimal filters
+            # Base search parameters
             params = {
+                "filter": "has_abstract:true",  # Only return results with abstracts
                 "search": query,
-                "per_page": 100,  # Get more results initially for better relevance filtering
-                "select": "title,abstract,doi,publication_year,concepts,cited_by_count"  # Specify fields
+                "per_page": 100,
+                "select": "id,title,abstract,doi,publication_year,concepts,cited_by_count"
             }
 
-            # First attempt with exact query
+            print(f"Searching OpenAlex with query: {query}")  # Debug log
             response = self._make_request("works", params)
+
+            if "error" in response:
+                print(f"Search error: {response['error']}")
+                return []
+
             results = response.get("results", [])
+            print(f"Found {len(results)} initial results")  # Debug log
 
             # If no results, try with keywords
             if not results and keywords:
@@ -80,80 +82,64 @@ class OpenAlexClient:
                 params["search"] = keyword_query
                 response = self._make_request("works", params)
                 results = response.get("results", [])
+                print(f"Found {len(results)} results with keywords")  # Debug log
 
-            # If still no results, try with a more lenient search
-            if not results:
-                params["search"] = query.replace('"', '')  # Remove quotes
-                response = self._make_request("works", params)
-                results = response.get("results", [])
-
-            # Process and enhance results
             enhanced_results = []
             for paper in results:
-                # Extract and format paper data with improved abstract handling
+                # Extract and format paper data
                 abstract = paper.get('abstract', '')
+                doi = paper.get('doi')
 
-                # If no abstract available, try to fetch from DOI URL
-                if (not abstract or abstract == "") and paper.get('doi'):
+                # If no abstract but has DOI, try to fetch from DOI
+                if (not abstract or abstract == "") and doi:
                     try:
-                        doi_url = f"https://doi.org/{paper.get('doi')}"
+                        doi_url = f"https://doi.org/{doi}"
                         downloaded = trafilatura.fetch_url(doi_url)
                         if downloaded:
                             extracted_text = trafilatura.extract(downloaded)
                             if extracted_text:
-                                # Try to find an abstract section in the extracted text
-                                lines = extracted_text.split('\n')
-                                for i, line in enumerate(lines):
-                                    if 'abstract' in line.lower():
-                                        abstract = lines[i+1] if i+1 < len(lines) else ''
-                                        break
+                                abstract = extracted_text.split('\n')[0]  # Use first paragraph
                     except Exception as e:
                         print(f"Error fetching abstract from DOI: {str(e)}")
 
-                # If still no abstract, provide a more informative message
+                # If still no abstract, use concepts
                 if not abstract or abstract == "":
-                    try:
-                        # Try to generate a summary from the title and concepts
-                        title = paper.get('title', '')
-                        concepts = [c.get('display_name', '') for c in paper.get('concepts', [])]
-                        abstract = f"This paper titled '{title}' focuses on {', '.join(concepts[:3])}. Additional details can be found in the full paper."
-                    except:
-                        abstract = "This paper's abstract is not available in our database. You can access the full paper for detailed information."
+                    concepts = [c.get('display_name', '') for c in paper.get('concepts', [])]
+                    if concepts:
+                        abstract = f"This research focuses on {', '.join(concepts[:3])}. Full text available via DOI."
+                    else:
+                        abstract = "Abstract text will be available in the full paper."
 
                 paper_data = {
-                    'title': paper.get('title', 'Title not found'),
+                    'title': paper.get('title', 'Untitled'),
                     'abstract': abstract,
-                    'doi': paper.get('doi'),
+                    'doi': doi,
                     'publication_year': paper.get('publication_year'),
-                    'url': f"https://doi.org/{paper.get('doi')}" if paper.get('doi') else None,
+                    'url': f"https://doi.org/{doi}" if doi else None,
                     'concepts': paper.get('concepts', []),
                     'cited_by_count': paper.get('cited_by_count', 0)
                 }
 
-                # Calculate similarity score with more weight on title matches
-                if keywords:
-                    # Calculate similarity for both title and abstract separately
-                    title_similarities = [self._calculate_similarity(paper_data['title'], kw) for kw in keywords]
-                    abstract_similarities = [self._calculate_similarity(paper_data['abstract'], kw) for kw in keywords]
-
-                    # Give more weight to title matches (0.7) vs abstract matches (0.3)
-                    max_title_sim = max(title_similarities) if title_similarities else 0.0
-                    max_abstract_sim = max(abstract_similarities) if abstract_similarities else 0.0
-                    paper_data['similarity_score'] = (0.7 * max_title_sim) + (0.3 * max_abstract_sim)
-                else:
-                    paper_data['similarity_score'] = 0.0
+                # Calculate relevance score
+                title_similarity = max([self._calculate_similarity(paper_data['title'], kw) for kw in ([query] + (keywords or []))])
+                abstract_similarity = max([self._calculate_similarity(abstract, kw) for kw in ([query] + (keywords or []))])
+                paper_data['relevance_score'] = (0.7 * title_similarity) + (0.3 * abstract_similarity)
 
                 enhanced_results.append(paper_data)
 
-            # Sort by citation count and similarity score
-            enhanced_results.sort(key=lambda x: (-x['cited_by_count'], -x['similarity_score']))
-            enhanced_results = enhanced_results[:50]  # Return top 50 most relevant results
-
-            return enhanced_results
+            # Sort by relevance and citations
+            enhanced_results.sort(key=lambda x: (x['relevance_score'], x['cited_by_count']), reverse=True)
+            return enhanced_results[:50]  # Return top 50 results
 
         except Exception as e:
             print(f"Error in search: {str(e)}")
             return []
+
+    def _calculate_similarity(self, text1: str, text2: str) -> float:
+        """Calculate text similarity between two strings."""
+        if not text1 or not text2:
+            return 0
+        return SequenceMatcher(None, text1.lower(), text2.lower()).ratio()
 
     def get_citations(self, work_id: str) -> List[Dict]:
         """Get citation information for a specific work."""
