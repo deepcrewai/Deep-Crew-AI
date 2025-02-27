@@ -36,9 +36,10 @@ def main():
 
                 .logo-title {
                     font-size: 2.75rem;
-                    font-weight: 600;
+                    font-weight: 500;
                     color: black;
                     margin-bottom: 0.5rem;
+                    font-family: 'Inter', sans-serif;
                 }
 
                 .main-header {
@@ -46,6 +47,7 @@ def main():
                     font-weight: 500;
                     color: #202124;
                     margin: 1rem 0;
+                    font-family: 'Inter', sans-serif;
                 }
 
                 .subtitle {
