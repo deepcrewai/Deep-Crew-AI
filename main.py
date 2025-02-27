@@ -234,31 +234,68 @@ def main():
             </style>
         </head>
         <div id="accessibility-container">
-            <button class="accessibility-button" onclick="document.querySelector('.accessibility-menu').classList.toggle('show')" aria-label="Accessibility Options">
+            <button class="accessibility-button" id="accessibilityBtn" aria-label="Accessibility Options">
                 <i class="fas fa-universal-access"></i>
             </button>
 
-            <div class="accessibility-menu">
-                <div class="accessibility-option" onclick="document.body.classList.toggle('high-contrast')">
+            <div class="accessibility-menu" id="accessibilityMenu">
+                <div class="accessibility-option" id="highContrastBtn">
                     <i class="fas fa-adjust"></i> High Contrast
                 </div>
-                <div class="accessibility-option" onclick="document.body.classList.toggle('negative-contrast')">
+                <div class="accessibility-option" id="negativeContrastBtn">
                     <i class="fas fa-moon"></i> Negative Contrast
                 </div>
-                <div class="accessibility-option" onclick="document.body.classList.toggle('light-background')">
+                <div class="accessibility-option" id="lightBackgroundBtn">
                     <i class="fas fa-sun"></i> Light Background
                 </div>
-                <div class="accessibility-option" onclick="document.body.classList.toggle('links-underline')">
+                <div class="accessibility-option" id="linksUnderlineBtn">
                     <i class="fas fa-underline"></i> Links Underline
                 </div>
-                <div class="accessibility-option" onclick="document.body.classList.toggle('readable-font')">
+                <div class="accessibility-option" id="readableFontBtn">
                     <i class="fas fa-font"></i> Readable Font
                 </div>
-                <div class="accessibility-option" onclick="['high-contrast', 'negative-contrast', 'light-background', 'links-underline', 'readable-font'].forEach(c => document.body.classList.remove(c))">
+                <div class="accessibility-option" id="resetBtn">
                     <i class="fas fa-undo"></i> Reset
                 </div>
             </div>
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const accessibilityBtn = document.getElementById('accessibilityBtn');
+                const accessibilityMenu = document.getElementById('accessibilityMenu');
+                const options = {
+                    'highContrastBtn': 'high-contrast',
+                    'negativeContrastBtn': 'negative-contrast',
+                    'lightBackgroundBtn': 'light-background',
+                    'linksUnderlineBtn': 'links-underline',
+                    'readableFontBtn': 'readable-font'
+                };
+
+                accessibilityBtn.addEventListener('click', function() {
+                    accessibilityMenu.classList.toggle('show');
+                });
+
+                // Add click events for each option
+                Object.entries(options).forEach(([btnId, className]) => {
+                    const btn = document.getElementById(btnId);
+                    if (btn) {
+                        btn.addEventListener('click', function() {
+                            document.body.classList.toggle(className);
+                        });
+                    }
+                });
+
+                // Reset button
+                const resetBtn = document.getElementById('resetBtn');
+                if (resetBtn) {
+                    resetBtn.addEventListener('click', function() {
+                        Object.values(options).forEach(className => {
+                            document.body.classList.remove(className);
+                        });
+                    });
+                }
+            });
+        </script>
         <div class="main-container">
             <div class="logo-title">DEEP CREW</div>
             <h1 class="main-header">Research & Innovation Hub</h1>
