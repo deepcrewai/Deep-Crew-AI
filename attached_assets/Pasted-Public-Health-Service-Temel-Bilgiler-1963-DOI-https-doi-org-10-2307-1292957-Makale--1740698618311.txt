@@ -1,0 +1,53 @@
+Public Health Service
+Temel Bilgiler
+📅 1963
+🔍 DOI: https://doi.org/10.2307/1292957
+📖 Makale
+Abstract is not available for this paper. Please refer to the full paper for detailed information.
+
+<!-- 2. Yazar Bilgileri -->
+<div class="paper-section">
+    <div class="paper-section-title">Yazarlar ve Kurumlar</div>
+    <div class="author-list">
+        <span class="author-item">👤 {'author': {'display_name': 'Anonim'}}</span>
+    </div>
+    <div class="paper-metadata">
+
+    </div>
+</div>
+
+<!-- 3. Bibliyometrik Veriler -->
+<div class="paper-section">
+    <div class="paper-section-title">Etki Metrikleri</div>
+    <div class="paper-metadata">
+        <span class="metadata-item">📊 Atıf Sayısı: 0</span>
+        <span class="metadata-item">🔄 Referans Sayısı: 0</span>
+        <span class="metadata-item">📈 Etki Puanı: N/A</span>
+    </div>
+</div>
+
+<!-- 4. Dergi/Yayın Bilgileri -->
+<div class="paper-section">
+    <div class="paper-section-title">Yayın Detayları</div>
+    <div class="paper-metadata">
+        <span class="metadata-item">📰 N/A</span>
+        <span class="metadata-item">🔖 ISSN: N/A</span>
+        <span class="metadata-item">📘 Yayıncı: N/A</span>
+    </div>
+</div>
+
+<!-- 5. Araştırma Alanları -->
+<div class="paper-section">
+    <div class="paper-section-title">Konu Başlıkları ve Alanlar</div>
+    <div class="concepts-grid">
+        <span class="concept-item">Public health</span> <span class="concept-item">Service (business)</span> <span class="concept-item">Library science</span> <span class="concept-item">Volume (thermodynamics)</span> <span class="concept-item">Public service</span> <span class="concept-item">Political science</span> <span class="concept-item">Medicine</span> <span class="concept-item">Public relations</span> <span class="concept-item">Computer science</span> <span class="concept-item">Business</span> <span class="concept-item">Marketing</span> <span class="concept-item">Pathology</span> <span class="concept-item">Physics</span> <span class="concept-item">Quantum mechanics</span>
+    </div>
+</div>
+
+<!-- Bağlantılar -->
+<div style="margin-top: 1rem; text-align: right;">
+    <a href="https://doi.org/https://doi.org/10.2307/1292957" target="_blank" 
+       style="color: #1a73e8; text-decoration: none; font-weight: 500;">
+        Makaleyi Görüntüle →
+    </a>
+</div>
