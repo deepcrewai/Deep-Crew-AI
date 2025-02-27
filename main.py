@@ -127,7 +127,6 @@ def main():
         </div>
     """, unsafe_allow_html=True)
 
-    # Search input with modern styling
     search_query = st.text_input(
         "",
         placeholder="Enter your research topic...",
@@ -135,11 +134,9 @@ def main():
         label_visibility="collapsed"
     )
 
-    # Initialize session state for selected stages
     if 'selected_stages' not in st.session_state:
         st.session_state.selected_stages = set()
 
-    # Create stage buttons using columns for horizontal layout
     col1, col2, col3, col4, col5 = st.columns(5)
 
     stages = {
@@ -170,17 +167,14 @@ def main():
 
     selected_stages = list(st.session_state.selected_stages)
 
-    # Create tabs for selected stages if we have a search query
     if search_query:
         if not selected_stages:
             st.warning("Please select at least one research stage to proceed.")
             return
 
-        # Only add Results tab if more than one stage is selected
         if len(selected_stages) > 1:
             selected_stages.append("results")
 
-        # Create tabs with modern styling
         tabs = st.tabs([stage.capitalize() for stage in selected_stages])
 
         for idx, tab in enumerate(tabs):
@@ -225,10 +219,21 @@ def main():
                             render_patent_results(st.session_state.patent_results, st.session_state.patent_analysis)
 
                 elif selected_stages[idx] == "results":
+                    if (st.session_state.get('search_results') and 
+                        st.session_state.get('patent_results') and 
+                        'combined_analysis' not in st.session_state):
+                        with st.spinner("🔄 Generating comprehensive analysis..."):
+                            ai_analyzer = AIAnalyzer()
+                            st.session_state.combined_analysis = ai_analyzer.analyze_combined_results(
+                                st.session_state.search_results,
+                                st.session_state.patent_results
+                            )
+
+                    combined_analysis = st.session_state.get('combined_analysis', {})
                     render_combined_results(
-                        st.session_state.get('search_results') or [],
-                        st.session_state.get('patent_results') or [],
-                        st.session_state.combined_analysis if 'combined_analysis' in st.session_state else None
+                        st.session_state.get('search_results', []),
+                        st.session_state.get('patent_results', []),
+                        combined_analysis
                     )
 
                 elif selected_stages[idx] == "network":
