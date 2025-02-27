@@ -624,17 +624,37 @@ def render_accessibility_menu():
     """Render the accessibility menu component."""
     import streamlit as st
 
-    st.markdown("""
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    """, unsafe_allow_html=True)
-
     st.components.v1.html("""
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <div style="position: fixed; top: 0; left: 0; z-index: 99999999;">
+            <button class="accessibility-button" id="accessibilityBtn" aria-label="Accessibility Options">
+                <i class="fas fa-universal-access"></i>
+            </button>
+
+            <div class="accessibility-menu" id="accessibilityMenu">
+                <div class="accessibility-option" onclick="toggleAccessibility('high-contrast')">
+                    <i class="fas fa-adjust"></i> High Contrast
+                </div>
+                <div class="accessibility-option" onclick="toggleAccessibility('negative-contrast')">
+                    <i class="fas fa-moon"></i> Negative Contrast
+                </div>
+                <div class="accessibility-option" onclick="toggleAccessibility('light-background')">
+                    <i class="fas fa-sun"></i> Light Background
+                </div>
+                <div class="accessibility-option" onclick="toggleAccessibility('links-underline')">
+                    <i class="fas fa-underline"></i> Links Underline
+                </div>
+                <div class="accessibility-option" onclick="toggleAccessibility('readable-font')">
+                    <i class="fas fa-font"></i> Readable Font
+                </div>
+                <div class="accessibility-option" onclick="resetAccessibility()">
+                    <i class="fas fa-undo"></i> Reset
+                </div>
+            </div>
+        </div>
+
         <style>
             .accessibility-button {
-                position: fixed;
-                top: 0.5rem;
-                left: 1rem;
-                z-index: 999999;
                 background: white;
                 border: none;
                 cursor: pointer;
@@ -648,25 +668,30 @@ def render_accessibility_menu():
                 align-items: center;
                 justify-content: center;
                 box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                transition: all 0.3s ease;
             }
+
             .accessibility-button:hover {
                 background: #f0f3f6;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             }
+
             .accessibility-menu {
-                position: fixed;
-                top: 4rem;
-                left: 1rem;
+                position: absolute;
+                top: 60px;
+                left: 10px;
                 background: white;
                 border-radius: 8px;
                 box-shadow: 0 2px 10px rgba(0,0,0,0.1);
                 padding: 15px;
-                z-index: 999998;
                 display: none;
                 min-width: 200px;
             }
+
             .accessibility-menu.show {
                 display: block;
             }
+
             .accessibility-option {
                 display: flex;
                 align-items: center;
@@ -676,95 +701,30 @@ def render_accessibility_menu():
                 border-radius: 4px;
                 color: #202124;
             }
+
             .accessibility-option:hover {
                 background: #f0f3f6;
             }
+
             .accessibility-option i {
                 margin-right: 8px;
                 width: 20px;
                 text-align: center;
             }
-            /* High Contrast Mode */
-            .high-contrast {
-                background: black !important;
-                color: white !important;
-            }
-            .high-contrast * {
-                background: black !important;
-                color: white !important;
-                border-color: white !important;
-            }
-            /* Negative Contrast */
-            .negative-contrast {
-                filter: invert(100%);
-            }
-            /* Light Background */
-            .light-background {
-                background: #ffffff !important;
-                color: #000000 !important;
-            }
-            /* Links Underline */
-            .links-underline a {
-                text-decoration: underline !important;
-            }
-            /* Readable Font */
-            .readable-font, .readable-font * {
-                font-family: 'OpenDyslexic', Arial, sans-serif !important;
-            }
         </style>
 
-        <button class="accessibility-button" onclick="toggleMenu()" aria-label="Accessibility Options">
-            <i class="fas fa-universal-access"></i>
-        </button>
-
-        <div class="accessibility-menu" id="accessibilityMenu">
-            <div class="accessibility-option" onclick="toggleAccessibility('high-contrast')">
-                <i class="fas fa-adjust"></i> High Contrast
-            </div>
-            <div class="accessibility-option" onclick="toggleAccessibility('negative-contrast')">
-                <i class="fas fa-moon"></i> Negative Contrast
-            </div>
-            <div class="accessibility-option" onclick="toggleAccessibility('light-background')">
-                <i class="fas fa-sun"></i> Light Background
-            </div>
-            <div class="accessibility-option" onclick="toggleAccessibility('links-underline')">
-                <i class="fas fa-underline"></i> Links Underline
-            </div>
-            <div class="accessibility-option" onclick="toggleAccessibility('readable-font')">
-                <i class="fas fa-font"></i> Readable Font
-            </div>
-            <div class="accessibility-option" onclick="resetAccessibility()">
-                <i class="fas fa-undo"></i> Reset
-            </div>
-        </div>
-
         <script>
-            function toggleMenu() {
-                const menu = document.getElementById('accessibilityMenu');
-                menu.classList.toggle('show');
-            }
+            document.getElementById('accessibilityBtn').addEventListener('click', function() {
+                document.getElementById('accessibilityMenu').classList.toggle('show');
+            });
 
             function toggleAccessibility(className) {
                 document.documentElement.classList.toggle(className);
-                if (window.parent.streamlit) {
-                    window.parent.streamlit.setComponentValue({
-                        type: 'toggle',
-                        className: className,
-                        state: document.documentElement.classList.contains(className)
-                    });
-                }
             }
 
             function resetAccessibility() {
-                const classes = ['high-contrast', 'negative-contrast', 'light-background', 'links-underline', 'readable-font'];
-                classes.forEach(className => {
-                    document.documentElement.classList.remove(className);
-                });
-                if (window.parent.streamlit) {
-                    window.parent.streamlit.setComponentValue({
-                        type: 'reset'
-                    });
-                }
+                ['high-contrast', 'negative-contrast', 'light-background', 'links-underline', 'readable-font']
+                    .forEach(className => document.documentElement.classList.remove(className));
             }
         </script>
-    """, height=50)
+    """, height=0)
