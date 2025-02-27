@@ -497,68 +497,9 @@ def render_analysis_section(analysis):
     st.write(f"Complexity Score: {score}/10")
     st.write(complexity.get("explanation", "No explanation available"))
 
-def render_accessibility_menu():
-    """Render the accessibility menu using Streamlit native components."""
-    with st.sidebar:
-        # Initialize state if not exists
-        if 'accessibility_menu_expanded' not in st.session_state:
-            st.session_state.accessibility_menu_expanded = False
-
-        # Accessibility Tools header
-        st.markdown("### 🌐 Accessibility Tools")
-
-        # High Contrast Mode
-        if st.toggle("🔳 High Contrast (Alt+H)", value=st.session_state.get('high_contrast', False), key='high_contrast'):
-            st.markdown("""
-                <style>
-                    body, .main-container, .stApp, [data-testid="stSidebar"] {
-                        background-color: black !important;
-                        color: white !important;
-                    }
-                    .stButton button, .stSelectbox, .stTextInput input {
-                        background-color: white !important;
-                        color: black !important;
-                        border: 1px solid white !important;
-                    }
-                    .stMarkdown, .stText, .logo-title, .main-header, .subtitle {
-                        color: white !important;
-                    }
-                    [data-testid="stSidebarNav"] {
-                        background-color: black !important;
-                    }
-                </style>
-            """, unsafe_allow_html=True)
-
-        # Negative Contrast
-        if st.toggle("🌙 Negative Contrast (Alt+N)", value=st.session_state.get('negative_contrast', False), key='negative_contrast'):
-            st.markdown("""
-                <style>
-                    .stApp, body {
-                        filter: invert(100%) !important;
-                        background-color: white !important;
-                    }
-                    img, [data-testid="stImage"] {
-                        filter: invert(100%) !important;
-                    }
-                    .stMarkdown a {
-                        color: #0000EE !important;
-                    }
-                </style>
-            """, unsafe_allow_html=True)
-
-        # Keyboard Shortcuts
-        st.markdown("""
-            ⌨️ **Keyboard Shortcuts**:
-            - **Alt + H**: High Contrast
-            - **Alt + N**: Negative Contrast
-            - **Alt + R**: Reset
-        """)
-
-        # Reset Button
-        if st.button("🔄 Reset (Alt+R)"):
-            for key in ['high_contrast', 'negative_contrast']:
-                st.session_state[key] = False
-            st.rerun()
+def handle_pdf_export(results, analysis):
+    """This function is now deprecated as the export functionality has been moved to render_search_section"""
+    pass
 
 def render_combined_results(research_results, patent_results, combined_analysis):
     """Render enhanced combined analysis of research and patent results."""
@@ -572,7 +513,7 @@ def render_combined_results(research_results, patent_results, combined_analysis)
     st.subheader("Key Findings")
     findings = combined_analysis.get("key_findings", [])
     for finding in findings:
-        with st.expander(f"🔍 Finding (Impact Score: {finding.get('impact_score','N/A')}/10)"):
+        with st.expander(f"🔍 Finding (Impact Score: {finding.get('impact_score', 'N/A')}/10)"):
             st.write(finding.get('finding', ''))
             st.write("**Evidence:**", finding.get('evidence', ''))
 
