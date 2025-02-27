@@ -8,8 +8,8 @@ class AIAnalyzer:
         self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
         self.model = "gpt-4o"
 
-    def analyze_combined_results(self, research_results: List[Dict], patent_results: List[Dict]) -> Dict:
-        """Analyze combined research and patent results for comprehensive insights with enhanced detail."""
+    def analyze_combined_results(self, research_results: List[Dict], patent_results: List[Dict], funding_results: List[Dict] = None) -> Dict:
+        """Analyze combined research, patent and funding results for comprehensive insights."""
         try:
             # Prepare enhanced combined data for analysis
             combined_data = {
@@ -32,6 +32,16 @@ class AIAnalyzer:
                         'inventors': p.get('inventors', ''),
                         'patent_id': p.get('patent_id', '')
                     } for p in patent_results
+                ],
+                'funding': [
+                    {
+                        'title': f.get('title', ''),
+                        'description': f.get('description', ''),
+                        'amount': f.get('amount', ''),
+                        'deadline': f.get('deadline', ''),
+                        'funder': f.get('funder', ''),
+                        'type': 'funding'
+                    } for f in (funding_results or [])
                 ]
             }
 
@@ -39,47 +49,58 @@ class AIAnalyzer:
                 model=self.model,
                 messages=[{
                     "role": "system",
-                    "content": """As an expert research analyst, provide a comprehensive analysis of the research papers and patents.
+                    "content": """As an expert research and funding analyst, provide a comprehensive analysis of the research papers, patents, and funding opportunities.
                     Include detailed insights, recommendations, and future predictions. Return a JSON object with the following structure:
                     {
-                        "comprehensive_summary": "Detailed overview analyzing both research papers and patents, including key themes and overall direction of the field",
+                        "comprehensive_summary": "Detailed overview analyzing research papers, patents, and funding opportunities, including key themes and overall direction",
                         "key_findings": [
                             {"finding": "description", "impact_score": 1-10, "evidence": "supporting evidence"}
                         ],
                         "research_patent_alignment": {
-                            "overview": "Detailed analysis of how research aligns with patent activity",
-                            "gaps": ["specific gaps between research and patents"],
-                            "opportunities": ["specific opportunities based on gaps"]
+                            "overview": "Analysis of research-patent alignment",
+                            "gaps": ["gaps between research and patents"],
+                            "opportunities": ["opportunities based on gaps"]
+                        },
+                        "funding_landscape": {
+                            "total_opportunities": "number of funding opportunities",
+                            "total_available_funding": "total amount available",
+                            "key_funders": ["major funding organizations"],
+                            "funding_trends": ["observed funding trends"],
+                            "alignment_with_research": "how funding aligns with research direction",
+                            "recommended_approaches": ["funding strategy recommendations"]
                         },
                         "innovation_opportunities": [
-                            {"opportunity": "description", "potential_impact": "high/medium/low", "implementation_timeline": "short/medium/long", "required_resources": "description"}
+                            {"opportunity": "description", "potential_impact": "high/medium/low", "implementation_timeline": "short/medium/long", "required_resources": "description", "potential_funding": "funding sources"}
                         ],
                         "market_research_gaps": [
-                            {"gap": "description", "market_potential": 1-10, "recommended_approach": "description"}
+                            {"gap": "description", "market_potential": 1-10, "recommended_approach": "description", "funding_availability": "high/medium/low"}
                         ],
                         "technology_assessment": {
                             "maturity_level": "description",
                             "readiness_score": 1-10,
-                            "development_stages": ["stage descriptions"]
+                            "development_stages": ["stage descriptions"],
+                            "funding_requirements": ["funding needs per stage"]
                         },
                         "risk_analysis": {
                             "technical_risks": ["risk descriptions"],
                             "market_risks": ["risk descriptions"],
+                            "funding_risks": ["funding-related risks"],
                             "mitigation_strategies": ["strategy descriptions"]
                         },
                         "investment_recommendations": [
-                            {"area": "description", "potential_roi": "high/medium/low", "timeframe": "description", "required_investment": "estimation"}
+                            {"area": "description", "potential_roi": "high/medium/low", "timeframe": "description", "required_investment": "estimation", "funding_sources": ["potential sources"]}
                         ],
                         "future_directions": [
-                            {"direction": "description", "probability": 1-10, "impact": "description", "timeline": "short/medium/long"}
+                            {"direction": "description", "probability": 1-10, "impact": "description", "timeline": "short/medium/long", "funding_potential": "high/medium/low"}
                         ],
                         "collaboration_opportunities": [
-                            {"type": "description", "potential_partners": ["suggestions"], "expected_benefits": ["benefits"]}
+                            {"type": "description", "potential_partners": ["suggestions"], "expected_benefits": ["benefits"], "funding_opportunities": ["relevant funding sources"]}
                         ],
                         "industry_implications": {
                             "affected_sectors": ["sector names"],
                             "impact_analysis": ["detailed impact descriptions"],
-                            "adaptation_strategies": ["strategy descriptions"]
+                            "adaptation_strategies": ["strategy descriptions"],
+                            "sector_specific_funding": ["funding opportunities by sector"]
                         }
                     }"""
                 }, {
@@ -95,14 +116,22 @@ class AIAnalyzer:
                 "comprehensive_summary": "Error performing combined analysis",
                 "key_findings": [],
                 "research_patent_alignment": {"overview": "Analysis unavailable", "gaps": [], "opportunities": []},
+                "funding_landscape": {
+                    "total_opportunities": 0,
+                    "total_available_funding": "Unknown",
+                    "key_funders": [],
+                    "funding_trends": [],
+                    "alignment_with_research": "Analysis unavailable",
+                    "recommended_approaches": []
+                },
                 "innovation_opportunities": [],
                 "market_research_gaps": [],
-                "technology_assessment": {"maturity_level": "Unknown", "readiness_score": 0, "development_stages": []},
-                "risk_analysis": {"technical_risks": [], "market_risks": [], "mitigation_strategies": []},
+                "technology_assessment": {"maturity_level": "Unknown", "readiness_score": 0, "development_stages": [], "funding_requirements": []},
+                "risk_analysis": {"technical_risks": [], "market_risks": [], "funding_risks": [], "mitigation_strategies": []},
                 "investment_recommendations": [],
                 "future_directions": [],
                 "collaboration_opportunities": [],
-                "industry_implications": {"affected_sectors": [], "impact_analysis": [], "adaptation_strategies": []}
+                "industry_implications": {"affected_sectors": [], "impact_analysis": [], "adaptation_strategies": [], "sector_specific_funding": []}
             }
 
     def generate_search_keywords(self, query: str) -> List[str]:
@@ -138,6 +167,7 @@ class AIAnalyzer:
         except Exception as e:
             print(f"Error generating keywords: {e}")
             return [query]  # Fallback to original query
+        
     def analyze_results(self, results: List[Dict]) -> Dict:
         """Analyze search results using AI."""
         analysis = {

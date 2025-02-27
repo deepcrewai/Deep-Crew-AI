@@ -224,9 +224,12 @@ def main():
                         'combined_analysis' not in st.session_state):
                         with st.spinner("🔄 Generating comprehensive analysis..."):
                             ai_analyzer = AIAnalyzer()
+                            # Get funding results if available
+                            funding_results = st.session_state.get('funding_results', [])
                             st.session_state.combined_analysis = ai_analyzer.analyze_combined_results(
                                 st.session_state.search_results,
-                                st.session_state.patent_results
+                                st.session_state.patent_results,
+                                funding_results
                             )
 
                     combined_analysis = st.session_state.get('combined_analysis', {})

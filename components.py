@@ -502,7 +502,7 @@ def handle_pdf_export(results, analysis):
     pass
 
 def render_combined_results(research_results, patent_results, combined_analysis):
-    """Render enhanced combined analysis of research and patent results."""
+    """Render enhanced combined analysis of research, patent and funding results."""
     st.header("Comprehensive Analysis")
 
     # Summary
@@ -532,6 +532,29 @@ def render_combined_results(research_results, patent_results, combined_analysis)
         for opp in alignment.get("opportunities", []):
             st.markdown(f"• {opp}")
 
+    # Funding Landscape Analysis
+    st.subheader("Funding Landscape")
+    funding = combined_analysis.get("funding_landscape", {})
+
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Total Opportunities", funding.get("total_opportunities", "N/A"))
+    with col2:
+        st.metric("Available Funding", funding.get("total_available_funding", "N/A"))
+    with col3:
+        st.metric("Key Funders", len(funding.get("key_funders", [])))
+
+    st.write("**Funding Trends:**")
+    for trend in funding.get("funding_trends", []):
+        st.markdown(f"• {trend}")
+
+    st.write("**Research Alignment:**")
+    st.write(funding.get("alignment_with_research", "No alignment analysis available"))
+
+    st.write("**Recommended Funding Approaches:**")
+    for approach in funding.get("recommended_approaches", []):
+        st.markdown(f"• {approach}")
+
     # Technology Assessment
     st.subheader("Technology Assessment")
     tech_assessment = combined_analysis.get("technology_assessment", {})
@@ -540,21 +563,25 @@ def render_combined_results(research_results, patent_results, combined_analysis)
         st.metric("Technology Readiness", f"{tech_assessment.get('readiness_score', 0)}/10")
         st.write("**Maturity Level:**", tech_assessment.get("maturity_level", "Unknown"))
     with col2:
-        st.write("**Development Stages:**")
-        for stage in tech_assessment.get("development_stages", []):
+        st.write("**Development & Funding Stages:**")
+        stages = tech_assessment.get("development_stages", [])
+        funding_reqs = tech_assessment.get("funding_requirements", [])
+        for stage, req in zip(stages, funding_reqs):
             st.markdown(f"• {stage}")
+            st.markdown(f"  *Funding: {req}*")
 
-    # Innovation Opportunities
+    # Innovation Opportunities with Funding
     st.subheader("Innovation Opportunities")
     for opp in combined_analysis.get("innovation_opportunities", []):
         with st.expander(f"💡 {opp.get('opportunity', 'Opportunity')} ({opp.get('potential_impact', 'N/A')} impact)"):
             st.write(f"**Implementation Timeline:** {opp.get('implementation_timeline', 'N/A')}")
             st.write(f"**Required Resources:** {opp.get('required_resources', 'N/A')}")
+            st.write(f"**Potential Funding Sources:** {opp.get('potential_funding', 'N/A')}")
 
-    # Risk Analysis
+    # Risk Analysis including Funding Risks
     st.subheader("Risk Analysis")
     risks = combined_analysis.get("risk_analysis", {})
-    tab1, tab2, tab3 = st.tabs(["Technical Risks", "Market Risks", "Mitigation Strategies"])
+    tab1, tab2, tab3, tab4 = st.tabs(["Technical Risks", "Market Risks", "Funding Risks", "Mitigation Strategies"])
 
     with tab1:
         for risk in risks.get("technical_risks", []):
@@ -563,24 +590,31 @@ def render_combined_results(research_results, patent_results, combined_analysis)
         for risk in risks.get("market_risks", []):
             st.markdown(f"• {risk}")
     with tab3:
+        for risk in risks.get("funding_risks", []):
+            st.markdown(f"• {risk}")
+    with tab4:
         for strategy in risks.get("mitigation_strategies", []):
             st.markdown(f"• {strategy}")
 
-    # Investment Recommendations
+    # Investment Recommendations with Funding Sources
     st.subheader("Investment Recommendations")
     for rec in combined_analysis.get("investment_recommendations", []):
         with st.expander(f"💰 {rec.get('area', 'Investment Area')} (ROI: {rec.get('potential_roi', 'N/A')})"):
             st.write(f"**Timeframe:** {rec.get('timeframe', 'N/A')}")
             st.write(f"**Required Investment:** {rec.get('required_investment', 'N/A')}")
+            st.write("**Potential Funding Sources:**")
+            for source in rec.get("funding_sources", []):
+                st.markdown(f"• {source}")
 
-    # Future Directions
+    # Future Directions with Funding Potential
     st.subheader("Future Directions")
     for direction in combined_analysis.get("future_directions", []):
         with st.expander(f"🔮 {direction.get('direction', 'Direction')} (Probability: {direction.get('probability', 'N/A')}/10)"):
             st.write(f"**Impact:** {direction.get('impact', 'N/A')}")
             st.write(f"**Timeline:** {direction.get('timeline', 'N/A')}")
+            st.write(f"**Funding Potential:** {direction.get('funding_potential', 'N/A')}")
 
-    # Collaboration Opportunities
+    # Collaboration Opportunities with Funding
     st.subheader("Collaboration Opportunities")
     for collab in combined_analysis.get("collaboration_opportunities", []):
         with st.expander(f"🤝 {collab.get('type', 'Collaboration')}"):
@@ -590,8 +624,11 @@ def render_combined_results(research_results, patent_results, combined_analysis)
             st.write("**Expected Benefits:**")
             for benefit in collab.get("expected_benefits", []):
                 st.markdown(f"• {benefit}")
+            st.write("**Funding Opportunities:**")
+            for funding in collab.get("funding_opportunities", []):
+                st.markdown(f"• {funding}")
 
-    # Industry Implications
+    # Industry Implications with Sector-Specific Funding
     st.subheader("Industry Implications")
     implications = combined_analysis.get("industry_implications", {})
 
@@ -604,6 +641,10 @@ def render_combined_results(research_results, patent_results, combined_analysis)
     st.write("**Impact Analysis:**")
     for impact in implications.get("impact_analysis", []):
         st.markdown(f"• {impact}")
+
+    st.write("**Sector-Specific Funding:**")
+    for funding in implications.get("sector_specific_funding", []):
+        st.markdown(f"• {funding}")
 
     st.write("**Adaptation Strategies:**")
     for strategy in implications.get("adaptation_strategies", []):
