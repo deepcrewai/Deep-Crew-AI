@@ -8,7 +8,8 @@ from components import (
     render_analysis_section,
     render_patent_results,
     render_combined_results,
-    handle_pdf_export
+    handle_pdf_export,
+    render_accessibility_menu
 )
 from utils import setup_page
 from funding import render_funding_section, FundingAgent
@@ -16,173 +17,9 @@ from funding import render_funding_section, FundingAgent
 def main():
     setup_page()
 
-    # Accessibility Settings in Sidebar
-    with st.sidebar:
-        st.title("🌐 Erişilebilirlik")
+    # Render accessibility menu
+    render_accessibility_menu()
 
-        # Initialize session state for settings if not exists
-        if 'accessibility_settings' not in st.session_state:
-            st.session_state.accessibility_settings = {
-                'high_contrast': False,
-                'negative_contrast': False,
-                'screen_reader': False,
-                'keyboard_shortcuts': False
-            }
-
-        # High Contrast Mode
-        high_contrast = st.toggle("🔳 Yüksek Kontrast (Alt+H)", 
-            value=st.session_state.accessibility_settings['high_contrast'],
-            help="Yüksek kontrast modunu etkinleştirmek için Alt+H tuşlarını kullanın")
-        if high_contrast != st.session_state.accessibility_settings['high_contrast']:
-            st.session_state.accessibility_settings['high_contrast'] = high_contrast
-            st.rerun()
-
-        # Negative Contrast
-        negative_contrast = st.toggle("🌙 Negatif Kontrast (Alt+N)", 
-            value=st.session_state.accessibility_settings['negative_contrast'],
-            help="Negatif kontrast modunu etkinleştirmek için Alt+N tuşlarını kullanın")
-        if negative_contrast != st.session_state.accessibility_settings['negative_contrast']:
-            st.session_state.accessibility_settings['negative_contrast'] = negative_contrast
-            st.rerun()
-
-        # Screen Reader
-        screen_reader = st.toggle("🔊 Ekran Okuyucu (Alt+S)", 
-            value=st.session_state.accessibility_settings['screen_reader'],
-            help="Ekran okuyucuyu etkinleştirmek için Alt+S tuşlarını kullanın")
-        if screen_reader != st.session_state.accessibility_settings['screen_reader']:
-            st.session_state.accessibility_settings['screen_reader'] = screen_reader
-            st.rerun()
-
-        # Keyboard Shortcuts Info
-        with st.expander("⌨️ Klavye Kısayolları"):
-            st.markdown("""
-                - **Alt + H**: Yüksek Kontrast
-                - **Alt + N**: Negatif Kontrast
-                - **Alt + S**: Ekran Okuyucu
-                - **Alt + R**: Sıfırla
-                - **Alt + →**: Sonraki Eleman
-                - **Alt + ←**: Önceki Eleman
-                - **Space**: Seçili Elemanı Etkinleştir
-            """)
-
-        # Reset Button
-        if st.button("🔄 Sıfırla (Alt+R)"):
-            st.session_state.accessibility_settings = {
-                'high_contrast': False,
-                'negative_contrast': False,
-                'screen_reader': False,
-                'keyboard_shortcuts': False
-            }
-            st.rerun()
-
-    # Apply accessibility styles and scripts
-    styles = []
-    scripts = []
-
-    if st.session_state.accessibility_settings['high_contrast']:
-        styles.append("""
-            .stApp, body, [data-testid="stSidebar"] {
-                background-color: black !important;
-                color: white !important;
-            }
-            .stButton button, .stSelectbox, .stTextInput input {
-                background-color: white !important;
-                color: black !important;
-                border: 1px solid white !important;
-            }
-            .stMarkdown, .stText, .logo-title, .main-header, .subtitle {
-                color: white !important;
-            }
-        """)
-
-    if st.session_state.accessibility_settings['negative_contrast']:
-        styles.append("""
-            .stApp {
-                filter: invert(100%) !important;
-            }
-            img, [data-testid="stImage"] {
-                filter: invert(100%) !important;
-            }
-        """)
-
-    if st.session_state.accessibility_settings['screen_reader']:
-        scripts.append("""
-            function speak(text) {
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'tr-TR';
-                window.speechSynthesis.speak(utterance);
-            }
-
-            document.addEventListener('keydown', function(e) {
-                if (e.altKey && e.key === 's') {
-                    const focusedElement = document.activeElement;
-                    if (focusedElement) {
-                        speak(focusedElement.textContent || focusedElement.value || 'Seçili element');
-                    }
-                }
-            });
-        """)
-
-    # Keyboard navigation script
-    scripts.append("""
-        document.addEventListener('keydown', function(e) {
-            if (e.altKey) {
-                switch(e.key) {
-                    case 'h':
-                        document.querySelector('[data-testid="stToggleButton"][aria-label*="Yüksek Kontrast"]').click();
-                        break;
-                    case 'n':
-                        document.querySelector('[data-testid="stToggleButton"][aria-label*="Negatif Kontrast"]').click();
-                        break;
-                    case 's':
-                        document.querySelector('[data-testid="stToggleButton"][aria-label*="Ekran Okuyucu"]').click();
-                        break;
-                    case 'r':
-                        document.querySelector('button:contains("🔄 Sıfırla")').click();
-                        break;
-                    case 'ArrowRight':
-                        navigateElements('next');
-                        break;
-                    case 'ArrowLeft':
-                        navigateElements('prev');
-                        break;
-                }
-            }
-        });
-
-        function navigateElements(direction) {
-            const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-            const elements = Array.from(document.querySelectorAll(focusableElements));
-            const currentElement = document.activeElement;
-            const currentIndex = elements.indexOf(currentElement);
-            let nextIndex;
-
-            if (direction === 'next') {
-                nextIndex = currentIndex + 1 >= elements.length ? 0 : currentIndex + 1;
-            } else {
-                nextIndex = currentIndex - 1 < 0 ? elements.length - 1 : currentIndex - 1;
-            }
-
-            elements[nextIndex].focus();
-        }
-    """)
-
-    # Apply all styles and scripts
-    if styles:
-        st.markdown(f"""
-            <style>
-                {' '.join(styles)}
-            </style>
-        """, unsafe_allow_html=True)
-
-    if scripts:
-        st.markdown(f"""
-            <script>
-                {' '.join(scripts)}
-            </script>
-        """, unsafe_allow_html=True)
-
-    # Main Content
     st.markdown("""
         <div class="main-container">
             <div class="logo-title">DEEP CREW</div>

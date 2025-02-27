@@ -1,11 +1,4 @@
 import streamlit as st
-import plotly.express as px
-from utils import format_citation, calculate_metrics
-from io import BytesIO
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
-from datetime import datetime
-from reportlab.lib.utils import ImageReader
 
 def generate_pdf_report(results, analysis):
     """Generate a PDF report of AI analysis."""
@@ -622,14 +615,11 @@ def render_combined_results(research_results, patent_results, combined_analysis)
 
 def render_accessibility_menu():
     """Render the accessibility menu using Streamlit native components."""
-    import streamlit as st
-
-    # Create a container in the sidebar for accessibility options
     with st.sidebar:
         st.markdown("### 🌐 Erişilebilirlik Araçları")
 
         # High Contrast Mode
-        if st.toggle("🔳 Yüksek Kontrast", value=st.session_state.get('high_contrast', False), key='high_contrast'):
+        if st.toggle("🔳 Yüksek Kontrast (Alt+H)", value=st.session_state.get('high_contrast', False), key='high_contrast'):
             st.markdown("""
                 <style>
                     body, .main-container, .stApp, [data-testid="stSidebar"] {
@@ -651,7 +641,7 @@ def render_accessibility_menu():
             """, unsafe_allow_html=True)
 
         # Negative Contrast
-        if st.toggle("🌙 Negatif Kontrast", value=st.session_state.get('negative_contrast', False), key='negative_contrast'):
+        if st.toggle("🌙 Negatif Kontrast (Alt+N)", value=st.session_state.get('negative_contrast', False), key='negative_contrast'):
             st.markdown("""
                 <style>
                     .stApp, body {
@@ -667,47 +657,144 @@ def render_accessibility_menu():
                 </style>
             """, unsafe_allow_html=True)
 
-        # Light Background
-        if st.toggle("☀️ Açık Arka Plan", value=st.session_state.get('light_background', False), key='light_background'):
-            st.markdown("""
-                <style>
-                    .stApp, .main-container, [data-testid="stSidebar"] {
-                        background-color: #ffffff !important;
-                    }
-                    .stMarkdown, .stText, .logo-title, .main-header, .subtitle {
-                        color: #000000 !important;
-                    }
-                    .stButton button {
-                        background-color: #f0f2f6 !important;
-                        color: #000000 !important;
-                    }
-                </style>
-            """, unsafe_allow_html=True)
+        # Screen Reader
+        if st.toggle("🔊 Ekran Okuyucu (Alt+S)", value=st.session_state.get('screen_reader', False), key='screen_reader'):
+            # Add screen reader functionality using components.html
+            st.components.v1.html("""
+                <script>
+                    // Speech synthesis initialization
+                    if ('speechSynthesis' in window) {
+                        const synth = window.speechSynthesis;
+                        let speaking = false;
 
-        # Links Underline
-        if st.toggle("🔗 Bağlantıları Altı Çizili", value=st.session_state.get('links_underline', False), key='links_underline'):
-            st.markdown("""
-                <style>
-                    a, .stMarkdown a, [data-testid="stSidebarNav"] a {
-                        text-decoration: underline !important;
-                    }
-                </style>
-            """, unsafe_allow_html=True)
+                        function speak(text) {
+                            if (!text || typeof text !== 'string') return;
 
-        # Readable Font
-        if st.toggle("📖 Okunabilir Yazı Tipi", value=st.session_state.get('readable_font', False), key='readable_font'):
-            st.markdown("""
-                <style>
-                    @import url('https://fonts.googleapis.com/css2?family=OpenDyslexic:wght@400;700&display=swap');
-                    .stMarkdown, .stText, .logo-title, .main-header, .subtitle, 
-                    button, input, select, .stButton button, [data-testid="stMarkdown"] {
-                        font-family: 'OpenDyslexic', Arial, sans-serif !important;
+                            // Cancel any ongoing speech
+                            if (speaking) {
+                                synth.cancel();
+                            }
+
+                            // Create and configure utterance
+                            const utterance = new SpeechSynthesisUtterance(text);
+                            utterance.lang = 'tr-TR';
+                            utterance.rate = 1;
+                            utterance.pitch = 1;
+                            utterance.volume = 1;
+
+                            // Handle speech events
+                            utterance.onstart = () => { speaking = true; };
+                            utterance.onend = () => { speaking = false; };
+                            utterance.onerror = () => { speaking = false; };
+
+                            // Speak the text
+                            synth.speak(utterance);
+                        }
+
+                        // Function to handle focused elements
+                        function handleFocusedElement(element) {
+                            const textToRead = 
+                                element.getAttribute('aria-label') ||
+                                element.title ||
+                                element.textContent ||
+                                element.value ||
+                                element.placeholder;
+
+                            if (textToRead) {
+                                speak(textToRead.trim());
+                            }
+                        }
+
+                        // Add focus event listeners
+                        document.addEventListener('focusin', (e) => {
+                            if (e.target) {
+                                handleFocusedElement(e.target);
+                            }
+                        });
+
+                        // Manual trigger with Alt+S
+                        document.addEventListener('keydown', (e) => {
+                            if (e.altKey && e.key.toLowerCase() === 's') {
+                                const activeElement = document.activeElement;
+                                if (activeElement) {
+                                    handleFocusedElement(activeElement);
+                                }
+                            }
+                        });
+
+                        // Observe DOM changes for dynamic content
+                        const observer = new MutationObserver((mutations) => {
+                            mutations.forEach((mutation) => {
+                                if (mutation.type === 'childList') {
+                                    mutation.addedNodes.forEach((node) => {
+                                        if (node.nodeType === 1) {
+                                            const ariaLabel = node.getAttribute('aria-label');
+                                            if (ariaLabel) {
+                                                speak(ariaLabel);
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        });
+
+                        // Start observing once DOM is loaded
+                        document.addEventListener('DOMContentLoaded', () => {
+                            observer.observe(document.body, {
+                                childList: true,
+                                subtree: true,
+                                attributes: true,
+                                attributeFilter: ['aria-label']
+                            });
+                        });
+
+                        // Add keyboard navigation
+                        document.addEventListener('keydown', (e) => {
+                            if (e.altKey) {
+                                const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+                                const elements = Array.from(document.querySelectorAll(focusableElements));
+                                const currentElement = document.activeElement;
+                                const currentIndex = elements.indexOf(currentElement);
+
+                                if (e.key === 'ArrowRight') {
+                                    const nextIndex = (currentIndex + 1) % elements.length;
+                                    elements[nextIndex].focus();
+                                    e.preventDefault();
+                                } else if (e.key === 'ArrowLeft') {
+                                    const prevIndex = currentIndex <= 0 ? elements.length - 1 : currentIndex - 1;
+                                    elements[prevIndex].focus();
+                                    e.preventDefault();
+                                }
+                            }
+                        });
+                    } else {
+                        console.warn('Speech Synthesis is not supported in this browser');
                     }
-                </style>
-            """, unsafe_allow_html=True)
+                </script>
+            """, height=0)
+
+        # Keyboard Shortcuts Info
+        with st.expander("⌨️ Klavye Kısayolları"):
+            st.markdown("""
+                - **Alt + H**: Yüksek Kontrast
+                - **Alt + N**: Negatif Kontrast
+                - **Alt + S**: Ekran Okuyucu
+                - **Alt + R**: Sıfırla
+                - **Alt + →**: Sonraki Eleman
+                - **Alt + ←**: Önceki Eleman
+                - **Space**: Seçili Elemanı Etkinleştir
+            """)
 
         # Reset Button
-        if st.button("🔄 Sıfırla"):
-            for key in ['high_contrast', 'negative_contrast', 'light_background', 'links_underline', 'readable_font']:
+        if st.button("🔄 Sıfırla (Alt+R)"):
+            for key in ['high_contrast', 'negative_contrast', 'screen_reader']:
                 st.session_state[key] = False
             st.rerun()
+
+import plotly.express as px
+from utils import format_citation, calculate_metrics
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from datetime import datetime
+from reportlab.lib.utils import ImageReader
