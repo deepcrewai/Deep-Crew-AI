@@ -13,16 +13,6 @@ from components import (
 from utils import setup_page
 from funding import render_funding_section, FundingAgent
 
-def create_stage_button(icon_class: str, label: str, stage_key: str) -> str:
-    """Create HTML for a modernized stage button"""
-    is_selected = stage_key in st.session_state.get('selected_stages', set())
-    selected_class = "selected" if is_selected else ""
-    return f"""
-        <div class="stage-selector {selected_class}">
-            {label}
-        </div>
-    """
-
 def main():
     setup_page()
 
@@ -77,44 +67,41 @@ def main():
                     border-color: rgba(223,225,229,0);
                 }
 
-                /* Stage selector styling */
-                .stage-selectors {
+                /* Stage buttons styling */
+                .stage-buttons {
                     display: flex;
-                    justify-content: center;
-                    gap: 1.5rem;
+                    justify-content: space-between;
+                    gap: 1rem;
                     margin: 2rem 0;
-                    flex-wrap: wrap;
                 }
 
-                /* Button styling */
-                .stButton > button {
-                    background-color: #fff !important;
-                    border-radius: 12px !important;
-                    padding: 1rem !important;
-                    border: 1px solid #dfe1e5 !important;
-                    color: #202124 !important;
-                    font-weight: 500 !important;
+                .stage-button {
+                    background-color: #fff;
+                    border: 1px solid #dfe1e5;
+                    border-radius: 12px;
+                    padding: 0.75rem 1.5rem;
+                    color: #202124;
+                    font-weight: 500;
+                    cursor: pointer;
                     transition: all 0.2s ease;
-                    width: 100%;
-                    display: flex !important;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 0.5rem;
+                    flex: 1;
+                    text-align: center;
+                    text-decoration: none;
                 }
 
-                .stButton > button:hover {
+                .stage-button:hover {
                     box-shadow: 0 1px 6px rgba(32,33,36,.28);
-                    border-color: rgba(223,225,229,0) !important;
+                    border-color: rgba(223,225,229,0);
                 }
 
-                .stButton > button i {
-                    font-size: 1.2rem;
+                .stage-button.selected {
+                    background-color: #e8f0fe;
+                    border-color: #1a73e8;
+                    color: #1a73e8;
                 }
 
-                .stButton > button.selected {
-                    background-color: #e8f0fe !important;
-                    border-color: #1a73e8 !important;
-                    color: #1a73e8 !important;
+                .stage-button i {
+                    margin-right: 0.5rem;
                 }
 
                 /* Tab styling */
@@ -125,6 +112,17 @@ def main():
                     margin-top: 2rem;
                 }
             </style>
+            <script>
+                function toggleStage(stageKey) {
+                    const button = document.querySelector(`[data-stage="${stageKey}"]`);
+                    button.classList.toggle('selected');
+                    // Send message to Streamlit
+                    window.parent.postMessage({
+                        type: 'streamlit:setComponentValue',
+                        value: stageKey
+                    }, '*');
+                }
+            </script>
         </head>
         <div class="main-container">
             <div class="logo-title">DEEP CREW</div>
@@ -147,8 +145,8 @@ def main():
     if 'selected_stages' not in st.session_state:
         st.session_state.selected_stages = set()
 
-    # Create columns for stage buttons
-    cols = st.columns(5)
+    # Stage buttons container
+    st.markdown('<div class="stage-buttons">', unsafe_allow_html=True)
 
     stages = {
         'research': ('fas fa-search', 'Research'),
@@ -158,21 +156,29 @@ def main():
         'compliance': ('fas fa-shield-alt', 'Compliance')
     }
 
-    for idx, (stage_key, (icon, label)) in enumerate(stages.items()):
-        with cols[idx]:
-            is_selected = stage_key in st.session_state.selected_stages
-            button_label = f'<i class="{icon}"></i> {label}'
-            if st.button(
-                button_label,
-                key=f"btn_{stage_key}",
-                use_container_width=True,
-                help=f"Click to select {label}",
-            ):
-                if stage_key in st.session_state.selected_stages:
-                    st.session_state.selected_stages.remove(stage_key)
-                else:
-                    st.session_state.selected_stages.add(stage_key)
-                st.rerun()
+    for stage_key, (icon, label) in stages.items():
+        selected_class = "selected" if stage_key in st.session_state.selected_stages else ""
+        st.markdown(
+            f"""<button 
+                class="stage-button {selected_class}" 
+                onclick="toggleStage('{stage_key}')"
+                data-stage="{stage_key}">
+                <i class="{icon}"></i>{label}
+            </button>""",
+            unsafe_allow_html=True
+        )
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # Handle stage selection from JavaScript
+    if st.session_state.get('last_clicked'):
+        stage_key = st.session_state.last_clicked
+        if stage_key in st.session_state.selected_stages:
+            st.session_state.selected_stages.remove(stage_key)
+        else:
+            st.session_state.selected_stages.add(stage_key)
+        del st.session_state.last_clicked
+        st.rerun()
 
     selected_stages = list(st.session_state.selected_stages)
 
