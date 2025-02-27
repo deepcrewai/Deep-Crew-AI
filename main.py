@@ -8,7 +8,8 @@ from components import (
     render_analysis_section,
     render_patent_results,
     render_combined_results,
-    handle_pdf_export
+    handle_pdf_export,
+    render_accessibility_menu
 )
 from utils import setup_page
 from funding import render_funding_section, FundingAgent
@@ -28,214 +29,10 @@ def main():
     if 'readable_font' not in st.session_state:
         st.session_state.readable_font = False
 
+    # Render accessibility menu
+    render_accessibility_menu()
+
     st.markdown("""
-        <head>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-            <style>
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-                @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;500;600;700&display=swap');
-
-                /* Accessibility Menu Styles */
-                #accessibility-container {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    z-index: 999999;
-                }
-
-                .accessibility-button {
-                    position: fixed;
-                    top: 0.5rem;
-                    left: 1rem;
-                    z-index: 999999;
-                    background: none;
-                    border: none;
-                    cursor: pointer;
-                    padding: 10px;
-                    font-size: 24px;
-                    color: #1a73e8;
-                    border-radius: 50%;
-                    width: 48px;
-                    height: 48px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background: white;
-                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-                }
-
-                .accessibility-button:hover {
-                    background: #f0f3f6;
-                }
-
-                .accessibility-menu {
-                    position: fixed;
-                    top: 4rem;
-                    left: 1rem;
-                    background: white;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                    padding: 15px;
-                    z-index: 999998;
-                    display: none;
-                    min-width: 200px;
-                }
-
-                .accessibility-menu.show {
-                    display: block;
-                }
-
-                .accessibility-option {
-                    display: flex;
-                    align-items: center;
-                    padding: 8px;
-                    cursor: pointer;
-                    transition: background 0.2s;
-                    border-radius: 4px;
-                    color: #202124;
-                }
-
-                .accessibility-option:hover {
-                    background: #f0f3f6;
-                }
-
-                .accessibility-option i {
-                    margin-right: 8px;
-                    width: 20px;
-                    text-align: center;
-                }
-
-                /* Main Container Styles */
-                .main-container {
-                    max-width: 800px;
-                    margin: 3rem auto;
-                    text-align: center;
-                    font-family: 'Inter', sans-serif;
-                }
-
-                .logo-title {
-                    font-size: 2.75rem;
-                    font-weight: 700;
-                    padding: 1.25rem 0px 1rem;
-                    font-family: "Source Sans Pro", sans-serif;
-                    color: black;
-                }
-
-                .main-header {
-                    font-size: 2.5rem;
-                    font-weight: 500;
-                    color: #202124;
-                    margin: 1rem 0;
-                    font-family: 'Inter', sans-serif;
-                }
-
-                .subtitle {
-                    font-size: 1.1rem;
-                    color: #5f6368;
-                    margin-bottom: 2rem;
-                }
-
-                /* High Contrast Mode */
-                body.high-contrast {
-                    background: black !important;
-                    color: white !important;
-                }
-
-                body.high-contrast * {
-                    background: black !important;
-                    color: white !important;
-                    border-color: white !important;
-                }
-
-                /* Negative Contrast */
-                body.negative-contrast {
-                    filter: invert(100%);
-                }
-
-                /* Light Background */
-                body.light-background {
-                    background: #ffffff !important;
-                    color: #000000 !important;
-                }
-
-                /* Links Underline */
-                body.links-underline a {
-                    text-decoration: underline !important;
-                }
-
-                /* Readable Font */
-                body.readable-font {
-                    font-family: 'OpenDyslexic', sans-serif !important;
-                }
-
-                body.readable-font * {
-                    font-family: 'OpenDyslexic', sans-serif !important;
-                }
-            </style>
-        </head>
-        <div id="accessibility-container">
-            <button class="accessibility-button" id="accessibilityBtn" aria-label="Accessibility Options">
-                <i class="fas fa-universal-access"></i>
-            </button>
-
-            <div class="accessibility-menu" id="accessibilityMenu">
-                <div class="accessibility-option" id="highContrastBtn">
-                    <i class="fas fa-adjust"></i> High Contrast
-                </div>
-                <div class="accessibility-option" id="negativeContrastBtn">
-                    <i class="fas fa-moon"></i> Negative Contrast
-                </div>
-                <div class="accessibility-option" id="lightBackgroundBtn">
-                    <i class="fas fa-sun"></i> Light Background
-                </div>
-                <div class="accessibility-option" id="linksUnderlineBtn">
-                    <i class="fas fa-underline"></i> Links Underline
-                </div>
-                <div class="accessibility-option" id="readableFontBtn">
-                    <i class="fas fa-font"></i> Readable Font
-                </div>
-                <div class="accessibility-option" id="resetBtn">
-                    <i class="fas fa-undo"></i> Reset
-                </div>
-            </div>
-        </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const accessibilityBtn = document.getElementById('accessibilityBtn');
-                const accessibilityMenu = document.getElementById('accessibilityMenu');
-                const options = {
-                    'highContrastBtn': 'high-contrast',
-                    'negativeContrastBtn': 'negative-contrast',
-                    'lightBackgroundBtn': 'light-background',
-                    'linksUnderlineBtn': 'links-underline',
-                    'readableFontBtn': 'readable-font'
-                };
-
-                accessibilityBtn.addEventListener('click', function() {
-                    accessibilityMenu.classList.toggle('show');
-                });
-
-                // Add click events for each option
-                Object.entries(options).forEach(([btnId, className]) => {
-                    const btn = document.getElementById(btnId);
-                    if (btn) {
-                        btn.addEventListener('click', function() {
-                            document.body.classList.toggle(className);
-                        });
-                    }
-                });
-
-                // Reset button
-                const resetBtn = document.getElementById('resetBtn');
-                if (resetBtn) {
-                    resetBtn.addEventListener('click', function() {
-                        Object.values(options).forEach(className => {
-                            document.body.classList.remove(className);
-                        });
-                    });
-                }
-            });
-        </script>
         <div class="main-container">
             <div class="logo-title">DEEP CREW</div>
             <h1 class="main-header">Research & Innovation Hub</h1>
@@ -243,6 +40,39 @@ def main():
                 Discover insights, analyze patents, and explore funding opportunities with AI-powered research tools
             </p>
         </div>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;500;600;700&display=swap');
+
+            .main-container {
+                max-width: 800px;
+                margin: 3rem auto;
+                text-align: center;
+                font-family: 'Inter', sans-serif;
+            }
+
+            .logo-title {
+                font-size: 2.75rem;
+                font-weight: 700;
+                padding: 1.25rem 0px 1rem;
+                font-family: "Source Sans Pro", sans-serif;
+                color: black;
+            }
+
+            .main-header {
+                font-size: 2.5rem;
+                font-weight: 500;
+                color: #202124;
+                margin: 1rem 0;
+                font-family: 'Inter', sans-serif;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+                color: #5f6368;
+                margin-bottom: 2rem;
+            }
+        </style>
     """, unsafe_allow_html=True)
 
     # Search input with modern styling

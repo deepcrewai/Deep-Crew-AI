@@ -619,3 +619,174 @@ def render_combined_results(research_results, patent_results, combined_analysis)
     with col3:
         total_documents = len(research_results) + len(patent_results)
         st.metric("Total Documents", total_documents)
+
+def render_accessibility_menu():
+    """Render the accessibility menu component."""
+    import streamlit as st
+
+    st.markdown(
+        """
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown(
+        """
+        <style>
+            iframe {
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .accessibility-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 999999;
+            }
+            .accessibility-button {
+                position: fixed;
+                top: 0.5rem;
+                left: 1rem;
+                z-index: 999999;
+                background: white;
+                border: none;
+                cursor: pointer;
+                padding: 10px;
+                font-size: 24px;
+                color: #1a73e8;
+                border-radius: 50%;
+                width: 48px;
+                height: 48px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            .accessibility-button:hover {
+                background: #f0f3f6;
+            }
+            .accessibility-menu {
+                position: fixed;
+                top: 4rem;
+                left: 1rem;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                padding: 15px;
+                z-index: 999998;
+                display: none;
+                min-width: 200px;
+            }
+            .accessibility-menu.show {
+                display: block;
+            }
+            .accessibility-option {
+                display: flex;
+                align-items: center;
+                padding: 8px;
+                cursor: pointer;
+                transition: background 0.2s;
+                border-radius: 4px;
+                color: #202124;
+            }
+            .accessibility-option:hover {
+                background: #f0f3f6;
+            }
+            .accessibility-option i {
+                margin-right: 8px;
+                width: 20px;
+                text-align: center;
+            }
+            /* High Contrast Mode */
+            .high-contrast {
+                background: black !important;
+                color: white !important;
+            }
+            .high-contrast * {
+                background: black !important;
+                color: white !important;
+                border-color: white !important;
+            }
+            /* Negative Contrast */
+            .negative-contrast {
+                filter: invert(100%);
+            }
+            /* Light Background */
+            .light-background {
+                background: #ffffff !important;
+                color: #000000 !important;
+            }
+            /* Links Underline */
+            .links-underline a {
+                text-decoration: underline !important;
+            }
+            /* Readable Font */
+            .readable-font, .readable-font * {
+                font-family: 'OpenDyslexic', Arial, sans-serif !important;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    html_code = f"""
+        <div class="accessibility-container">
+            <button class="accessibility-button" onclick="toggleMenu()">
+                <i class="fas fa-universal-access"></i>
+            </button>
+            <div class="accessibility-menu" id="accessibilityMenu">
+                <div class="accessibility-option" onclick="toggleAccessibility('high-contrast')">
+                    <i class="fas fa-adjust"></i> High Contrast
+                </div>
+                <div class="accessibility-option" onclick="toggleAccessibility('negative-contrast')">
+                    <i class="fas fa-moon"></i> Negative Contrast
+                </div>
+                <div class="accessibility-option" onclick="toggleAccessibility('light-background')">
+                    <i class="fas fa-sun"></i> Light Background
+                </div>
+                <div class="accessibility-option" onclick="toggleAccessibility('links-underline')">
+                    <i class="fas fa-underline"></i> Links Underline
+                </div>
+                <div class="accessibility-option" onclick="toggleAccessibility('readable-font')">
+                    <i class="fas fa-font"></i> Readable Font
+                </div>
+                <div class="accessibility-option" onclick="resetAccessibility()">
+                    <i class="fas fa-undo"></i> Reset
+                </div>
+            </div>
+        </div>
+        <script>
+            function toggleMenu() {{
+                const menu = document.getElementById('accessibilityMenu');
+                menu.classList.toggle('show');
+            }}
+
+            function toggleAccessibility(className) {{
+                document.documentElement.classList.toggle(className);
+                if (window.parent.streamlit) {{
+                    window.parent.streamlit.setComponentValue({{
+                        type: 'toggle',
+                        className: className,
+                        state: document.documentElement.classList.contains(className)
+                    }});
+                }}
+            }}
+
+            function resetAccessibility() {{
+                const classes = ['high-contrast', 'negative-contrast', 'light-background', 'links-underline', 'readable-font'];
+                classes.forEach(className => {{
+                    document.documentElement.classList.remove(className);
+                }});
+                if (window.parent.streamlit) {{
+                    window.parent.streamlit.setComponentValue({{
+                        type: 'reset'
+                    }});
+                }}
+            }}
+        </script>
+    """
+
+    # Using components.html to render the HTML safely
+    st.components.v1.html(html_code, height=50, scrolling=False)
