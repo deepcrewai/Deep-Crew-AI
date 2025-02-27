@@ -66,31 +66,29 @@ def main():
                     border-color: rgba(223,225,229,0);
                 }
 
-                /* Stage buttons styling */
+                /* Stage buttons container */
                 .stage-buttons {
                     display: flex;
                     justify-content: space-between;
-                    gap: 1rem;
                     margin: 2rem 0;
-                    flex-direction: row;
-                    flex-wrap: nowrap;
+                    gap: 1rem;
                 }
 
+                /* Stage button styling */
                 .stage-button {
                     background-color: #fff;
                     border: 1px solid #dfe1e5;
-                    border-radius: 12px;
+                    border-radius: 8px;
                     padding: 0.75rem 1.5rem;
                     color: #202124;
                     font-weight: 500;
                     cursor: pointer;
                     transition: all 0.2s ease;
                     flex: 1;
-                    text-align: center;
-                    text-decoration: none;
-                    display: flex;
+                    display: inline-flex;
                     align-items: center;
                     justify-content: center;
+                    text-decoration: none;
                     min-width: 120px;
                 }
 
@@ -117,24 +115,6 @@ def main():
                     margin-top: 2rem;
                 }
             </style>
-            <script>
-                function toggleStage(stageKey) {
-                    const buttons = document.querySelectorAll('.stage-button');
-                    buttons.forEach(button => {
-                        button.classList.remove('selected'); // Remove selection from all buttons
-                    });
-                    const button = document.querySelector(`[data-stage="${stageKey}"]`);
-                    if (button) {
-                        button.classList.add('selected'); // Add selection to the clicked button
-                    }
-
-                    // Send message to Streamlit
-                    window.parent.postMessage({
-                        type: 'streamlit:setComponentValue',
-                        value: stageKey
-                    }, '*');
-                }
-            </script>
         </head>
         <div class="main-container">
             <div class="logo-title">DEEP CREW</div>
@@ -157,8 +137,8 @@ def main():
     if 'selected_stages' not in st.session_state:
         st.session_state.selected_stages = set()
 
-    # Stage buttons container
-    st.markdown('<div class="stage-buttons">', unsafe_allow_html=True)
+    # Create stage buttons using columns for horizontal layout
+    col1, col2, col3, col4, col5 = st.columns(5)
 
     stages = {
         'research': ('fas fa-search', 'Research'),
@@ -168,29 +148,21 @@ def main():
         'compliance': ('fas fa-shield-alt', 'Compliance')
     }
 
-    for stage_key, (icon, label) in stages.items():
-        selected_class = "selected" if stage_key in st.session_state.selected_stages else ""
-        st.markdown(
-            f"""<button 
-                class="stage-button {selected_class}" 
-                onclick="toggleStage('{stage_key}')"
-                data-stage="{stage_key}">
-                <i class="{icon}"></i>{label}
-            </button>""",
-            unsafe_allow_html=True
-        )
+    columns = [col1, col2, col3, col4, col5]
 
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    # Handle stage selection from JavaScript
-    if st.session_state.get('last_clicked'):
-        stage_key = st.session_state.last_clicked
-        if stage_key in st.session_state.selected_stages:
-            st.session_state.selected_stages.remove(stage_key)
-        else:
-            st.session_state.selected_stages.add(stage_key)
-        del st.session_state.last_clicked
-        st.rerun()
+    for idx, (stage_key, (icon, label)) in enumerate(stages.items()):
+        with columns[idx]:
+            if st.button(
+                f"<i class='{icon}'></i> {label}",
+                key=f"btn_{stage_key}",
+                help=f"Click to select {label}",
+                use_container_width=True,
+            ):
+                if stage_key in st.session_state.selected_stages:
+                    st.session_state.selected_stages.remove(stage_key)
+                else:
+                    st.session_state.selected_stages.add(stage_key)
+                st.rerun()
 
     selected_stages = list(st.session_state.selected_stages)
 
