@@ -2,6 +2,7 @@ import requests
 from typing import Dict, List, Optional
 import time
 from difflib import SequenceMatcher
+import trafilatura
 
 class OpenAlexClient:
     def __init__(self):
@@ -65,7 +66,8 @@ class OpenAlexClient:
             # Base search parameters with minimal filters
             params = {
                 "search": query,
-                "per_page": 100  # Get more results initially for better relevance filtering
+                "per_page": 100,  # Get more results initially for better relevance filtering
+                "select": "title,abstract,doi,publication_year,concepts,cited_by_count"  # Specify fields
             }
 
             # First attempt with exact query
@@ -88,10 +90,35 @@ class OpenAlexClient:
             # Process and enhance results
             enhanced_results = []
             for paper in results:
-                # Extract and format paper data
-                abstract = paper.get('abstract')
-                if abstract is None or abstract == "":
-                    abstract = "Abstract is not available for this paper. Please refer to the full paper for detailed information."
+                # Extract and format paper data with improved abstract handling
+                abstract = paper.get('abstract', '')
+
+                # If no abstract available, try to fetch from DOI URL
+                if (not abstract or abstract == "") and paper.get('doi'):
+                    try:
+                        doi_url = f"https://doi.org/{paper.get('doi')}"
+                        downloaded = trafilatura.fetch_url(doi_url)
+                        if downloaded:
+                            extracted_text = trafilatura.extract(downloaded)
+                            if extracted_text:
+                                # Try to find an abstract section in the extracted text
+                                lines = extracted_text.split('\n')
+                                for i, line in enumerate(lines):
+                                    if 'abstract' in line.lower():
+                                        abstract = lines[i+1] if i+1 < len(lines) else ''
+                                        break
+                    except Exception as e:
+                        print(f"Error fetching abstract from DOI: {str(e)}")
+
+                # If still no abstract, provide a more informative message
+                if not abstract or abstract == "":
+                    try:
+                        # Try to generate a summary from the title and concepts
+                        title = paper.get('title', '')
+                        concepts = [c.get('display_name', '') for c in paper.get('concepts', [])]
+                        abstract = f"This paper titled '{title}' focuses on {', '.join(concepts[:3])}. Additional details can be found in the full paper."
+                    except:
+                        abstract = "This paper's abstract is not available in our database. You can access the full paper for detailed information."
 
                 paper_data = {
                     'title': paper.get('title', 'Title not found'),
@@ -99,7 +126,8 @@ class OpenAlexClient:
                     'doi': paper.get('doi'),
                     'publication_year': paper.get('publication_year'),
                     'url': f"https://doi.org/{paper.get('doi')}" if paper.get('doi') else None,
-                    'concepts': paper.get('concepts', [])
+                    'concepts': paper.get('concepts', []),
+                    'cited_by_count': paper.get('cited_by_count', 0)
                 }
 
                 # Calculate similarity score with more weight on title matches
@@ -117,8 +145,8 @@ class OpenAlexClient:
 
                 enhanced_results.append(paper_data)
 
-            # Sort only by similarity score
-            enhanced_results.sort(key=lambda x: (-x['similarity_score']))
+            # Sort by citation count and similarity score
+            enhanced_results.sort(key=lambda x: (-x['cited_by_count'], -x['similarity_score']))
             enhanced_results = enhanced_results[:50]  # Return top 50 most relevant results
 
             return enhanced_results
