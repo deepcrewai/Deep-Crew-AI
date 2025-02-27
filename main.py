@@ -14,34 +14,145 @@ from utils import setup_page
 from funding import render_funding_section, FundingAgent
 
 def create_stage_button(icon_class: str, label: str, stage_key: str) -> str:
-    """Create HTML for a stage button"""
+    """Create HTML for a modernized stage button"""
     is_selected = stage_key in st.session_state.get('selected_stages', set())
     selected_class = "selected" if is_selected else ""
     return f"""
         <div class="stage-selector {selected_class}">
             <i class="{icon_class}"></i>
-            <div class="stage-label">{label}</div>
+            <span class="stage-label">{label}</span>
         </div>
     """
 
 def main():
     setup_page()
 
-    # Add Font Awesome and custom styles
+    # Add modern styling
     st.markdown("""
         <head>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+                /* Modern styling */
+                .main-container {
+                    max-width: 800px;
+                    margin: 3rem auto;
+                    text-align: center;
+                    font-family: 'Inter', sans-serif;
+                }
+
+                .logo-title {
+                    font-size: 1.75rem;
+                    font-weight: 600;
+                    color: #1a73e8;
+                    margin-bottom: 0.5rem;
+                }
+
+                .main-header {
+                    font-size: 2.5rem;
+                    font-weight: 500;
+                    color: #202124;
+                    margin: 1rem 0;
+                }
+
+                .subtitle {
+                    font-size: 1.1rem;
+                    color: #5f6368;
+                    margin-bottom: 2rem;
+                }
+
+                /* Search box styling */
+                .stTextInput > div > div {
+                    background-color: #fff;
+                    border-radius: 24px !important;
+                    border: 1px solid #dfe1e5;
+                    box-shadow: none;
+                    padding: 0 1rem;
+                    transition: all 0.3s ease;
+                }
+
+                .stTextInput > div > div:hover,
+                .stTextInput > div > div:focus-within {
+                    box-shadow: 0 1px 6px rgba(32,33,36,.28);
+                    border-color: rgba(223,225,229,0);
+                }
+
+                /* Stage selector styling */
+                .stage-selectors {
+                    display: flex;
+                    justify-content: center;
+                    gap: 1.5rem;
+                    margin: 2rem 0;
+                    flex-wrap: wrap;
+                }
+
+                .stage-selector {
+                    background-color: #fff;
+                    border-radius: 12px;
+                    padding: 1rem;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    border: 1px solid #dfe1e5;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 0.5rem;
+                    min-width: 120px;
+                }
+
+                .stage-selector:hover {
+                    box-shadow: 0 1px 6px rgba(32,33,36,.28);
+                    border-color: rgba(223,225,229,0);
+                }
+
+                .stage-selector.selected {
+                    background-color: #e8f0fe;
+                    border-color: #1a73e8;
+                    color: #1a73e8;
+                }
+
+                .stage-selector i {
+                    font-size: 1.5rem;
+                    color: inherit;
+                }
+
+                .stage-label {
+                    font-size: 0.9rem;
+                    font-weight: 500;
+                }
+
+                /* Tab styling */
+                .stTabs {
+                    background: #fff;
+                    border-radius: 12px;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+                    margin-top: 2rem;
+                }
+
+                /* Button styling */
+                .stButton > button {
+                    border-radius: 24px;
+                    padding: 0.5rem 1.5rem;
+                    font-weight: 500;
+                    transition: all 0.2s ease;
+                }
+
+                .stButton > button:hover {
+                    box-shadow: 0 1px 6px rgba(32,33,36,.28);
+                }
+            </style>
         </head>
-        <div style='text-align: center; padding: 2rem 0;'>
-            <div class='deep-crew-title'>DEEP CREW</div>
-            <h1 class='main-header'>Research & Innovation Hub</h1>
-            <p style='font-size: 1.2rem; color: #64748B; max-width: 600px; margin: 0 auto;'>
+        <div class="main-container">
+            <div class="logo-title">DEEP CREW</div>
+            <h1 class="main-header">Research & Innovation Hub</h1>
+            <p class="subtitle">
                 Discover insights, analyze patents, and explore funding opportunities with AI-powered research tools
             </p>
         </div>
     """, unsafe_allow_html=True)
 
-    # Search input
+    # Search input with modern styling
     search_query = st.text_input(
         "",
         placeholder="Enter your research topic...",
@@ -53,9 +164,8 @@ def main():
     if 'selected_stages' not in st.session_state:
         st.session_state.selected_stages = set()
 
-    # Create stage selectors
-    st.markdown("### Choose Research Stages")
-    col1, col2, col3, col4, col5 = st.columns(5)
+    # Create stage selectors with modern styling
+    st.markdown('<div class="stage-selectors">', unsafe_allow_html=True)
 
     stages = {
         'research': ('fas fa-search', 'Research'),
@@ -65,23 +175,25 @@ def main():
         'compliance': ('fas fa-shield-alt', 'Compliance')
     }
 
-    columns = {'research': col1, 'patents': col2, 'funding': col3, 'network': col4, 'compliance': col5}
+    # Create columns for stage buttons
+    cols = st.columns(len(stages))
 
-    for stage_key, (icon, label) in stages.items():
-        with columns[stage_key]:
+    for idx, (stage_key, (icon, label)) in enumerate(stages.items()):
+        with cols[idx]:
             st.markdown(create_stage_button(icon, label, stage_key), unsafe_allow_html=True)
-            if st.button(label, key=f"btn_{stage_key}"):
+            if st.button(label, key=f"btn_{stage_key}", use_container_width=True):
                 if stage_key in st.session_state.selected_stages:
                     st.session_state.selected_stages.remove(stage_key)
                 else:
                     st.session_state.selected_stages.add(stage_key)
                 st.rerun()
 
+    st.markdown('</div>', unsafe_allow_html=True)
+
     selected_stages = list(st.session_state.selected_stages)
 
     # Create tabs for selected stages if we have a search query
     if search_query:
-        # Check if any stages are selected
         if not selected_stages:
             st.warning("Please select at least one research stage to proceed.")
             return
@@ -90,19 +202,18 @@ def main():
         if len(selected_stages) > 1:
             selected_stages.append("results")
 
-        # Create tabs for selected stages
+        # Create tabs with modern styling
         tabs = st.tabs([stage.capitalize() for stage in selected_stages])
 
         for idx, tab in enumerate(tabs):
             with tab:
                 if selected_stages[idx] == "research":
-                    openalex_client = OpenAlexClient()
-                    ai_analyzer = AIAnalyzer()
+                    with st.spinner("🔍 Analyzing..."):
+                        openalex_client = OpenAlexClient()
+                        ai_analyzer = AIAnalyzer()
 
-                    if search_query != st.session_state.get('last_query', ''):
-                        with st.spinner("Analyzing..."):
+                        if search_query != st.session_state.get('last_query', ''):
                             keywords = ai_analyzer.generate_search_keywords(search_query)
-                            st.markdown("Researching...")
                             results = openalex_client.search(query=search_query, keywords=keywords)
 
                             if results:
@@ -114,15 +225,14 @@ def main():
                                 st.session_state.search_results = None
                                 st.session_state.analysis = None
 
-                    if st.session_state.get('search_results'):
-                        render_search_section(st.session_state.search_results)
-                        render_analysis_section(st.session_state.analysis)
+                        if st.session_state.get('search_results'):
+                            render_search_section(st.session_state.search_results)
+                            render_analysis_section(st.session_state.analysis)
 
                 elif selected_stages[idx] == "patents":
-                    patent_client = PatentSearchClient()
-
-                    if search_query != st.session_state.get('last_query', '') or st.session_state.get('patent_results') is None:
-                        with st.spinner("🔍 Searching patents..."):
+                    with st.spinner("🔍 Searching patents..."):
+                        patent_client = PatentSearchClient()
+                        if search_query != st.session_state.get('last_query', '') or st.session_state.get('patent_results') is None:
                             patent_results = patent_client.search_patents(search_query)
                             if patent_results:
                                 st.session_state.patent_results = patent_results
@@ -133,110 +243,15 @@ def main():
                                 st.session_state.patent_results = None
                                 st.session_state.patent_analysis = None
 
-                    if st.session_state.get('patent_results'):
-                        render_patent_results(st.session_state.patent_results, st.session_state.patent_analysis)
-                        # AI Analysis for Patents 
-                        if st.session_state.get('patent_analysis'):
-                            st.subheader("AI Analysis")
-
-                            st.markdown("### 🔬 Overview")
-                            st.write(st.session_state.patent_analysis.get("summary", ""))
-
-                            st.markdown("### 📈 Trends")
-                            for trend in st.session_state.patent_analysis.get("trends", []):
-                                st.markdown(f"• {trend}")
-
-                            st.markdown("### 💡 Opportunities")
-                            for opp in st.session_state.patent_analysis.get("opportunities", []):
-                                st.markdown(f"• {opp}")
-
-                            st.markdown("### 🏢 Competition")
-                            st.write(st.session_state.patent_analysis.get("competition", ""))
+                        if st.session_state.get('patent_results'):
+                            render_patent_results(st.session_state.patent_results, st.session_state.patent_analysis)
 
                 elif selected_stages[idx] == "results":
-                    if st.session_state.get('combined_analysis') is None:
-                        with st.spinner("🔄 Generating comprehensive analysis..."):
-                            ai_analyzer = AIAnalyzer()
-                            research_data = st.session_state.get('search_results') if st.session_state.get('search_results') else []
-                            patent_data = st.session_state.get('patent_results') if st.session_state.get('patent_results') else []
-                            st.session_state.combined_analysis = ai_analyzer.analyze_combined_results(
-                                research_data,
-                                patent_data
-                            )
-
-                    if st.session_state.get('combined_analysis'):
-                        render_combined_results(
-                            st.session_state.get('search_results') or [],
-                            st.session_state.get('patent_results') or [],
-                            st.session_state.combined_analysis
-                        )
-                        # Funding Analysis
-                        st.markdown("## 💰 Global Funding Analysis")
-                        funding_agent = FundingAgent()
-                        global_insights = funding_agent.get_regional_insights("Global")
-
-                        # Overview
-                        st.markdown("### 📊 Market Overview")
-                        st.write(global_insights["overview"])
-
-                        # Success Metrics
-                        metrics = global_insights.get("success_metrics", {})
-                        met_col1, met_col2, met_col3, met_col4 = st.columns(4)
-                        with met_col1:
-                            st.metric("Success Rate", f"{metrics.get('average_success_rate', 0)}%")
-                        with met_col2:
-                            st.metric("Projects Funded", metrics.get('total_projects_funded', 0))
-                        with met_col3:
-                            st.metric("Avg Funding", metrics.get('average_funding_size', 'N/A'))
-                        with met_col4:
-                            st.metric("YoY Growth", f"{metrics.get('yoy_growth', 0)}%")
-
-                        # Funding Distribution
-                        st.markdown("### 💰 Global Funding Distribution")
-                        dist_data = global_insights.get("funding_distribution", {})
-                        if dist_data:
-                            fig_dist = px.pie(
-                                values=list(dist_data.values()),
-                                names=list(dist_data.keys()),
-                                title="Global Funding Sources Distribution",
-                                hole=0.4
-                            )
-                            st.plotly_chart(fig_dist)
-
-                        # Sector Growth
-                        st.markdown("### 📈 Global Sector Growth")
-                        sector_growth = global_insights.get("sector_growth", [])
-                        if sector_growth:
-                            fig_growth = px.bar(
-                                sector_growth,
-                                x="sector",
-                                y="growth_rate",
-                                title="Global Growth Rates by Sector",
-                                labels={"sector": "Sector", "growth_rate": "Growth Rate (%)"},
-                                color="growth_rate",
-                                color_continuous_scale="viridis"
-                            )
-                            st.plotly_chart(fig_growth)
-
-                        # Key Sectors and Trends
-                        col1, col2 = st.columns(2)
-                        with col1:
-                            st.markdown("### 🎯 Key Global Sectors")
-                            for sector in global_insights.get("key_sectors", []):
-                                st.markdown(f"• {sector}")
-
-                        with col2:
-                            st.markdown("### 🔄 Global Market Trends")
-                            trends = [
-                                "Growing investment in research and development",
-                                "Increased focus on sustainable technologies",
-                                "Rising cross-border collaborations",
-                                "Emphasis on digital transformation"
-                            ]
-                            for trend in trends:
-                                st.markdown(f"• {trend}")
-                    else:
-                        st.info("Please perform a search in Research Agent or Patent Search to view combined analysis.")
+                    render_combined_results(
+                        st.session_state.get('search_results') or [],
+                        st.session_state.get('patent_results') or [],
+                        st.session_state.combined_analysis if 'combined_analysis' in st.session_state else None
+                    )
 
                 elif selected_stages[idx] == "network":
                     st.info("🔄 Coming Soon")

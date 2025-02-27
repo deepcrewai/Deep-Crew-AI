@@ -241,78 +241,164 @@ def generate_patent_pdf_report(results, analysis):
     return buffer
 
 def render_search_section(results):
-    """Render the search results section."""
+    """Render the modernized search results section."""
     metrics = calculate_metrics(results)
 
-    # Display metrics
+    # Modern metrics cards
+    st.markdown("""
+        <style>
+        .metric-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        .metric-card:hover {
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a73e8;
+            margin: 0.5rem 0;
+        }
+        .metric-label {
+            font-size: 0.9rem;
+            color: #5f6368;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
     col1, col2, col3, col4 = st.columns(4)
-    col1.metric("Total Papers", metrics["total_papers"])
-    col2.metric("Total Citations", metrics["total_citations"])
-    col3.metric("Average Year", metrics["avg_year"])
-    col4.metric("Average Citations", metrics["avg_citations"])
+    metrics_data = [
+        {"label": "Total Papers", "value": metrics["total_papers"]},
+        {"label": "Total Citations", "value": metrics["total_citations"]},
+        {"label": "Average Year", "value": metrics["avg_year"]},
+        {"label": "Average Citations", "value": metrics["avg_citations"]}
+    ]
 
-    # Display results header with export button
-    col1, col2 = st.columns([2, 3])
-    with col1:
-        st.subheader("Search Results")
-    with col2:
-        # Right-align the button using a container and custom CSS
-        button_container = st.container()
-        with button_container:
-            st.markdown(
-                """
-                <style>
-                div[data-testid="stDownloadButton"] {
-                    display: flex;
-                    justify-content: flex-end;
-                }
-                </style>
-                """, 
-                unsafe_allow_html=True
-            )
-            # Initialize the session state for PDF generation if not exists
-            if 'pdf_generated' not in st.session_state:
-                st.session_state.pdf_generated = False
+    for col, metric in zip([col1, col2, col3, col4], metrics_data):
+        with col:
+            st.markdown(f"""
+                <div class="metric-card">
+                    <div class="metric-value">{metric['value']}</div>
+                    <div class="metric-label">{metric['label']}</div>
+                </div>
+            """, unsafe_allow_html=True)
 
-            st.download_button(
-                label="📑 Export Results as PDF",
-                data=generate_pdf_report(results, st.session_state.analysis),
-                file_name="research_report.pdf",
-                mime="application/pdf",
-                key="pdf_download"
-            )
-            st.session_state.pdf_generated = False
+    # Modern results header with export button
+    st.markdown("""
+        <style>
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0 1rem;
+        }
+        .results-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #202124;
+        }
+        .export-button {
+            background-color: #1a73e8;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 24px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        .export-button:hover {
+            background-color: #1557b0;
+            box-shadow: 0 1px 6px rgba(32,33,36,.28);
+        }
+        </style>
+        <div class="results-header">
+            <div class="results-title">Search Results</div>
+        </div>
+    """, unsafe_allow_html=True)
 
-    # Display results
+    # Export button
+    if 'pdf_generated' not in st.session_state:
+        st.session_state.pdf_generated = False
+
+    st.download_button(
+        label="📑 Export Results as PDF",
+        data=generate_pdf_report(results, st.session_state.analysis),
+        file_name="research_report.pdf",
+        mime="application/pdf",
+        key="pdf_download",
+        use_container_width=False
+    )
+
+    # Modern paper cards
+    st.markdown("""
+        <style>
+        .paper-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+            transition: all 0.2s ease;
+        }
+        .paper-card:hover {
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+        .paper-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 0.5rem;
+        }
+        .paper-citation {
+            font-size: 0.9rem;
+            color: #5f6368;
+            margin-bottom: 1rem;
+        }
+        .paper-abstract {
+            font-size: 0.95rem;
+            color: #202124;
+            line-height: 1.5;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .paper-metrics {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #5f6368;
+        }
+        .paper-link {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        .paper-link:hover {
+            text-decoration: underline;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
     for paper in results:
         similarity = paper.get('similarity_score', 0)
-        with st.expander(f"{paper.get('title', 'Untitled')} (Similarity: {similarity:.2f})"):
-            st.write(format_citation(paper))
-            if paper.get('url'):
-                st.write(f"🔗 [View Paper]({paper['url']})")
-            st.write(f"Citations: {paper.get('cited_by_count', 0)}")
-
-            # Abstract preview with PDF-like styling
-            with st.container():
-                st.markdown("""
-                <style>
-                .pdf-preview {
-                    background-color: white;
-                    border: 1px solid #ddd;
-                    padding: 20px;
-                    border-radius: 5px;
-                    font-family: serif;
-                    line-height: 1.6;
-                }
-                </style>
-                """, unsafe_allow_html=True)
-
-                st.markdown(f"""
-                <div class="pdf-preview">
-                <h4>Abstract</h4>
-                {paper.get('abstract', 'No abstract available')}
+        st.markdown(f"""
+            <div class="paper-card">
+                <div class="paper-title">{paper.get('title', 'Untitled')}</div>
+                <div class="paper-citation">{format_citation(paper)}</div>
+                <div class="paper-abstract">{paper.get('abstract', 'No abstract available')}</div>
+                <div class="paper-metrics">
+                    <span>Similarity: {similarity:.2f}</span>
+                    <span>Citations: {paper.get('cited_by_count', 0)}</span>
+                    {'<a href="' + paper['url'] + '" class="paper-link" target="_blank">View Paper</a>' if paper.get('url') else ''}
                 </div>
-                """, unsafe_allow_html=True)
+            </div>
+        """, unsafe_allow_html=True)
 
 
 def render_patent_results(results, analysis):
