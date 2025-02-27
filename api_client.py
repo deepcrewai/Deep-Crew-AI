@@ -1,98 +1,31 @@
 import requests
 from typing import Dict, List, Optional
 import time
+from difflib import SequenceMatcher
 
 class OpenAlexClient:
     def __init__(self):
         self.base_url = "https://api.openalex.org"
-        self.email = "research@deepcrew.org"
+        self.email = "researcher@example.org"  # Updated email for better rate limits
         self.last_request_time = 0
-        self.min_request_interval = 1.0
-
-    def search(self, query: str, keywords: List[str] = None) -> List[Dict]:
-        """Search OpenAlex for works matching the query."""
-        try:
-            # Clean and prepare the query
-            cleaned_query = query.strip()
-            if not cleaned_query:
-                return []
-
-            # Base search parameters - simplified
-            params = {
-                "search": cleaned_query,
-                "per_page": 100,
-                "filter": "type:journal-article",
-                "sort": "relevance_score:desc"
-            }
-
-            print(f"Searching OpenAlex with parameters:")  # Debug log
-            print(f"Query: {cleaned_query}")
-            print(f"Parameters: {params}")
-
-            # First try with direct query
-            response = self._make_request("works", params)
-            results = response.get("results", [])
-            print(f"Initial search returned {len(results)} results")  # Debug log
-
-            # If no results, try with keywords
-            if not results and keywords:
-                print("No results with direct query, trying with keywords")  # Debug log
-                keyword_query = f"{cleaned_query} OR " + " OR ".join(keywords)
-                params["search"] = keyword_query
-                print(f"Keyword search query: {keyword_query}")  # Debug log
-                response = self._make_request("works", params)
-                results = response.get("results", [])
-                print(f"Keyword search returned {len(results)} results")  # Debug log
-
-            # Process and enhance results
-            enhanced_results = []
-            for result in results:
-                try:
-                    paper_data = {
-                        'title': result.get('title', 'Untitled'),
-                        'abstract': result.get('abstract', 'Full text available via DOI.'),
-                        'publication_year': result.get('publication_year'),
-                        'cited_by_count': result.get('cited_by_count', 0),
-                        'doi': result.get('doi'),
-                        'concepts': result.get('concepts', [])
-                    }
-
-                    if paper_data['doi']:
-                        paper_data['url'] = f"https://doi.org/{paper_data['doi']}"
-
-                    enhanced_results.append(paper_data)
-                    print(f"Processed paper: {paper_data['title'][:50]}...")  # Debug log
-
-                except Exception as e:
-                    print(f"Error processing paper: {str(e)}")
-                    continue
-
-            print(f"Successfully processed {len(enhanced_results)} papers")  # Debug log
-
-            # Sort by citation count and return top results
-            enhanced_results.sort(key=lambda x: x.get('cited_by_count', 0), reverse=True)
-            return enhanced_results[:50]
-
-        except Exception as e:
-            print(f"Search error: {str(e)}")
-            return []
+        self.min_request_interval = 1.0  # 1 second between requests
 
     def _make_request(self, endpoint: str, params: Dict) -> Dict:
-        """Make a request to OpenAlex API with improved error handling."""
+        """Make a request to OpenAlex API with improved rate limiting and error handling."""
+        # Ensure minimum time between requests
         current_time = time.time()
         time_since_last_request = current_time - self.last_request_time
         if time_since_last_request < self.min_request_interval:
             time.sleep(self.min_request_interval - time_since_last_request)
 
         headers = {
-            "User-Agent": f"DeepCrew Research Platform (mailto:{self.email})",
+            "User-Agent": f"mailto:{self.email}",
             "Accept": "application/json"
         }
 
         try:
             url = f"{self.base_url}/{endpoint}"
-            print(f"Making request to: {url}")  # Debug log
-            print(f"With params: {params}")  # Debug log
+            print(f"Making request to: {url} with params: {params}")  # Debug log
 
             response = requests.get(
                 url,
@@ -103,30 +36,103 @@ class OpenAlexClient:
             self.last_request_time = time.time()
 
             print(f"Response status: {response.status_code}")  # Debug log
-            if response.status_code == 200:
-                data = response.json()
-                return data
-            else:
-                print(f"Error response: {response.text}")  # Debug log
-                return {"error": f"API error: {response.status_code}", "results": []}
+
+            if response.status_code == 429:  # Rate limit exceeded
+                print("Rate limit exceeded, waiting...")
+                time.sleep(5)  # Wait 5 seconds before retry
+                return self._make_request(endpoint, params)  # Retry the request
+
+            # Try to handle the response even if it's not 200
+            try:
+                return response.json()
+            except Exception as e:
+                print(f"Error parsing response: {str(e)}")
+                return {"results": []}
+
+        except requests.exceptions.RequestException as e:
+            print(f"API Request Error: {str(e)}")
+            return {"results": []}
+
+    def _calculate_similarity(self, text1: str, text2: str) -> float:
+        """Calculate text similarity between two strings."""
+        if not text1 or not text2:
+            return 0
+        return SequenceMatcher(None, text1.lower(), text2.lower()).ratio()
+
+    def search(self, query: str, keywords: List[str] = None) -> List[Dict]:
+        """Search OpenAlex for works matching the query with improved error handling."""
+        try:
+            # Base search parameters with minimal filters
+            params = {
+                "search": query,
+                "per_page": 100  # Get more results initially for better relevance filtering
+            }
+
+            # First attempt with exact query
+            response = self._make_request("works", params)
+            results = response.get("results", [])
+
+            # If no results, try with keywords
+            if not results and keywords:
+                keyword_query = " OR ".join(keywords)
+                params["search"] = keyword_query
+                response = self._make_request("works", params)
+                results = response.get("results", [])
+
+            # If still no results, try with a more lenient search
+            if not results:
+                params["search"] = query.replace('"', '')  # Remove quotes
+                response = self._make_request("works", params)
+                results = response.get("results", [])
+
+            # Process and enhance results
+            enhanced_results = []
+            for paper in results:
+                # Extract and format paper data
+                abstract = paper.get('abstract')
+                if abstract is None or abstract == "":
+                    abstract = "Abstract is not available for this paper. Please refer to the full paper for detailed information."
+
+                paper_data = {
+                    'title': paper.get('title', 'Title not found'),
+                    'abstract': abstract,
+                    'doi': paper.get('doi'),
+                    'publication_year': paper.get('publication_year'),
+                    'url': f"https://doi.org/{paper.get('doi')}" if paper.get('doi') else None,
+                    'concepts': paper.get('concepts', [])
+                }
+
+                # Calculate similarity score with more weight on title matches
+                if keywords:
+                    # Calculate similarity for both title and abstract separately
+                    title_similarities = [self._calculate_similarity(paper_data['title'], kw) for kw in keywords]
+                    abstract_similarities = [self._calculate_similarity(paper_data['abstract'], kw) for kw in keywords]
+
+                    # Give more weight to title matches (0.7) vs abstract matches (0.3)
+                    max_title_sim = max(title_similarities) if title_similarities else 0.0
+                    max_abstract_sim = max(abstract_similarities) if abstract_similarities else 0.0
+                    paper_data['similarity_score'] = (0.7 * max_title_sim) + (0.3 * max_abstract_sim)
+                else:
+                    paper_data['similarity_score'] = 0.0
+
+                enhanced_results.append(paper_data)
+
+            # Sort only by similarity score
+            enhanced_results.sort(key=lambda x: (-x['similarity_score']))
+            enhanced_results = enhanced_results[:50]  # Return top 50 most relevant results
+
+            return enhanced_results
 
         except Exception as e:
-            print(f"Request error: {str(e)}")  # Debug log
-            return {"error": str(e), "results": []}
+            print(f"Error in search: {str(e)}")
+            return []
 
-    def _get_abstract(self, result: Dict) -> str:
-        """Extract or generate abstract for a paper."""
-        # Try to get abstract directly
-        abstract = result.get('abstract', '')
-        if abstract:
-            return abstract
-
-        # If no abstract but has concepts, generate a summary
-        concepts = result.get('concepts', [])
-        if concepts:
-            concept_names = [c.get('display_name', '') for c in concepts if c.get('display_name')]
-            if concept_names:
-                return f"This research focuses on {', '.join(concept_names[:3])}. Full text available via DOI."
-
-        # Default fallback
-        return "Abstract will be available in the full paper."
+    def get_citations(self, work_id: str) -> List[Dict]:
+        """Get citation information for a specific work."""
+        params = {"cited_by": work_id, "per_page": 50}
+        try:
+            response = self._make_request("works", params)
+            return response.get("results", [])
+        except Exception as e:
+            print(f"Error fetching citations: {str(e)}")
+            return []
