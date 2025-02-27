@@ -29,10 +29,10 @@ def main():
         st.session_state.readable_font = False
 
     st.markdown("""
-        <div class='results-container'>
-            <h2>💰 Funding Analysis</h2>
+        <head>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
             <style>
+                /* Accessibility Menu Styles */
                 .accessibility-button {
                     position: fixed;
                     top: 0.5rem;
@@ -137,47 +137,41 @@ def main():
                     font-family: 'OpenDyslexic', sans-serif !important;
                 }
             </style>
-        </div>
+        </head>
         <div id="accessibility-container">
-            <button class="accessibility-button" onclick="toggleAccessibility()" aria-label="Accessibility Options">
+            <button class="accessibility-button" onclick="document.querySelector('.accessibility-menu').classList.toggle('show')" aria-label="Accessibility Options">
                 <i class="fas fa-universal-access"></i>
             </button>
 
             <div class="accessibility-menu">
-                <div class="accessibility-option" onclick="toggleClass('high-contrast')">
+                <div class="accessibility-option" onclick="document.body.classList.toggle('high-contrast')">
                     <i class="fas fa-adjust"></i> High Contrast
                 </div>
-                <div class="accessibility-option" onclick="toggleClass('negative-contrast')">
+                <div class="accessibility-option" onclick="document.body.classList.toggle('negative-contrast')">
                     <i class="fas fa-moon"></i> Negative Contrast
                 </div>
-                <div class="accessibility-option" onclick="toggleClass('light-background')">
+                <div class="accessibility-option" onclick="document.body.classList.toggle('light-background')">
                     <i class="fas fa-sun"></i> Light Background
                 </div>
-                <div class="accessibility-option" onclick="toggleClass('links-underline')">
+                <div class="accessibility-option" onclick="document.body.classList.toggle('links-underline')">
                     <i class="fas fa-underline"></i> Links Underline
                 </div>
-                <div class="accessibility-option" onclick="toggleClass('readable-font')">
+                <div class="accessibility-option" onclick="document.body.classList.toggle('readable-font')">
                     <i class="fas fa-font"></i> Readable Font
                 </div>
-                <div class="accessibility-option" onclick="resetClasses()">
+                <div class="accessibility-option" onclick="
+                    ['high-contrast', 'negative-contrast', 'light-background', 'links-underline', 'readable-font'].forEach(c => document.body.classList.remove(c))">
                     <i class="fas fa-undo"></i> Reset
                 </div>
             </div>
         </div>
-        <script>
-            function toggleAccessibility() {
-                document.querySelector('.accessibility-menu').classList.toggle('show');
-            }
-
-            function toggleClass(className) {
-                document.body.classList.toggle(className);
-            }
-
-            function resetClasses() {
-                ['high-contrast', 'negative-contrast', 'light-background', 'links-underline', 'readable-font']
-                    .forEach(className => document.body.classList.remove(className));
-            }
-        </script>
+        <div class="main-container">
+            <div class="logo-title">DEEP CREW</div>
+            <h1 class="main-header">Research & Innovation Hub</h1>
+            <p class="subtitle">
+                Discover insights, analyze patents, and explore funding opportunities with AI-powered research tools
+            </p>
+        </div>
     """, unsafe_allow_html=True)
 
     # Search input with modern styling
