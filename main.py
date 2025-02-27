@@ -19,8 +19,7 @@ def create_stage_button(icon_class: str, label: str, stage_key: str) -> str:
     selected_class = "selected" if is_selected else ""
     return f"""
         <div class="stage-selector {selected_class}">
-            <i class="{icon_class}"></i>
-            <span class="stage-label">{label}</span>
+            {label}
         </div>
     """
 
@@ -87,39 +86,35 @@ def main():
                     flex-wrap: wrap;
                 }
 
-                .stage-selector {
-                    background-color: #fff;
-                    border-radius: 12px;
-                    padding: 1rem;
-                    cursor: pointer;
+                /* Button styling */
+                .stButton > button {
+                    background-color: #fff !important;
+                    border-radius: 12px !important;
+                    padding: 1rem !important;
+                    border: 1px solid #dfe1e5 !important;
+                    color: #202124 !important;
+                    font-weight: 500 !important;
                     transition: all 0.2s ease;
-                    border: 1px solid #dfe1e5;
-                    display: flex;
-                    flex-direction: column;
+                    width: 100%;
+                    display: flex !important;
                     align-items: center;
+                    justify-content: center;
                     gap: 0.5rem;
-                    min-width: 120px;
                 }
 
-                .stage-selector:hover {
+                .stButton > button:hover {
                     box-shadow: 0 1px 6px rgba(32,33,36,.28);
-                    border-color: rgba(223,225,229,0);
+                    border-color: rgba(223,225,229,0) !important;
                 }
 
-                .stage-selector.selected {
-                    background-color: #e8f0fe;
-                    border-color: #1a73e8;
-                    color: #1a73e8;
+                .stButton > button i {
+                    font-size: 1.2rem;
                 }
 
-                .stage-selector i {
-                    font-size: 1.5rem;
-                    color: inherit;
-                }
-
-                .stage-label {
-                    font-size: 0.9rem;
-                    font-weight: 500;
+                .stButton > button.selected {
+                    background-color: #e8f0fe !important;
+                    border-color: #1a73e8 !important;
+                    color: #1a73e8 !important;
                 }
 
                 /* Tab styling */
@@ -128,18 +123,6 @@ def main():
                     border-radius: 12px;
                     box-shadow: 0 1px 3px rgba(0,0,0,0.12);
                     margin-top: 2rem;
-                }
-
-                /* Button styling */
-                .stButton > button {
-                    border-radius: 24px;
-                    padding: 0.5rem 1.5rem;
-                    font-weight: 500;
-                    transition: all 0.2s ease;
-                }
-
-                .stButton > button:hover {
-                    box-shadow: 0 1px 6px rgba(32,33,36,.28);
                 }
             </style>
         </head>
@@ -164,8 +147,8 @@ def main():
     if 'selected_stages' not in st.session_state:
         st.session_state.selected_stages = set()
 
-    # Create stage selectors with modern styling
-    st.markdown('<div class="stage-selectors">', unsafe_allow_html=True)
+    # Create columns for stage buttons
+    cols = st.columns(5)
 
     stages = {
         'research': ('fas fa-search', 'Research'),
@@ -175,20 +158,21 @@ def main():
         'compliance': ('fas fa-shield-alt', 'Compliance')
     }
 
-    # Create columns for stage buttons
-    cols = st.columns(len(stages))
-
     for idx, (stage_key, (icon, label)) in enumerate(stages.items()):
         with cols[idx]:
-            st.markdown(create_stage_button(icon, label, stage_key), unsafe_allow_html=True)
-            if st.button(label, key=f"btn_{stage_key}", use_container_width=True):
+            is_selected = stage_key in st.session_state.selected_stages
+            button_label = f'<i class="{icon}"></i> {label}'
+            if st.button(
+                button_label,
+                key=f"btn_{stage_key}",
+                use_container_width=True,
+                help=f"Click to select {label}",
+            ):
                 if stage_key in st.session_state.selected_stages:
                     st.session_state.selected_stages.remove(stage_key)
                 else:
                     st.session_state.selected_stages.add(stage_key)
                 st.rerun()
-
-    st.markdown('</div>', unsafe_allow_html=True)
 
     selected_stages = list(st.session_state.selected_stages)
 
