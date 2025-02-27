@@ -621,110 +621,93 @@ def render_combined_results(research_results, patent_results, combined_analysis)
         st.metric("Total Documents", total_documents)
 
 def render_accessibility_menu():
-    """Render the accessibility menu component."""
+    """Render the accessibility menu using Streamlit native components."""
     import streamlit as st
 
-    st.components.v1.html("""
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-        <div style="position: fixed; top: 0; left: 0; z-index: 99999999;">
-            <button class="accessibility-button" id="accessibilityBtn" aria-label="Accessibility Options">
-                <i class="fas fa-universal-access"></i>
-            </button>
+    # Create a container in the sidebar for accessibility options
+    with st.sidebar:
+        st.markdown("### 🌐 Erişilebilirlik Araçları")
 
-            <div class="accessibility-menu" id="accessibilityMenu">
-                <div class="accessibility-option" onclick="toggleAccessibility('high-contrast')">
-                    <i class="fas fa-adjust"></i> High Contrast
-                </div>
-                <div class="accessibility-option" onclick="toggleAccessibility('negative-contrast')">
-                    <i class="fas fa-moon"></i> Negative Contrast
-                </div>
-                <div class="accessibility-option" onclick="toggleAccessibility('light-background')">
-                    <i class="fas fa-sun"></i> Light Background
-                </div>
-                <div class="accessibility-option" onclick="toggleAccessibility('links-underline')">
-                    <i class="fas fa-underline"></i> Links Underline
-                </div>
-                <div class="accessibility-option" onclick="toggleAccessibility('readable-font')">
-                    <i class="fas fa-font"></i> Readable Font
-                </div>
-                <div class="accessibility-option" onclick="resetAccessibility()">
-                    <i class="fas fa-undo"></i> Reset
-                </div>
-            </div>
-        </div>
+        # High Contrast Mode
+        if st.toggle("🔳 Yüksek Kontrast", value=st.session_state.get('high_contrast', False), key='high_contrast'):
+            st.markdown("""
+                <style>
+                    body, .main-container, .stApp, [data-testid="stSidebar"] {
+                        background-color: black !important;
+                        color: white !important;
+                    }
+                    .stButton button, .stSelectbox, .stTextInput input {
+                        background-color: white !important;
+                        color: black !important;
+                        border: 1px solid white !important;
+                    }
+                    .stMarkdown, .stText, .logo-title, .main-header, .subtitle {
+                        color: white !important;
+                    }
+                    [data-testid="stSidebarNav"] {
+                        background-color: black !important;
+                    }
+                </style>
+            """, unsafe_allow_html=True)
 
-        <style>
-            .accessibility-button {
-                background: white;
-                border: none;
-                cursor: pointer;
-                padding: 10px;
-                font-size: 24px;
-                color: #1a73e8;
-                border-radius: 50%;
-                width: 48px;
-                height: 48px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-                transition: all 0.3s ease;
-            }
+        # Negative Contrast
+        if st.toggle("🌙 Negatif Kontrast", value=st.session_state.get('negative_contrast', False), key='negative_contrast'):
+            st.markdown("""
+                <style>
+                    .stApp, body {
+                        filter: invert(100%) !important;
+                        background-color: white !important;
+                    }
+                    img, [data-testid="stImage"] {
+                        filter: invert(100%) !important;
+                    }
+                    .stMarkdown a {
+                        color: #0000EE !important;
+                    }
+                </style>
+            """, unsafe_allow_html=True)
 
-            .accessibility-button:hover {
-                background: #f0f3f6;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            }
+        # Light Background
+        if st.toggle("☀️ Açık Arka Plan", value=st.session_state.get('light_background', False), key='light_background'):
+            st.markdown("""
+                <style>
+                    .stApp, .main-container, [data-testid="stSidebar"] {
+                        background-color: #ffffff !important;
+                    }
+                    .stMarkdown, .stText, .logo-title, .main-header, .subtitle {
+                        color: #000000 !important;
+                    }
+                    .stButton button {
+                        background-color: #f0f2f6 !important;
+                        color: #000000 !important;
+                    }
+                </style>
+            """, unsafe_allow_html=True)
 
-            .accessibility-menu {
-                position: absolute;
-                top: 60px;
-                left: 10px;
-                background: white;
-                border-radius: 8px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                padding: 15px;
-                display: none;
-                min-width: 200px;
-            }
+        # Links Underline
+        if st.toggle("🔗 Bağlantıları Altı Çizili", value=st.session_state.get('links_underline', False), key='links_underline'):
+            st.markdown("""
+                <style>
+                    a, .stMarkdown a, [data-testid="stSidebarNav"] a {
+                        text-decoration: underline !important;
+                    }
+                </style>
+            """, unsafe_allow_html=True)
 
-            .accessibility-menu.show {
-                display: block;
-            }
+        # Readable Font
+        if st.toggle("📖 Okunabilir Yazı Tipi", value=st.session_state.get('readable_font', False), key='readable_font'):
+            st.markdown("""
+                <style>
+                    @import url('https://fonts.googleapis.com/css2?family=OpenDyslexic:wght@400;700&display=swap');
+                    .stMarkdown, .stText, .logo-title, .main-header, .subtitle, 
+                    button, input, select, .stButton button, [data-testid="stMarkdown"] {
+                        font-family: 'OpenDyslexic', Arial, sans-serif !important;
+                    }
+                </style>
+            """, unsafe_allow_html=True)
 
-            .accessibility-option {
-                display: flex;
-                align-items: center;
-                padding: 8px;
-                cursor: pointer;
-                transition: background 0.2s;
-                border-radius: 4px;
-                color: #202124;
-            }
-
-            .accessibility-option:hover {
-                background: #f0f3f6;
-            }
-
-            .accessibility-option i {
-                margin-right: 8px;
-                width: 20px;
-                text-align: center;
-            }
-        </style>
-
-        <script>
-            document.getElementById('accessibilityBtn').addEventListener('click', function() {
-                document.getElementById('accessibilityMenu').classList.toggle('show');
-            });
-
-            function toggleAccessibility(className) {
-                document.documentElement.classList.toggle(className);
-            }
-
-            function resetAccessibility() {
-                ['high-contrast', 'negative-contrast', 'light-background', 'links-underline', 'readable-font']
-                    .forEach(className => document.documentElement.classList.remove(className));
-            }
-        </script>
-    """, height=0)
+        # Reset Button
+        if st.button("🔄 Sıfırla"):
+            for key in ['high_contrast', 'negative_contrast', 'light_background', 'links_underline', 'readable_font']:
+                st.session_state[key] = False
+            st.rerun()

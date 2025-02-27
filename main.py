@@ -8,8 +8,7 @@ from components import (
     render_analysis_section,
     render_patent_results,
     render_combined_results,
-    handle_pdf_export,
-    render_accessibility_menu
+    handle_pdf_export
 )
 from utils import setup_page
 from funding import render_funding_section, FundingAgent
@@ -17,21 +16,124 @@ from funding import render_funding_section, FundingAgent
 def main():
     setup_page()
 
-    # Initialize session state for accessibility settings
-    if 'high_contrast' not in st.session_state:
-        st.session_state.high_contrast = False
-    if 'negative_contrast' not in st.session_state:
-        st.session_state.negative_contrast = False
-    if 'light_background' not in st.session_state:
-        st.session_state.light_background = False
-    if 'links_underline' not in st.session_state:
-        st.session_state.links_underline = False
-    if 'readable_font' not in st.session_state:
-        st.session_state.readable_font = False
+    # Accessibility Settings in Sidebar
+    with st.sidebar:
+        st.title("🌐 Erişilebilirlik")
 
-    # Render accessibility menu
-    render_accessibility_menu()
+        # Initialize session state for settings if not exists
+        if 'accessibility_settings' not in st.session_state:
+            st.session_state.accessibility_settings = {
+                'high_contrast': False,
+                'negative_contrast': False,
+                'light_bg': False,
+                'underline_links': False,
+                'readable_font': False
+            }
 
+        # High Contrast Mode
+        high_contrast = st.toggle("🔳 Yüksek Kontrast", value=st.session_state.accessibility_settings['high_contrast'])
+        if high_contrast != st.session_state.accessibility_settings['high_contrast']:
+            st.session_state.accessibility_settings['high_contrast'] = high_contrast
+            st.rerun()
+
+        # Negative Contrast
+        negative_contrast = st.toggle("🌙 Negatif Kontrast", value=st.session_state.accessibility_settings['negative_contrast'])
+        if negative_contrast != st.session_state.accessibility_settings['negative_contrast']:
+            st.session_state.accessibility_settings['negative_contrast'] = negative_contrast
+            st.rerun()
+
+        # Light Background
+        light_bg = st.toggle("☀️ Açık Arka Plan", value=st.session_state.accessibility_settings['light_bg'])
+        if light_bg != st.session_state.accessibility_settings['light_bg']:
+            st.session_state.accessibility_settings['light_bg'] = light_bg
+            st.rerun()
+
+        # Underline Links
+        underline_links = st.toggle("🔗 Bağlantıları Altı Çizili", value=st.session_state.accessibility_settings['underline_links'])
+        if underline_links != st.session_state.accessibility_settings['underline_links']:
+            st.session_state.accessibility_settings['underline_links'] = underline_links
+            st.rerun()
+
+        # Readable Font
+        readable_font = st.toggle("📖 Okunabilir Yazı Tipi", value=st.session_state.accessibility_settings['readable_font'])
+        if readable_font != st.session_state.accessibility_settings['readable_font']:
+            st.session_state.accessibility_settings['readable_font'] = readable_font
+            st.rerun()
+
+        # Reset Button
+        if st.button("🔄 Sıfırla"):
+            st.session_state.accessibility_settings = {
+                'high_contrast': False,
+                'negative_contrast': False,
+                'light_bg': False,
+                'underline_links': False,
+                'readable_font': False
+            }
+            st.rerun()
+
+    # Apply accessibility styles based on settings
+    styles = []
+
+    if st.session_state.accessibility_settings['high_contrast']:
+        styles.append("""
+            .stApp, body, [data-testid="stSidebar"] {
+                background-color: black !important;
+                color: white !important;
+            }
+            .stButton button, .stSelectbox, .stTextInput input {
+                background-color: white !important;
+                color: black !important;
+                border: 1px solid white !important;
+            }
+            .stMarkdown, .stText, .logo-title, .main-header, .subtitle {
+                color: white !important;
+            }
+        """)
+
+    if st.session_state.accessibility_settings['negative_contrast']:
+        styles.append("""
+            .stApp {
+                filter: invert(100%) !important;
+            }
+            img, [data-testid="stImage"] {
+                filter: invert(100%) !important;
+            }
+        """)
+
+    if st.session_state.accessibility_settings['light_bg']:
+        styles.append("""
+            .stApp, [data-testid="stSidebar"] {
+                background-color: #ffffff !important;
+            }
+            .stMarkdown, .stText {
+                color: #000000 !important;
+            }
+        """)
+
+    if st.session_state.accessibility_settings['underline_links']:
+        styles.append("""
+            a, .stMarkdown a {
+                text-decoration: underline !important;
+            }
+        """)
+
+    if st.session_state.accessibility_settings['readable_font']:
+        styles.append("""
+            @import url('https://fonts.googleapis.com/css2?family=OpenDyslexic:wght@400;700&display=swap');
+            .stMarkdown, .stText, button, input, select {
+                font-family: 'OpenDyslexic', Arial, sans-serif !important;
+            }
+        """)
+
+    # Apply all styles
+    if styles:
+        st.markdown(f"""
+            <style>
+                {' '.join(styles)}
+            </style>
+        """, unsafe_allow_html=True)
+
+    # Main Content
     st.markdown("""
         <div class="main-container">
             <div class="logo-title">DEEP CREW</div>
@@ -118,7 +220,6 @@ def main():
 
     selected_stages = list(st.session_state.selected_stages)
 
-    # Create tabs for selected stages if we have a search query
     if search_query:
         if not selected_stages:
             st.warning("Please select at least one research stage to proceed.")
