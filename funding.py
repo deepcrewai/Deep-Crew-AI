@@ -11,6 +11,14 @@ class FundingAgent:
     def __init__(self):
         self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
         self.model = "gpt-4o"  # Latest model as of May 13, 2024
+        self.analysis_prompt = """As an AI funding analyst, provide detailed insights for the following data.
+        Focus on:
+        - Key trends and patterns
+        - Success factors and risks
+        - Strategic recommendations
+        - Market dynamics and competitive analysis
+        - Future outlook and opportunities
+        Return analysis in JSON format with 'summary', 'key_points', and 'recommendations' fields."""
 
     def get_funding_opportunities(self, research_area: str, region: str = None) -> List[Dict]:
         """Find relevant funding opportunities based on research area and region."""
@@ -351,6 +359,26 @@ class FundingAgent:
         except Exception as e:
             st.error(f"Error generating heatmap: {str(e)}")
 
+    def analyze_with_ai(self, data: Dict) -> Dict:
+        """Perform AI analysis on funding data."""
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": self.analysis_prompt},
+                    {"role": "user", "content": json.dumps(data)}
+                ],
+                response_format={"type": "json_object"}
+            )
+            return json.loads(response.choices[0].message.content)
+        except Exception as e:
+            print(f"Error in AI analysis: {str(e)}")
+            return {
+                "summary": "AI analysis unavailable",
+                "key_points": [],
+                "recommendations": []
+            }
+
 
 def render_funding_section(research_query: str):
     """Render the funding section in the Streamlit app."""
@@ -385,10 +413,29 @@ def render_funding_section(research_query: str):
                 <h3>Available Opportunities</h3>
             </div>
         """, unsafe_allow_html=True)
-        with st.spinner("🔍 Finding funding opportunities..."):
+        with st.spinner("🔍 Finding and analyzing funding opportunities..."):
             opportunities = funding_agent.get_funding_opportunities(research_query, selected_region)
 
             if opportunities:
+                # AI Analysis of opportunities
+                ai_analysis = funding_agent.analyze_with_ai({
+                    "opportunities": opportunities,
+                    "context": {"query": research_query, "region": selected_region}
+                })
+
+                # Display AI Insights
+                st.markdown("### 🤖 AI Analysis")
+                st.markdown(f"**Summary:** {ai_analysis.get('summary', 'No summary available')}")
+
+                with st.expander("📊 Key Insights"):
+                    for point in ai_analysis.get('key_points', []):
+                        st.markdown(f"• {point}")
+
+                with st.expander("🎯 Strategic Recommendations"):
+                    for rec in ai_analysis.get('recommendations', []):
+                        st.markdown(f"• {rec}")
+
+                st.markdown("### 📑 Available Opportunities")
                 for opp in opportunities:
                     with st.expander(f"{opp['title']} - {opp['funder']}"):
                         st.markdown(f"""
@@ -411,12 +458,29 @@ def render_funding_section(research_query: str):
                     <h3>📊 Sector Analysis</h3>
                 </div>
             """, unsafe_allow_html=True)
-            with st.spinner("Analyzing sector trends..."):
+            with st.spinner("Analyzing sector trends with AI..."):
                 trends = funding_agent.analyze_funding_trends(research_query)
 
                 if trends:
-                    # AI Analysis Summary
-                    st.markdown("#### 🤖 AI Analysis")
+                    # AI Analysis
+                    ai_sector_analysis = funding_agent.analyze_with_ai({
+                        "trends": trends,
+                        "context": {"query": research_query}
+                    })
+
+                    # Display AI Analysis
+                    st.markdown("#### 🤖 AI Insights")
+                    st.markdown(f"**Market Analysis:** {ai_sector_analysis.get('summary', 'No analysis available')}")
+
+                    with st.expander("🔍 Detailed Analysis"):
+                        for point in ai_sector_analysis.get('key_points', []):
+                            st.markdown(f"• {point}")
+
+                    with st.expander("📈 Growth Strategies"):
+                        for rec in ai_sector_analysis.get('recommendations', []):
+                            st.markdown(f"• {rec}")
+
+                    # Existing metrics and charts remain unchanged
                     sector_analysis = trends.get("sector_analysis", {})
 
                     metrics_col1, metrics_col2, metrics_col3 = st.columns(3)
