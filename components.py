@@ -147,7 +147,7 @@ def render_combined_results(research_results, patent_results, combined_analysis)
         st.markdown('</div>', unsafe_allow_html=True)
 
     # Market and Investment Analysis
-    st.markdown('<h2 class="section-header">📈 Market & Investment Analysis</h2>', unsafe_safe_html=True)
+    st.markdown('<h2 class="section-header">📈 Market & Investment Analysis</h2>', unsafe_allow_html=True)
 
     # Display market gaps in a grid
     gaps = combined_analysis.get("market_research_gaps", [])
@@ -444,7 +444,6 @@ def render_search_section(results):
     """Render the modernized search results section with detailed paper information."""
     metrics = calculate_metrics(results)
 
-    # Modern metrics cards with updated styling
     st.markdown("""
         <style>
         .metric-card {
@@ -578,8 +577,28 @@ def render_search_section(results):
         use_container_width=False
     )
 
-    # Display detailed paper information
+    # Display detailed paper information with corrected data handling
     for paper in results:
+        # Extract author information correctly
+        authors = []
+        institutions = []
+
+        for authorship in paper.get('authorships', []):
+            if authorship.get('author'):
+                authors.append(authorship['author'].get('display_name', 'Anonim'))
+            if authorship.get('institutions'):
+                for inst in authorship['institutions']:
+                    if inst.get('display_name'):
+                        institutions.append(inst['display_name'])
+
+        # Remove duplicates from institutions
+        institutions = list(set(institutions))
+
+        # Extract concepts properly
+        concepts = [concept.get('display_name', '') for concept in paper.get('concepts', []) if concept.get('display_name')]
+
+        venue = paper.get('host_venue', {})
+
         st.markdown(f"""
             <div class="paper-card">
                 <!-- 1. Makale Temel Bilgileri -->
@@ -598,14 +617,10 @@ def render_search_section(results):
                 <div class="paper-section">
                     <div class="paper-section-title">Yazarlar ve Kurumlar</div>
                     <div class="author-list">
-                        {' '.join([f'<span class="author-item">👤 {author}</span>' 
-                                 for author in paper.get('authorships', [{'author': {'display_name': 'Anonim'}}])])
-                        }
+                        {' '.join([f'<span class="author-item">👤 {author}</span>' for author in authors])}
                     </div>
                     <div class="paper-metadata">
-                        {' '.join([f'<span class="metadata-item">🏛️ {inst.get("display_name", "Bilinmeyen Kurum")}</span>'
-                                 for inst in paper.get('institutions', [])])
-                        }
+                        {' '.join([f'<span class="metadata-item">🏛️ {inst}</span>' for inst in institutions])}
                     </div>
                 </div>
 
@@ -615,7 +630,7 @@ def render_search_section(results):
                     <div class="paper-metadata">
                         <span class="metadata-item">📊 Atıf Sayısı: {paper.get('cited_by_count', 0)}</span>
                         <span class="metadata-item">🔄 Referans Sayısı: {len(paper.get('referenced_works', []))}</span>
-                        <span class="metadata-item">📈 Etki Puanı: {paper.get('score', 'N/A')}</span>
+                        <span class="metadata-item">📈 Etki Puanı: {paper.get('counts_by_year', [{'year': 0, 'cited_by_count': 0}])[0].get('cited_by_count', 0)}</span>
                     </div>
                 </div>
 
@@ -623,9 +638,9 @@ def render_search_section(results):
                 <div class="paper-section">
                     <div class="paper-section-title">Yayın Detayları</div>
                     <div class="paper-metadata">
-                        <span class="metadata-item">📰 {paper.get('host_venue', {}).get('display_name', 'N/A')}</span>
-                        <span class="metadata-item">🔖 ISSN: {paper.get('host_venue', {}).get('issn_l', 'N/A')}</span>
-                        <span class="metadata-item">📘 Yayıncı: {paper.get('host_venue', {}).get('publisher', 'N/A')}</span>
+                        <span class="metadata-item">📰 {venue.get('display_name', 'N/A')}</span>
+                        <span class="metadata-item">🔖 ISSN: {venue.get('issn_l', 'N/A')}</span>
+                        <span class="metadata-item">📘 Yayıncı: {venue.get('publisher', 'N/A')}</span>
                     </div>
                 </div>
 
@@ -633,15 +648,13 @@ def render_search_section(results):
                 <div class="paper-section">
                     <div class="paper-section-title">Konu Başlıkları ve Alanlar</div>
                     <div class="concepts-grid">
-                        {' '.join([f'<span class="concept-item">{concept.get("display_name", "")}</span>'
-                                 for concept in paper.get('concepts', [])])
-                        }
+                        {' '.join([f'<span class="concept-item">{concept}</span>' for concept in concepts])}
                     </div>
                 </div>
 
                 <!-- Bağlantılar -->
                 <div style="margin-top: 1rem; text-align: right;">
-                    <a href="{paper.get('url', '#')}" target="_blank" 
+                    <a href="{paper.get('doi', '#')}" target="_blank" 
                        style="color: #1a73e8; text-decoration: none; font-weight: 500;">
                         Makaleyi Görüntüle →
                     </a>
@@ -755,7 +768,7 @@ def render_combined_results(research_results, patent_results, combined_analysis)
 
     # Summary
     st.subheader("Overview")
-    st.write(combined_analysis.get("comprehensive_summary", "No summary available"))
+    st.write(combined_analysis.get("comprehensive_summary", "Nosummary available"))
 
     # Key Findings with Impact Scores
     st.subheader("Key Findings")
