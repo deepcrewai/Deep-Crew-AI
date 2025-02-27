@@ -8,7 +8,6 @@ from components import (
     render_analysis_section,
     render_patent_results,
     render_combined_results,
-    handle_pdf_export,
     render_accessibility_menu
 )
 from utils import setup_page
