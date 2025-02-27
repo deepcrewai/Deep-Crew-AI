@@ -513,7 +513,7 @@ def render_combined_results(research_results, patent_results, combined_analysis)
     st.subheader("Key Findings")
     findings = combined_analysis.get("key_findings", [])
     for finding in findings:
-        with st.expander(f"🔍 Finding (Impact Score: {finding.get('impact_score', 'N/A')}/10)"):
+        with st.expander(f"🔍 Finding (Impact Score: {finding.get('impact_score','N/A')}/10)"):
             st.write(finding.get('finding', ''))
             st.write("**Evidence:**", finding.get('evidence', ''))
 
@@ -689,154 +689,76 @@ def render_accessibility_menu():
                    - Content is automatically read as you navigate
             """)
 
-            # Screen reader JavaScript code
             st.components.v1.html("""
                 <div id="screenReaderContainer"></div>
                 <script>
-                    // Speech synthesis initialization
                     if ('speechSynthesis' in window) {
                         const synth = window.speechSynthesis;
                         let speaking = false;
 
-                        // Speak function
                         function speak(text) {
                             if (!text || typeof text !== 'string') return;
+                            console.log('Attempting to speak:', text);
 
-                            // Cancel previous speech
                             if (speaking) {
                                 synth.cancel();
                             }
 
-                            // Create utterance
                             const utterance = new SpeechSynthesisUtterance(text);
-                            utterance.lang = 'en-US';
+                            utterance.lang = 'tr-TR';
                             utterance.rate = 1;
                             utterance.pitch = 1;
                             utterance.volume = 1;
 
-                            // Speech events
-                            utterance.onstart = () => { speaking = true; };
-                            utterance.onend = () => { speaking = false; };
-                            utterance.onerror = (e) => { speaking = false; };
+                            utterance.onstart = () => { 
+                                speaking = true;
+                                console.log('Started speaking:', text);
+                            };
+                            utterance.onend = () => { 
+                                speaking = false;
+                                console.log('Finished speaking:', text);
+                            };
 
-                            // Speak
                             synth.speak(utterance);
                         }
 
-                        // Function to read page content
-                        function readPageContent() {
-                            // Get all page elements
-                            const elements = document.querySelectorAll('[data-testid], button, input, select, a, p, h1, h2, h3, h4, h5, h6, .main-header, .subtitle');
+                        // Announce activation
+                        speak("Ekran okuyucu aktif");
 
-                            elements.forEach(element => {
-                                // Set tabindex for keyboard navigation
-                                element.setAttribute('tabindex', '0');
+                        // Add mouseover event at document level
+                        document.addEventListener('mouseover', function(e) {
+                            const target = e.target;
+                            if (!target) return;
 
-                                // Get text content
-                                const text = element.getAttribute('aria-label') || 
-                                           element.textContent || 
-                                           element.value || 
-                                           element.placeholder;
+                            // Don't read if we're already speaking
+                            if (speaking) return;
 
-                                if (text && text.trim()) {
-                                    // Add proper ARIA label
-                                    element.setAttribute('aria-label', text.trim());
-                                }
+                            const text = target.textContent || 
+                                       target.value || 
+                                       target.placeholder || 
+                                       target.getAttribute('aria-label');
 
-                                // Add mouse enter event listener
-                                element.addEventListener('mouseenter', function() {
-                                    const elementText = this.getAttribute('aria-label') || 
-                                                      this.textContent || 
-                                                      this.value || 
-                                                      this.placeholder;
-                                    if (elementText && elementText.trim()) {
-                                        speak(elementText.trim());
-                                    }
-                                });
-                            });
-                        }
+                            if (text && text.trim()) {
+                                console.log('Mouseover target:', target.tagName, text.trim());
+                                speak(text.trim());
+                            }
+                        }, true);
 
-                        // Initialize screen reader
-                        function initializeScreenReader() {
-                            // Announce activation
-                            speak("Screen reader activated");
-
-                            // Add hover event listener to document
-                            document.addEventListener('mouseover', function(e) {
-                                const element = e.target;
+                        // Add keyboard support
+                        document.addEventListener('keydown', function(e) {
+                            if (e.altKey && e.key.toLowerCase() === 's') {
+                                const element = document.activeElement;
                                 if (element) {
-                                    const text = element.getAttribute('aria-label') || 
-                                               element.textContent || 
+                                    const text = element.textContent || 
                                                element.value || 
-                                               element.placeholder;
-
+                                               element.placeholder || 
+                                               element.getAttribute('aria-label');
                                     if (text && text.trim()) {
                                         speak(text.trim());
                                     }
                                 }
-                            }, true);
-
-                            // Add focus event listener
-                            document.addEventListener('focusin', function(e) {
-                                const element = e.target;
-                                if (element) {
-                                    const text = element.getAttribute('aria-label') || 
-                                               element.textContent || 
-                                               element.value || 
-                                               element.placeholder;
-
-                                    if (text && text.trim()) {
-                                        speak(text.trim());
-                                    }
-                                }
-                            });
-
-                            // Manual trigger with Alt+S
-                            document.addEventListener('keydown', function(e) {
-                                if (e.altKey && e.key.toLowerCase() === 's') {
-                                    const element = document.activeElement;
-                                    if (element) {
-                                        const text = element.getAttribute('aria-label') || 
-                                                   element.textContent || 
-                                                   element.value || 
-                                                   element.placeholder;
-
-                                        if (text && text.trim()) {
-                                            speak(text.trim());
-                                        }
-                                    }
-                                }
-                            });
-
-                            // Monitor Streamlit updates
-                            const observer = new MutationObserver(function(mutations) {
-                                mutations.forEach(function(mutation) {
-                                    if (mutation.type === 'childList') {
-                                        // Run readPageContent for new elements
-                                        readPageContent();
-                                    }
-                                });
-                            });
-
-                            // Start observing the entire document
-                            observer.observe(document.body, {
-                                childList: true,
-                                subtree: true,
-                                characterData: true,
-                                attributes: true,
-                                attributeFilter: ['aria-label', 'data-testid']
-                            });
-
-                            // Initial page setup
-                            readPageContent();
-                        }
-
-                        // Initialize when document is ready
-                        if (document.readyState === 'loading') {
-                            document.addEventListener('DOMContentLoaded', initializeScreenReader);
-                        } else {
-                            initializeScreenReader();
-                        }
+                            }
+                        });
 
                     } else {
                         console.warn('Speech Synthesis API is not supported');
@@ -880,7 +802,296 @@ def render_combined_results(research_results, patent_results, combined_analysis)
     st.subheader("Key Findings")
     findings = combined_analysis.get("key_findings", [])
     for finding in findings:
-        with st.expander(f"🔍 Finding (Impact Score: {finding.get('impact_score', 'N/A')}/10)"):
+        with st.expander(f"🔍 Finding (Impact Score: {finding.get('impact_score','N/A')}/10)"):
+            st.write(finding.get('finding', ''))
+            st.write("**Evidence:**", finding.get('evidence', ''))
+
+    # Research-Patent Alignment
+    st.subheader("Research & Patent Alignment")
+    alignment = combined_analysis.get("research_patent_alignment", {})
+    st.write(alignment.get("overview", "No alignment analysis available"))
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.write("**Gaps:**")
+        for gap in alignment.get("gaps", []):
+            st.markdown(f"• {gap}")
+    with col2:
+        st.write("**Opportunities:**")
+        for opp in alignment.get("opportunities", []):
+            st.markdown(f"• {opp}")
+
+    # Technology Assessment
+    st.subheader("Technology Assessment")
+    tech_assessment = combined_analysis.get("technology_assessment", {})
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("Technology Readiness", f"{tech_assessment.get('readiness_score', 0)}/10")
+        st.write("**Maturity Level:**", tech_assessment.get("maturity_level", "Unknown"))
+    with col2:
+        st.write("**Development Stages:**")
+        for stage in tech_assessment.get("development_stages", []):
+            st.markdown(f"• {stage}")
+
+    # Innovation Opportunities
+    st.subheader("Innovation Opportunities")
+    for opp in combined_analysis.get("innovation_opportunities", []):
+        with st.expander(f"💡 {opp.get('opportunity', 'Opportunity')} ({opp.get('potential_impact', 'N/A')} impact)"):
+            st.write(f"**Implementation Timeline:** {opp.get('implementation_timeline', 'N/A')}")
+            st.write(f"**Required Resources:** {opp.get('required_resources', 'N/A')}")
+
+    # Risk Analysis
+    st.subheader("Risk Analysis")
+    risks = combined_analysis.get("risk_analysis", {})
+    tab1, tab2, tab3 = st.tabs(["Technical Risks", "Market Risks", "Mitigation Strategies"])
+
+    with tab1:
+        for risk in risks.get("technical_risks", []):
+            st.markdown(f"• {risk}")
+    with tab2:
+        for risk in risks.get("market_risks", []):
+            st.markdown(f"• {risk}")
+    with tab3:
+        for strategy in risks.get("mitigation_strategies", []):
+            st.markdown(f"• {strategy}")
+
+    # Investment Recommendations
+    st.subheader("Investment Recommendations")
+    for rec in combined_analysis.get("investment_recommendations", []):
+        with st.expander(f"💰 {rec.get('area', 'Investment Area')} (ROI: {rec.get('potential_roi', 'N/A')})"):
+            st.write(f"**Timeframe:** {rec.get('timeframe', 'N/A')}")
+            st.write(f"**Required Investment:** {rec.get('required_investment', 'N/A')}")
+
+    # Future Directions
+    st.subheader("Future Directions")
+    for direction in combined_analysis.get("future_directions", []):
+        with st.expander(f"🔮 {direction.get('direction', 'Direction')} (Probability: {direction.get('probability', 'N/A')}/10)"):
+            st.write(f"**Impact:** {direction.get('impact', 'N/A')}")
+            st.write(f"**Timeline:** {direction.get('timeline', 'N/A')}")
+
+    # Collaboration Opportunities
+    st.subheader("Collaboration Opportunities")
+    for collab in combined_analysis.get("collaboration_opportunities", []):
+        with st.expander(f"🤝 {collab.get('type', 'Collaboration')}"):
+            st.write("**Potential Partners:**")
+            for partner in collab.get("potential_partners", []):
+                st.markdown(f"• {partner}")
+            st.write("**Expected Benefits:**")
+            for benefit in collab.get("expected_benefits", []):
+                st.markdown(f"• {benefit}")
+
+    # Industry Implications
+    st.subheader("Industry Implications")
+    implications = combined_analysis.get("industry_implications", {})
+
+    st.write("**Affected Sectors:**")
+    cols = st.columns(3)
+    sectors = implications.get("affected_sectors", [])
+    for i, sector in enumerate(sectors):
+        cols[i % 3].markdown(f"• {sector}")
+
+    st.write("**Impact Analysis:**")
+    for impact in implications.get("impact_analysis", []):
+        st.markdown(f"• {impact}")
+
+    st.write("**Adaptation Strategies:**")
+    for strategy in implications.get("adaptation_strategies", []):
+        st.markdown(f"• {strategy}")
+
+    # Statistics
+    st.subheader("Document Statistics")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Research Papers", len(research_results))
+    with col2:
+        st.metric("Patents", len(patent_results))
+    with col3:
+        total_documents = len(research_results) + len(patent_results)
+        st.metric("Total Documents", total_documents)
+
+def render_accessibility_menu():
+    """Render the accessibility menu using Streamlit native components."""
+    with st.sidebar:
+        st.markdown("### 🌐 Accessibility Tools")
+
+        # High Contrast Mode
+        if st.toggle("🔳 High Contrast (Alt+H)", value=st.session_state.get('high_contrast', False), key='high_contrast'):
+            st.markdown("""
+                <style>
+                    body, .main-container, .stApp, [data-testid="stSidebar"] {
+                        background-color: black !important;
+                        color: white !important;
+                    }
+                    .stButton button, .stSelectbox, .stTextInput input {
+                        background-color: white !important;
+                        color: black !important;
+                        border: 1px solid white !important;
+                    }
+                    .stMarkdown, .stText, .logo-title, .main-header, .subtitle {
+                        color: white !important;
+                    }
+                    [data-testid="stSidebarNav"] {
+                        background-color: black !important;
+                    }
+                </style>
+            """, unsafe_allow_html=True)
+
+        # Negative Contrast
+        if st.toggle("🌙 Negative Contrast (Alt+N)", value=st.session_state.get('negative_contrast', False), key='negative_contrast'):
+            st.markdown("""
+                <style>
+                    .stApp, body {
+                        filter: invert(100%) !important;
+                        background-color: white !important;
+                    }
+                    img, [data-testid="stImage"] {
+                        filter: invert(100%) !important;
+                    }
+                    .stMarkdown a {
+                        color: #0000EE !important;
+                    }
+                </style>
+            """, unsafe_allow_html=True)
+
+        # Screen Reader
+        if st.toggle("🔊 Screen Reader (Alt+S)", value=st.session_state.get('screen_reader', False), key='screen_reader'):
+            # Info message about screen reader
+            st.info("""
+                ℹ️ **Screen Reader Guide**
+
+                1. **Automatic Reading**: 
+                   - Content is read automatically when you click or Tab to an element
+                   - Each element will be read aloud when focused
+
+                2. **Manual Reading**: 
+                   - Select any element and press `Alt + S`
+                   - The selected element's content will be read aloud
+
+                3. **Navigation**:
+                   - `Tab`: Move to next element
+                   - `Shift + Tab`: Move to previous element
+                   - `Alt + →`: Quick jump to next element
+                   - `Alt + ←`: Quick jump to previous element
+
+                4. **Tip**: 
+                   - You'll hear "Screen reader activated" when enabled
+                   - Content is automatically read as you navigate
+            """)
+
+            st.components.v1.html("""
+                <div id="screenReaderContainer"></div>
+                <script>
+                    if ('speechSynthesis' in window) {
+                        const synth = window.speechSynthesis;
+                        let speaking = false;
+
+                        function speak(text) {
+                            if (!text || typeof text !== 'string') return;
+                            console.log('Attempting to speak:', text);
+
+                            if (speaking) {
+                                synth.cancel();
+                            }
+
+                            const utterance = new SpeechSynthesisUtterance(text);
+                            utterance.lang = 'tr-TR';
+                            utterance.rate = 1;
+                            utterance.pitch = 1;
+                            utterance.volume = 1;
+
+                            utterance.onstart = () => { 
+                                speaking = true;
+                                console.log('Started speaking:', text);
+                            };
+                            utterance.onend = () => { 
+                                speaking = false;
+                                console.log('Finished speaking:', text);
+                            };
+
+                            synth.speak(utterance);
+                        }
+
+                        // Announce activation
+                        speak("Ekran okuyucu aktif");
+
+                        // Add mouseover event at document level
+                        document.addEventListener('mouseover', function(e) {
+                            const target = e.target;
+                            if (!target) return;
+
+                            // Don't read if we're already speaking
+                            if (speaking) return;
+
+                            const text = target.textContent || 
+                                       target.value || 
+                                       target.placeholder || 
+                                       target.getAttribute('aria-label');
+
+                            if (text && text.trim()) {
+                                console.log('Mouseover target:', target.tagName, text.trim());
+                                speak(text.trim());
+                            }
+                        }, true);
+
+                        // Add keyboard support
+                        document.addEventListener('keydown', function(e) {
+                            if (e.altKey && e.key.toLowerCase() === 's') {
+                                const element = document.activeElement;
+                                if (element) {
+                                    const text = element.textContent || 
+                                               element.value || 
+                                               element.placeholder || 
+                                               element.getAttribute('aria-label');
+                                    if (text && text.trim()) {
+                                        speak(text.trim());
+                                    }
+                                }
+                            }
+                        });
+
+                    } else {
+                        console.warn('Speech Synthesis API is not supported');
+                        document.getElementById('screenReaderContainer').textContent = 
+                            'Screen reader is not supported in this browser.';
+                    }
+                </script>
+            """, height=0)
+
+        # Keyboard Shortcuts Info
+        with st.expander("⌨️ Keyboard Shortcuts"):
+            st.markdown("""
+                - **Alt + H**: High Contrast
+                - **Alt + N**: Negative Contrast
+                - **Alt + S**: Screen Reader
+                - **Alt + R**: Reset
+                - **Alt + →**: Next Element
+                - **Alt + ←**: Previous Element
+                - **Space**: Activate Selected Element
+            """)
+
+        # Reset Button
+        if st.button("🔄 Reset (Alt+R)"):
+            for key in ['high_contrast', 'negative_contrast', 'screen_reader']:
+                st.session_state[key] = False
+            st.rerun()
+
+def handle_pdf_export(results, analysis):
+    """This function is now deprecated as the export functionality has been moved to render_search_section"""
+    pass
+
+def render_combined_results(research_results, patent_results, combined_analysis):
+    """Render enhanced combined analysis of research and patent results."""
+    st.header("Comprehensive Analysis")
+
+    # Summary
+    st.subheader("Overview")
+    st.write(combined_analysis.get("comprehensive_summary", "No summary available"))
+
+    # Key Findings with Impact Scores
+    st.subheader("Key Findings")
+    findings = combined_analysis.get("key_findings", [])
+    for finding in findings:
+        with st.expander(f"🔍 Finding (Impact Score: {finding.get('impact_score','N/A')}/10)"):
             st.write(finding.get('finding', ''))
             st.write("**Evidence:**", finding.get('evidence', ''))
 
