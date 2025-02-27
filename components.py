@@ -708,7 +708,7 @@ def render_accessibility_menu():
 
                             // Create utterance
                             const utterance = new SpeechSynthesisUtterance(text);
-                            utterance.lang = 'tr-TR';
+                            utterance.lang = 'en-US';  // Changed to English
                             utterance.rate = 1;
                             utterance.pitch = 1;
                             utterance.volume = 1;
@@ -758,7 +758,7 @@ def render_accessibility_menu():
                         // Setup event listeners
                         document.addEventListener('DOMContentLoaded', () => {
                             // Initial announcement
-                            speak("Ekran okuyucu aktif");
+                            speak("Screen reader activated");  // Changed to English
 
                             // Focus and click events
                             document.body.addEventListener('focusin', handleFocus, true);
@@ -790,7 +790,7 @@ def render_accessibility_menu():
                     } else {
                         console.warn('Speech Synthesis API is not supported');
                         document.getElementById('screenReaderContainer').textContent = 
-                            'Bu tarayıcıda ekran okuyucu desteklenmiyor.';
+                            'Screen reader is not supported in this browser.';  // Changed to English
                     }
                 </script>
             """, height=0)
