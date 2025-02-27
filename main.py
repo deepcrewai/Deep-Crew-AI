@@ -74,8 +74,8 @@ def main():
                     gap: 1rem;
                 }
 
-                /* Stage button styling */
-                .stage-button {
+                /* Custom button styling */
+                div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button {
                     background-color: #fff;
                     border: 1px solid #dfe1e5;
                     border-radius: 8px;
@@ -84,27 +84,22 @@ def main():
                     font-weight: 500;
                     cursor: pointer;
                     transition: all 0.2s ease;
-                    flex: 1;
+                    width: 100%;
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
-                    text-decoration: none;
-                    min-width: 120px;
+                    gap: 0.5rem;
                 }
 
-                .stage-button:hover {
+                div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button:hover {
                     box-shadow: 0 1px 6px rgba(32,33,36,.28);
                     border-color: rgba(223,225,229,0);
                 }
 
-                .stage-button.selected {
+                div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button[data-selected="true"] {
                     background-color: #e8f0fe;
                     border-color: #1a73e8;
                     color: #1a73e8;
-                }
-
-                .stage-button i {
-                    margin-right: 0.5rem;
                 }
 
                 /* Tab styling */
@@ -152,11 +147,16 @@ def main():
 
     for idx, (stage_key, (icon, label)) in enumerate(stages.items()):
         with columns[idx]:
+            is_selected = stage_key in st.session_state.selected_stages
+            button_html = f"""
+                <i class='{icon}'></i> {label}
+            """
             if st.button(
-                f"<i class='{icon}'></i> {label}",
+                button_html,
                 key=f"btn_{stage_key}",
                 help=f"Click to select {label}",
                 use_container_width=True,
+                type="secondary" if is_selected else "primary"
             ):
                 if stage_key in st.session_state.selected_stages:
                     st.session_state.selected_stages.remove(stage_key)
