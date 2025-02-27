@@ -672,6 +672,7 @@ def render_accessibility_menu():
 
                 1. **Otomatik Okuma**: 
                    - Bir öğeye tıkladığınızda veya Tab tuşu ile üzerine geldiğinizde otomatik olarak okunur
+                   - Her öğe üzerine geldiğinizde sesli olarak okunacaktır
 
                 2. **Manuel Okuma**: 
                    - Herhangi bir öğeyi seçin ve `Alt + S` tuşlarına basın
@@ -691,23 +692,10 @@ def render_accessibility_menu():
             st.components.v1.html("""
                 <div id="screenReaderContainer"></div>
                 <script>
-                    // Initialize speech synthesis
+                    // Speech synthesis initialization
                     if ('speechSynthesis' in window) {
                         const synth = window.speechSynthesis;
                         let speaking = false;
-
-                        // Initialize voices
-                        let voices = [];
-                        function loadVoices() {
-                            voices = synth.getVoices();
-                            const turkishVoice = voices.find(voice => voice.lang.includes('tr'));
-                            if (turkishVoice) {
-                                console.log('Turkish voice found:', turkishVoice.name);
-                            }
-                        }
-
-                        synth.onvoiceschanged = loadVoices;
-                        loadVoices();
 
                         // Speak function
                         function speak(text) {
@@ -720,21 +708,20 @@ def render_accessibility_menu():
 
                             // Create utterance
                             const utterance = new SpeechSynthesisUtterance(text);
-
-                            // Try to set Turkish voice
-                            const turkishVoice = voices.find(voice => voice.lang.includes('tr'));
-                            if (turkishVoice) {
-                                utterance.voice = turkishVoice;
-                            }
-
                             utterance.lang = 'tr-TR';
                             utterance.rate = 1;
                             utterance.pitch = 1;
                             utterance.volume = 1;
 
                             // Speech events
-                            utterance.onstart = () => { speaking = true; };
-                            utterance.onend = () => { speaking = false; };
+                            utterance.onstart = () => { 
+                                speaking = true;
+                                console.log('Started speaking:', text);
+                            };
+                            utterance.onend = () => { 
+                                speaking = false;
+                                console.log('Finished speaking:', text);
+                            };
                             utterance.onerror = (e) => { 
                                 speaking = false;
                                 console.error('Speech error:', e);
@@ -742,76 +729,71 @@ def render_accessibility_menu():
 
                             // Speak
                             synth.speak(utterance);
-                            console.log('Speaking:', text);
                         }
 
-                        // Function to handle element text
-                        function getElementText(element) {
-                            return element.getAttribute('aria-label') || 
-                                   element.title ||
-                                   element.textContent ||
-                                   element.value ||
-                                   element.placeholder;
-                        }
-
-                        // Focus handler
+                        // Element focus handler
                         function handleFocus(event) {
                             const element = event.target;
-                            const text = getElementText(element);
-                            if (text && text.trim()) {
-                                speak(text.trim());
+                            if (!element) return;
+
+                            let textToRead = '';
+
+                            // Check various text sources
+                            if (element.getAttribute('aria-label')) {
+                                textToRead = element.getAttribute('aria-label');
+                            } else if (element.value) {
+                                textToRead = element.value;
+                            } else if (element.textContent) {
+                                textToRead = element.textContent;
+                            } else if (element.placeholder) {
+                                textToRead = element.placeholder;
+                            }
+
+                            if (textToRead && textToRead.trim()) {
+                                console.log('Reading element:', textToRead);
+                                speak(textToRead.trim());
                             }
                         }
 
-                        // Add event listeners
-                        document.addEventListener('focusin', handleFocus);
+                        // Setup event listeners
+                        document.addEventListener('DOMContentLoaded', () => {
+                            // Initial announcement
+                            speak("Ekran okuyucu aktif");
 
-                        // Manual trigger with Alt+S
-                        document.addEventListener('keydown', (e) => {
-                            if (e.altKey && e.key.toLowerCase() === 's') {
-                                const element = document.activeElement;
-                                const text = getElementText(element);
-                                if (text && text.trim()) {
-                                    speak(text.trim());
-                                }
-                            }
-                        });
+                            // Focus and click events
+                            document.body.addEventListener('focusin', handleFocus, true);
+                            document.body.addEventListener('click', handleFocus, true);
 
-                        // Observer for dynamic content
-                        const observer = new MutationObserver((mutations) => {
-                            mutations.forEach((mutation) => {
-                                if (mutation.type === 'childList') {
-                                    mutation.addedNodes.forEach((node) => {
-                                        if (node.nodeType === 1 && // Element node
-                                            (node.getAttribute('data-testid') || 
-                                             node.getAttribute('aria-label'))) {
-                                            const text = getElementText(node);
-                                            if (text && text.trim()) {
-                                                speak(text.trim());
-                                            }
+                            // Tab navigation
+                            document.addEventListener('keydown', (e) => {
+                                if (e.key === 'Tab') {
+                                    setTimeout(() => {
+                                        const activeElement = document.activeElement;
+                                        if (activeElement) {
+                                            handleFocus({ target: activeElement });
                                         }
-                                    });
+                                    }, 100);
+                                }
+                            });
+
+                            // Manual trigger with Alt+S
+                            document.addEventListener('keydown', (e) => {
+                                if (e.altKey && e.key.toLowerCase() === 's') {
+                                    const activeElement = document.activeElement;
+                                    if (activeElement) {
+                                        handleFocus({ target: activeElement });
+                                    }
                                 }
                             });
                         });
 
-                        // Start observing
-                        observer.observe(document.body, {
-                            childList: true,
-                            subtree: true,
-                            attributes: true,
-                            attributeFilter: ['aria-label', 'value']
-                        });
-
-                        // Test speech on load
-                        speak("Ekran okuyucu aktif");
                     } else {
                         console.warn('Speech Synthesis API is not supported');
                         document.getElementById('screenReaderContainer').textContent = 
                             'Bu tarayıcıda ekran okuyucu desteklenmiyor.';
                     }
                 </script>
-            """, height=1)
+            """, height=0)
 
         # Keyboard Shortcuts Info
         with st.expander("⌨️ Klavye Kısayolları"):
