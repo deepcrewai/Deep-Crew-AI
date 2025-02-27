@@ -194,21 +194,43 @@ def main():
                         ai_analyzer = AIAnalyzer()
 
                         if search_query != st.session_state.get('last_query', ''):
+                            # Generate keywords first
+                            print(f"Generating keywords for query: {search_query}")  # Debug log
                             keywords = ai_analyzer.generate_search_keywords(search_query)
-                            results = openalex_client.search(query=search_query, keywords=keywords)
+                            print(f"Generated keywords: {keywords}")  # Debug log
 
+                            if not keywords:
+                                st.error("Error generating search keywords. Please try again.")
+                                return
+
+                            # Show debug info in UI during development
+                            st.write("Debug: Generated Keywords", keywords)
+
+                            # Perform the search with both query and keywords
+                            with st.spinner("Searching OpenAlex database..."):
+                                results = openalex_client.search(
+                                    query=search_query,
+                                    keywords=keywords
+                                )
+                                print(f"Search returned {len(results)} results")  # Debug log
+
+                            # Store results in session state if found
                             if results:
                                 st.session_state.search_results = results
                                 st.session_state.analysis = ai_analyzer.analyze_results(results)
                                 st.session_state.last_query = search_query
                             else:
-                                st.warning("No results found. Try different terms.")
+                                st.error("No research papers found. Try modifying your search terms.")
                                 st.session_state.search_results = None
                                 st.session_state.analysis = None
+                                return
 
+                        # Display results if available
                         if st.session_state.get('search_results'):
                             render_search_section(st.session_state.search_results)
                             render_analysis_section(st.session_state.analysis)
+                        else:
+                            st.warning("No research results available. Try a new search.")
 
                 elif selected_stages[idx] == "patents":
                     with st.spinner("🔍 Analyzing patents..."):
