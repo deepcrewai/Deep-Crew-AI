@@ -54,7 +54,7 @@ def main():
                 .stTextInput > div > div {
                     background-color: #fff;
                     border-radius: 24px !important;
-                    border: 1px solid #dfe1e5;
+                    border: none !important;
                     box-shadow: none;
                     padding: 0 1rem;
                     transition: all 0.3s ease;
@@ -63,7 +63,6 @@ def main():
                 .stTextInput > div > div:hover,
                 .stTextInput > div > div:focus-within {
                     box-shadow: 0 1px 6px rgba(32,33,36,.28);
-                    border-color: rgba(223,225,229,0);
                 }
 
                 /* Stage buttons container */
