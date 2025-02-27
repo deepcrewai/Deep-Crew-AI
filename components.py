@@ -444,63 +444,15 @@ def render_search_section(results):
     """Render the modernized search results section with detailed paper information."""
     metrics = calculate_metrics(results)
 
+    # Custom CSS for styling
     st.markdown("""
         <style>
-        .metric-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-            text-align: center;
-            transition: all 0.2s ease;
-        }
-        .metric-card:hover {
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-            transform: translateY(-2px);
-        }
-        .metric-value {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #1a73e8;
-            margin: 0.5rem 0;
-        }
-        .metric-label {
-            font-size: 0.9rem;
-            color: #5f6368;
-        }
-        .paper-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-            transition: all 0.2s ease;
-        }
-        .paper-card:hover {
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        }
-        .paper-title {
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: #202124;
-            margin-bottom: 0.5rem;
-        }
-        .paper-section {
-            margin: 1rem 0;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-        .paper-section-title {
-            font-weight: 500;
-            color: #1a73e8;
-            margin-bottom: 0.5rem;
-        }
         .paper-metadata {
             display: flex;
-            gap: 1rem;
             flex-wrap: wrap;
+            gap: 0.5rem;
             margin: 0.5rem 0;
+            align-items: center;
         }
         .metadata-item {
             background: #e8f0fe;
@@ -508,159 +460,140 @@ def render_search_section(results):
             border-radius: 16px;
             font-size: 0.9rem;
             color: #1967d2;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
         }
-        .author-list {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin: 0.5rem 0;
+        .paper-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
         }
-        .author-item {
-            background: #f1f3f4;
-            padding: 0.25rem 0.75rem;
-            border-radius: 16px;
-            font-size: 0.9rem;
-            color: #202124;
-        }
-        .concepts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 0.5rem;
-            margin: 0.5rem 0;
-        }
-        .concept-item {
-            background: #e6f4ea;
-            padding: 0.25rem 0.75rem;
-            border-radius: 16px;
-            font-size: 0.9rem;
-            color: #137333;
-            text-align: center;
+        .section-title {
+            color: #1967d2;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
         }
         </style>
     """, unsafe_allow_html=True)
 
-    # Metrics display
+    # Display metrics
     col1, col2, col3, col4 = st.columns(4)
-    metrics_data = [
-        {"label": "Toplam Makale", "value": metrics["total_papers"]},
-        {"label": "Toplam Atıf", "value": metrics["total_citations"]},
-        {"label": "Ortalama Yıl", "value": metrics["avg_year"]},
-        {"label": "Ortalama Atıf", "value": metrics["avg_citations"]}
-    ]
+    with col1:
+        st.metric("Toplam Makale", metrics["total_papers"])
+    with col2:
+        st.metric("Toplam Atıf", metrics["total_citations"])
+    with col3:
+        st.metric("Ortalama Yıl", metrics["avg_year"])
+    with col4:
+        st.metric("Ortalama Atıf", metrics["avg_citations"])
 
-    for col, metric in zip([col1, col2, col3, col4], metrics_data):
-        with col:
-            st.markdown(f"""
-                <div class="metric-card">
-                    <div class="metric-value">{metric['value']}</div>
-                    <div class="metric-label">{metric['label']}</div>
-                </div>
-            """, unsafe_allow_html=True)
-
-    # Results header
-    st.markdown("""
-        <div style="margin: 2rem 0 1rem">
-            <h2 style="color: #202124; font-size: 1.5rem; font-weight: 500;">Araştırma Sonuçları</h2>
-        </div>
-    """, unsafe_allow_html=True)
-
-    # Export button
-    if 'pdf_generated' not in st.session_state:
-        st.session_state.pdf_generated = False
-
+    # Add export button
     st.download_button(
         label="📑 PDF Olarak İndir",
         data=generate_pdf_report(results, st.session_state.analysis),
         file_name="research_report.pdf",
         mime="application/pdf",
-        key="pdf_download",
-        use_container_width=False
+        key="pdf_download"
     )
 
-    # Display detailed paper information with corrected data handling
+    # Display results
     for paper in results:
-        # Extract author information correctly
-        authors = []
-        institutions = []
+        with st.container():
+            # Paper title
+            st.markdown(f"### {paper.get('title', 'Başlıksız')}")
 
-        for authorship in paper.get('authorships', []):
-            if authorship.get('author'):
-                authors.append(authorship['author'].get('display_name', 'Anonim'))
-            if authorship.get('institutions'):
-                for inst in authorship['institutions']:
-                    if inst.get('display_name'):
-                        institutions.append(inst['display_name'])
+            # Basic info section
+            st.markdown('<div class="paper-section">', unsafe_allow_html=True)
+            st.markdown('<div class="section-title">Temel Bilgiler</div>', unsafe_allow_html=True)
+            st.markdown('<div class="paper-metadata">', unsafe_allow_html=True)
+            st.markdown(f'<span class="metadata-item">📅 {paper.get("publication_year", "N/A")}</span>', unsafe_allow_html=True)
+            st.markdown(f'<span class="metadata-item">🔍 DOI: {paper.get("doi", "N/A")}</span>', unsafe_allow_html=True)
+            st.markdown(f'<span class="metadata-item">📖 {paper.get("type", "Makale")}</span>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown(paper.get('abstract', 'Özet bulunmamaktadır.'))
+            st.markdown('</div>', unsafe_allow_html=True)
 
-        # Remove duplicates from institutions
-        institutions = list(set(institutions))
+            # Authors and institutions section
+            st.markdown('<div class="paper-section">', unsafe_allow_html=True)
+            st.markdown('<div class="section-title">Yazarlar ve Kurumlar</div>', unsafe_allow_html=True)
 
-        # Extract concepts properly
-        concepts = [concept.get('display_name', '') for concept in paper.get('concepts', []) if concept.get('display_name')]
+            # Authors
+            authors = []
+            institutions = set()
+            for authorship in paper.get('authorships', []):
+                if isinstance(authorship, dict) and 'author' in authorship:
+                    author = authorship['author']
+                    if isinstance(author, dict) and 'display_name' in author:
+                        authors.append(author['display_name'])
+                    # Collect institutions
+                    for inst in authorship.get('institutions', []):
+                        if isinstance(inst, dict) and 'display_name' in inst:
+                            institutions.add(inst['display_name'])
 
-        venue = paper.get('host_venue', {})
+            # Display authors
+            st.markdown('<div class="paper-metadata">', unsafe_allow_html=True)
+            for author in (authors if authors else ['Anonim']):
+                st.markdown(f'<span class="metadata-item">👤 {author}</span>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
 
-        st.markdown(f"""
-            <div class="paper-card">
-                <!-- 1. Makale Temel Bilgileri -->
-                <div class="paper-title">{paper.get('title', 'Başlıksız')}</div>
-                <div class="paper-section">
-                    <div class="paper-section-title">Temel Bilgiler</div>
-                    <div class="paper-metadata">
-                        <span class="metadata-item">📅 {paper.get('publication_year', 'N/A')}</span>
-                        <span class="metadata-item">🔍 DOI: {paper.get('doi', 'N/A')}</span>
-                        <span class="metadata-item">📖 {paper.get('type', 'Makale')}</span>
-                    </div>
-                    <p style="margin-top: 1rem;">{paper.get('abstract', 'Özet bulunmamaktadır.')}</p>
-                </div>
+            # Display institutions
+            if institutions:
+                st.markdown('<div class="paper-metadata">', unsafe_allow_html=True)
+                for inst in institutions:
+                    st.markdown(f'<span class="metadata-item">🏛️ {inst}</span>', unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
 
-                <!-- 2. Yazar Bilgileri -->
-                <div class="paper-section">
-                    <div class="paper-section-title">Yazarlar ve Kurumlar</div>
-                    <div class="author-list">
-                        {' '.join([f'<span class="author-item">👤 {author}</span>' for author in authors])}
-                    </div>
-                    <div class="paper-metadata">
-                        {' '.join([f'<span class="metadata-item">🏛️ {inst}</span>' for inst in institutions])}
-                    </div>
-                </div>
+            # Metrics section
+            st.markdown('<div class="paper-section">', unsafe_allow_html=True)
+            st.markdown('<div class="section-title">Etki Metrikleri</div>', unsafe_allow_html=True)
+            st.markdown('<div class="paper-metadata">', unsafe_allow_html=True)
+            st.markdown(f'<span class="metadata-item">📊 Atıf Sayısı: {paper.get("cited_by_count", 0)}</span>', unsafe_allow_html=True)
+            st.markdown(f'<span class="metadata-item">🔄 Referans Sayısı: {len(paper.get("referenced_works", []))}</span>', unsafe_allow_html=True)
+            impact = next(
+                (year['cited_by_count'] for year in paper.get('counts_by_year', [])
+                 if year.get('year') == paper.get('publication_year')), 
+                0
+            )
+            st.markdown(f'<span class="metadata-item">📈 Etki Puanı: {impact}</span>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
 
-                <!-- 3. Bibliyometrik Veriler -->
-                <div class="paper-section">
-                    <div class="paper-section-title">Etki Metrikleri</div>
-                    <div class="paper-metadata">
-                        <span class="metadata-item">📊 Atıf Sayısı: {paper.get('cited_by_count', 0)}</span>
-                        <span class="metadata-item">🔄 Referans Sayısı: {len(paper.get('referenced_works', []))}</span>
-                        <span class="metadata-item">📈 Etki Puanı: {paper.get('counts_by_year', [{'year': 0, 'cited_by_count': 0}])[0].get('cited_by_count', 0)}</span>
-                    </div>
-                </div>
+            # Publication details section
+            venue = paper.get('host_venue', {})
+            st.markdown('<div class="paper-section">', unsafe_allow_html=True)
+            st.markdown('<div class="section-title">Yayın Detayları</div>', unsafe_allow_html=True)
+            st.markdown('<div class="paper-metadata">', unsafe_allow_html=True)
+            st.markdown(f'<span class="metadata-item">📰 {venue.get("display_name", "N/A")}</span>', unsafe_allow_html=True)
+            st.markdown(f'<span class="metadata-item">🔖 ISSN: {venue.get("issn_l", "N/A")}</span>', unsafe_allow_html=True)
+            st.markdown(f'<span class="metadata-item">📘 Yayıncı: {venue.get("publisher", "N/A")}</span>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
 
-                <!-- 4. Dergi/Yayın Bilgileri -->
-                <div class="paper-section">
-                    <div class="paper-section-title">Yayın Detayları</div>
-                    <div class="paper-metadata">
-                        <span class="metadata-item">📰 {venue.get('display_name', 'N/A')}</span>
-                        <span class="metadata-item">🔖 ISSN: {venue.get('issn_l', 'N/A')}</span>
-                        <span class="metadata-item">📘 Yayıncı: {venue.get('publisher', 'N/A')}</span>
-                    </div>
-                </div>
+            # Research areas section
+            st.markdown('<div class="paper-section">', unsafe_allow_html=True)
+            st.markdown('<div class="section-title">Konu Başlıkları ve Alanlar</div>', unsafe_allow_html=True)
+            st.markdown('<div class="paper-metadata">', unsafe_allow_html=True)
+            for concept in paper.get('concepts', []):
+                if isinstance(concept, dict) and 'display_name' in concept:
+                    st.markdown(f'<span class="metadata-item">{concept["display_name"]}</span>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
 
-                <!-- 5. Araştırma Alanları -->
-                <div class="paper-section">
-                    <div class="paper-section-title">Konu Başlıkları ve Alanlar</div>
-                    <div class="concepts-grid">
-                        {' '.join([f'<span class="concept-item">{concept}</span>' for concept in concepts])}
-                    </div>
-                </div>
+            # View paper link
+            st.markdown(
+                f'<div style="text-align: right; margin-top: 1rem;">'
+                f'<a href="https://doi.org/{paper.get("doi", "#")}" target="_blank" '
+                f'style="color: #1a73e8; text-decoration: none; font-weight: 500;">'
+                f'Makaleyi Görüntüle →</a></div>',
+                unsafe_allow_html=True
+            )
 
-                <!-- Bağlantılar -->
-                <div style="margin-top: 1rem; text-align: right;">
-                    <a href="{paper.get('doi', '#')}" target="_blank" 
-                       style="color: #1a73e8; text-decoration: none; font-weight: 500;">
-                        Makaleyi Görüntüle →
-                    </a>
-                </div>
-            </div>
-        """, unsafe_allow_html=True)
+            # Add separator between papers
+            st.markdown("<hr style='margin: 2rem 0; opacity: 0.2;'>", unsafe_allow_html=True)
 
 def render_patent_results(results, analysis):
     """Render patent search results with export functionality."""
@@ -826,7 +759,7 @@ def render_combined_results(research_results, patent_results, combined_analysis)
     with col2:
         st.write("**Development & Funding Stages:**")
         stages = tech_assessment.get("development_stages", [])
-        funding_reqs = tech_assessment.get("funding_requirements", [])
+        funding_reqs= tech_assessment.get("funding_requirements", [])
         for stage, req in zip(stages, funding_reqs):
             st.markdown(f"• {stage}")
             st.markdown(f"  *Funding: {req}*")
