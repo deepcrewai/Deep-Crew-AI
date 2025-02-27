@@ -17,7 +17,7 @@ class OpenAlexClient:
             if not cleaned_query:
                 return []
 
-            # Base search parameters
+            # Base search parameters - simplified
             params = {
                 "search": cleaned_query,
                 "per_page": 100,
@@ -48,13 +48,12 @@ class OpenAlexClient:
             enhanced_results = []
             for result in results:
                 try:
-                    # Basic paper data
                     paper_data = {
-                        'title': result.get('title') or 'Untitled',
+                        'title': result.get('title', 'Untitled'),
+                        'abstract': result.get('abstract', 'Full text available via DOI.'),
                         'publication_year': result.get('publication_year'),
                         'cited_by_count': result.get('cited_by_count', 0),
                         'doi': result.get('doi'),
-                        'abstract': self._get_abstract(result),
                         'concepts': result.get('concepts', [])
                     }
 
