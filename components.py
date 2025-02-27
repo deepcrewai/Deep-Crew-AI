@@ -624,27 +624,12 @@ def render_accessibility_menu():
     """Render the accessibility menu component."""
     import streamlit as st
 
-    st.markdown(
-        """
+    st.markdown("""
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-        """,
-        unsafe_allow_html=True
-    )
+    """, unsafe_allow_html=True)
 
-    st.markdown(
-        """
+    st.components.v1.html("""
         <style>
-            iframe {
-                border: none !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-            .accessibility-container {
-                position: fixed;
-                top: 0;
-                left: 0;
-                z-index: 999999;
-            }
             .accessibility-button {
                 position: fixed;
                 top: 0.5rem;
@@ -727,66 +712,59 @@ def render_accessibility_menu():
                 font-family: 'OpenDyslexic', Arial, sans-serif !important;
             }
         </style>
-        """,
-        unsafe_allow_html=True
-    )
 
-    html_code = f"""
-        <div class="accessibility-container">
-            <button class="accessibility-button" onclick="toggleMenu()">
-                <i class="fas fa-universal-access"></i>
-            </button>
-            <div class="accessibility-menu" id="accessibilityMenu">
-                <div class="accessibility-option" onclick="toggleAccessibility('high-contrast')">
-                    <i class="fas fa-adjust"></i> High Contrast
-                </div>
-                <div class="accessibility-option" onclick="toggleAccessibility('negative-contrast')">
-                    <i class="fas fa-moon"></i> Negative Contrast
-                </div>
-                <div class="accessibility-option" onclick="toggleAccessibility('light-background')">
-                    <i class="fas fa-sun"></i> Light Background
-                </div>
-                <div class="accessibility-option" onclick="toggleAccessibility('links-underline')">
-                    <i class="fas fa-underline"></i> Links Underline
-                </div>
-                <div class="accessibility-option" onclick="toggleAccessibility('readable-font')">
-                    <i class="fas fa-font"></i> Readable Font
-                </div>
-                <div class="accessibility-option" onclick="resetAccessibility()">
-                    <i class="fas fa-undo"></i> Reset
-                </div>
+        <button class="accessibility-button" onclick="toggleMenu()" aria-label="Accessibility Options">
+            <i class="fas fa-universal-access"></i>
+        </button>
+
+        <div class="accessibility-menu" id="accessibilityMenu">
+            <div class="accessibility-option" onclick="toggleAccessibility('high-contrast')">
+                <i class="fas fa-adjust"></i> High Contrast
+            </div>
+            <div class="accessibility-option" onclick="toggleAccessibility('negative-contrast')">
+                <i class="fas fa-moon"></i> Negative Contrast
+            </div>
+            <div class="accessibility-option" onclick="toggleAccessibility('light-background')">
+                <i class="fas fa-sun"></i> Light Background
+            </div>
+            <div class="accessibility-option" onclick="toggleAccessibility('links-underline')">
+                <i class="fas fa-underline"></i> Links Underline
+            </div>
+            <div class="accessibility-option" onclick="toggleAccessibility('readable-font')">
+                <i class="fas fa-font"></i> Readable Font
+            </div>
+            <div class="accessibility-option" onclick="resetAccessibility()">
+                <i class="fas fa-undo"></i> Reset
             </div>
         </div>
+
         <script>
-            function toggleMenu() {{
+            function toggleMenu() {
                 const menu = document.getElementById('accessibilityMenu');
                 menu.classList.toggle('show');
-            }}
+            }
 
-            function toggleAccessibility(className) {{
+            function toggleAccessibility(className) {
                 document.documentElement.classList.toggle(className);
-                if (window.parent.streamlit) {{
-                    window.parent.streamlit.setComponentValue({{
+                if (window.parent.streamlit) {
+                    window.parent.streamlit.setComponentValue({
                         type: 'toggle',
                         className: className,
                         state: document.documentElement.classList.contains(className)
-                    }});
-                }}
-            }}
+                    });
+                }
+            }
 
-            function resetAccessibility() {{
+            function resetAccessibility() {
                 const classes = ['high-contrast', 'negative-contrast', 'light-background', 'links-underline', 'readable-font'];
-                classes.forEach(className => {{
+                classes.forEach(className => {
                     document.documentElement.classList.remove(className);
-                }});
-                if (window.parent.streamlit) {{
-                    window.parent.streamlit.setComponentValue({{
+                });
+                if (window.parent.streamlit) {
+                    window.parent.streamlit.setComponentValue({
                         type: 'reset'
-                    }});
-                }}
-            }}
+                    });
+                }
+            }
         </script>
-    """
-
-    # Using components.html to render the HTML safely
-    st.components.v1.html(html_code, height=50, scrolling=False)
+    """, height=50)
