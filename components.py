@@ -401,7 +401,6 @@ def render_search_section(results):
         """, unsafe_allow_html=True)
 
 
-
 def render_patent_results(results, analysis):
     """Render patent search results with export functionality."""
     # Display metrics
@@ -667,6 +666,28 @@ def render_accessibility_menu():
 
         # Screen Reader
         if st.toggle("🔊 Ekran Okuyucu (Alt+S)", value=st.session_state.get('screen_reader', False), key='screen_reader'):
+            # Ekran okuyucu kullanım kılavuzu
+            st.info("""
+                ℹ️ **Ekran Okuyucu Kullanım Kılavuzu**
+
+                1. **Otomatik Okuma**: 
+                   - Bir öğeye tıkladığınızda veya Tab tuşu ile üzerine geldiğinizde otomatik olarak okunur
+
+                2. **Manuel Okuma**: 
+                   - Herhangi bir öğeyi seçin ve `Alt + S` tuşlarına basın
+                   - Seçili öğenin içeriği sesli okunacaktır
+
+                3. **Gezinme**:
+                   - `Tab` tuşu: Sonraki öğeye geç
+                   - `Shift + Tab`: Önceki öğeye geç
+                   - `Alt + →`: Sonraki öğeye hızlı geçiş
+                   - `Alt + ←`: Önceki öğeye hızlı geçiş
+
+                4. **İpucu**: 
+                   - Ekran okuyucu aktif olduğunda "Ekran okuyucu aktif" sesi duyacaksınız
+                   - Her bir öğe üzerine geldiğinizde içeriği otomatik okunacaktır
+            """)
+
             st.components.v1.html("""
                 <div id="screenReaderContainer"></div>
                 <script>
