@@ -404,7 +404,7 @@ def render_funding_section(research_query: str):
     selected_region = st.selectbox("Select Region", regions)
 
     # Main tabs
-    main_tabs = st.tabs(["Funding Opportunities", "Funding Trends", "Regional Insights"])
+    main_tabs = st.tabs(["Funding Opportunities", "Funding Trends", "Regional Insights", "Results"])
 
     # Funding Opportunities Tab
     with main_tabs[0]:
@@ -417,24 +417,6 @@ def render_funding_section(research_query: str):
             opportunities = funding_agent.get_funding_opportunities(research_query, selected_region)
 
             if opportunities:
-                # AI Analysis of opportunities
-                ai_analysis = funding_agent.analyze_with_ai({
-                    "opportunities": opportunities,
-                    "context": {"query": research_query, "region": selected_region}
-                })
-
-                # Display AI Insights
-                st.markdown("### 🤖 AI Analysis")
-                st.markdown(f"**Summary:** {ai_analysis.get('summary', 'No summary available')}")
-
-                with st.expander("📊 Key Insights"):
-                    for point in ai_analysis.get('key_points', []):
-                        st.markdown(f"• {point}")
-
-                with st.expander("🎯 Strategic Recommendations"):
-                    for rec in ai_analysis.get('recommendations', []):
-                        st.markdown(f"• {rec}")
-
                 st.markdown("### 📑 Available Opportunities")
                 for opp in opportunities:
                     with st.expander(f"{opp['title']} - {opp['funder']}"):
@@ -564,6 +546,7 @@ def render_funding_section(research_query: str):
                     st.metric("Market Size", sector_analysis.get("market_size", "N/A"))
                     st.metric("Growth Rate", sector_analysis.get("growth_rate", "N/A"))
 
+
     # Regional Insights Tab
     with main_tabs[2]:
         st.markdown("""
@@ -635,5 +618,54 @@ def render_funding_section(research_query: str):
                     ]
                     for trend in trends:
                         st.markdown(f"• {trend}")
+
+    # Results Tab - New Addition
+    with main_tabs[3]:
+        st.markdown("""
+            <div class='content-section'>
+                <h3>🤖 AI Analysis Results</h3>
+            </div>
+        """, unsafe_allow_html=True)
+
+        with st.spinner("Generating comprehensive AI analysis..."):
+            # Get all data for analysis
+            opportunities = funding_agent.get_funding_opportunities(research_query, selected_region)
+            trends = funding_agent.analyze_funding_trends(research_query)
+            regional_data = funding_agent.get_regional_insights(selected_region)
+
+            # Combine all data for comprehensive analysis
+            combined_data = {
+                "opportunities": opportunities,
+                "trends": trends,
+                "regional_data": regional_data,
+                "context": {
+                    "query": research_query,
+                    "region": selected_region
+                }
+            }
+
+            # Get comprehensive AI analysis
+            ai_analysis = funding_agent.analyze_with_ai(combined_data)
+
+            # Display Results
+            st.markdown("### 📊 Comprehensive Analysis")
+            st.markdown(f"**Overall Summary:**\n{ai_analysis.get('summary', 'No summary available')}")
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+                st.markdown("### 🎯 Key Insights")
+                for point in ai_analysis.get('key_points', []):
+                    st.markdown(f"• {point}")
+
+            with col2:
+                st.markdown("### 💡 Strategic Recommendations")
+                for rec in ai_analysis.get('recommendations', []):
+                    st.markdown(f"• {rec}")
+
+            # Add visual representation
+            if opportunities and trends:
+                st.markdown("### 📈 Opportunity Analysis")
+                funding_agent.generate_opportunity_heatmap(opportunities)
 
     st.markdown("</div>", unsafe_allow_html=True)
