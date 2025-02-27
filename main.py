@@ -21,6 +21,7 @@ def main():
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
             <style>
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;500;600;700&display=swap');
 
                 .st-bt {
                     background-color: transparent !important;
@@ -36,10 +37,10 @@ def main():
 
                 .logo-title {
                     font-size: 2.75rem;
-                    font-weight: 500;
+                    font-weight: 700;
+                    padding: 1.25rem 0px 1rem;
+                    font-family: "Source Sans Pro", sans-serif;
                     color: black;
-                    margin-bottom: 0.5rem;
-                    font-family: 'Inter', sans-serif;
                 }
 
                 .main-header {
