@@ -16,18 +16,6 @@ from funding import render_funding_section, FundingAgent
 def main():
     setup_page()
 
-    # Initialize session state for accessibility settings
-    if 'high_contrast' not in st.session_state:
-        st.session_state.high_contrast = False
-    if 'negative_contrast' not in st.session_state:
-        st.session_state.negative_contrast = False
-    if 'light_background' not in st.session_state:
-        st.session_state.light_background = False
-    if 'links_underline' not in st.session_state:
-        st.session_state.links_underline = False
-    if 'readable_font' not in st.session_state:
-        st.session_state.readable_font = False
-
     st.markdown("""
         <head>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -35,77 +23,11 @@ def main():
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
                 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;500;600;700&display=swap');
 
-                /* Accessibility Menu Styles */
-                #accessibility-container {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    z-index: 999999;
+                .st-bt {
+                    background-color: transparent !important;
                 }
 
-                .accessibility-button {
-                    position: fixed;
-                    top: 0.5rem;
-                    left: 1rem;
-                    z-index: 999999;
-                    background: none;
-                    border: none;
-                    cursor: pointer;
-                    padding: 10px;
-                    font-size: 24px;
-                    color: #1a73e8;
-                    border-radius: 50%;
-                    width: 48px;
-                    height: 48px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background: white;
-                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-                }
-
-                .accessibility-button:hover {
-                    background: #f0f3f6;
-                }
-
-                .accessibility-menu {
-                    position: fixed;
-                    top: 4rem;
-                    left: 1rem;
-                    background: white;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                    padding: 15px;
-                    z-index: 999998;
-                    display: none;
-                    min-width: 200px;
-                }
-
-                .accessibility-menu.show {
-                    display: block;
-                }
-
-                .accessibility-option {
-                    display: flex;
-                    align-items: center;
-                    padding: 8px;
-                    cursor: pointer;
-                    transition: background 0.2s;
-                    border-radius: 4px;
-                    color: #202124;
-                }
-
-                .accessibility-option:hover {
-                    background: #f0f3f6;
-                }
-
-                .accessibility-option i {
-                    margin-right: 8px;
-                    width: 20px;
-                    text-align: center;
-                }
-
-                /* Main Container Styles */
+                /* Modern styling */
                 .main-container {
                     max-width: 800px;
                     margin: 3rem auto;
@@ -135,107 +57,67 @@ def main():
                     margin-bottom: 2rem;
                 }
 
-                /* High Contrast Mode */
-                body.high-contrast {
-                    background: black !important;
-                    color: white !important;
+                /* Search box styling */
+                .stTextInput > div > div {
+                    background-color: #fff;
+                    border-radius: 24px !important;
+                    border: none !important;
+                    box-shadow: none;
+                    padding: 0 1rem;
+                    transition: all 0.3s ease;
                 }
 
-                body.high-contrast * {
-                    background: black !important;
-                    color: white !important;
-                    border-color: white !important;
+                .stTextInput > div > div:hover,
+                .stTextInput > div > div:focus-within {
+                    box-shadow: 0 1px 6px rgba(32,33,36,.28);
                 }
 
-                /* Negative Contrast */
-                body.negative-contrast {
-                    filter: invert(100%);
+                /* Stage buttons container */
+                .stage-buttons {
+                    display: flex;
+                    justify-content: space-between;
+                    margin: 2rem 0;
+                    gap: 1rem;
                 }
 
-                /* Light Background */
-                body.light-background {
-                    background: #ffffff !important;
-                    color: #000000 !important;
+                /* Custom button styling */
+                div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button {
+                    background-color: rgb(255, 255, 255);
+                    border: 1px solid #dfe1e5;
+                    border-radius: 8px;
+                    padding: 0.75rem 1.5rem;
+                    color: #202124;
+                    font-weight: 500;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    width: 100%;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 0.5rem;
                 }
 
-                /* Links Underline */
-                body.links-underline a {
-                    text-decoration: underline !important;
+                div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button:hover {
+                    box-shadow: 0 1px 6px rgba(32,33,36,.28);
+                    border-color: rgb(31, 119, 180);
+                    color: rgb(31, 119, 180);
                 }
 
-                /* Readable Font */
-                body.readable-font {
-                    font-family: 'OpenDyslexic', sans-serif !important;
+                div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button[data-selected="true"] {
+                    background-color: rgb(31, 119, 180);
+                    border-color: rgb(31, 119, 180);
+                    color: white;
                 }
 
-                body.readable-font * {
-                    font-family: 'OpenDyslexic', sans-serif !important;
+                /* Tab styling */
+                .stTabs {
+                    background: #fff;
+                    border-radius: 12px;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+                    margin-top: 2rem;
                 }
             </style>
         </head>
-        <div id="accessibility-container">
-            <button class="accessibility-button" id="accessibilityBtn" aria-label="Accessibility Options">
-                <i class="fas fa-universal-access"></i>
-            </button>
-
-            <div class="accessibility-menu" id="accessibilityMenu">
-                <div class="accessibility-option" id="highContrastBtn">
-                    <i class="fas fa-adjust"></i> High Contrast
-                </div>
-                <div class="accessibility-option" id="negativeContrastBtn">
-                    <i class="fas fa-moon"></i> Negative Contrast
-                </div>
-                <div class="accessibility-option" id="lightBackgroundBtn">
-                    <i class="fas fa-sun"></i> Light Background
-                </div>
-                <div class="accessibility-option" id="linksUnderlineBtn">
-                    <i class="fas fa-underline"></i> Links Underline
-                </div>
-                <div class="accessibility-option" id="readableFontBtn">
-                    <i class="fas fa-font"></i> Readable Font
-                </div>
-                <div class="accessibility-option" id="resetBtn">
-                    <i class="fas fa-undo"></i> Reset
-                </div>
-            </div>
-        </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const accessibilityBtn = document.getElementById('accessibilityBtn');
-                const accessibilityMenu = document.getElementById('accessibilityMenu');
-                const options = {
-                    'highContrastBtn': 'high-contrast',
-                    'negativeContrastBtn': 'negative-contrast',
-                    'lightBackgroundBtn': 'light-background',
-                    'linksUnderlineBtn': 'links-underline',
-                    'readableFontBtn': 'readable-font'
-                };
-
-                accessibilityBtn.addEventListener('click', function() {
-                    accessibilityMenu.classList.toggle('show');
-                });
-
-                // Add click events for each option
-                Object.entries(options).forEach(([btnId, className]) => {
-                    const btn = document.getElementById(btnId);
-                    if (btn) {
-                        btn.addEventListener('click', function() {
-                            document.body.classList.toggle(className);
-                        });
-                    }
-                });
-
-                // Reset button
-                const resetBtn = document.getElementById('resetBtn');
-                if (resetBtn) {
-                    resetBtn.addEventListener('click', function() {
-                        Object.values(options).forEach(className => {
-                            document.body.classList.remove(className);
-                        });
-                    });
-                }
-            });
-        </script>
         <div class="main-container">
             <div class="logo-title">DEEP CREW</div>
             <h1 class="main-header">Research & Innovation Hub</h1>
