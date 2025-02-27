@@ -20,149 +20,145 @@ def main():
         <head>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
             <style>
-                /* Modern corporate styling */
-                :root {
-                    --primary-color: #2C3E50;
-                    --secondary-color: #34495E;
-                    --accent-color: #3498DB;
-                    --text-color: #2C3E50;
-                    --light-bg: #F7F9FC;
-                    --border-color: #E5E9F2;
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;500;600;700&display=swap');
+
+                .st-bt {
+                    background-color: transparent !important;
                 }
 
-                body {
-                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-                    color: var(--text-color);
-                    background-color: var(--light-bg);
-                }
-
-                .corporate-container {
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    padding: 2rem;
-                }
-
-                .logo-section {
+                /* Modern styling */
+                .main-container {
+                    max-width: 800px;
+                    margin: 3rem auto;
                     text-align: center;
-                    margin-bottom: 3rem;
+                    font-family: 'Inter', sans-serif;
                 }
 
                 .logo-title {
-                    font-size: 2.5rem;
+                    font-size: 2.75rem;
                     font-weight: 700;
-                    color: var(--primary-color);
-                    margin: 0;
-                    letter-spacing: -0.5px;
+                    padding: 1.25rem 0px 1rem;
+                    font-family: "Source Sans Pro", sans-serif;
+                    color: black;
+                }
+
+                .main-header {
+                    font-size: 2.5rem;
+                    font-weight: 500;
+                    color: #202124;
+                    margin: 1rem 0;
+                    font-family: 'Inter', sans-serif;
                 }
 
                 .subtitle {
                     font-size: 1.1rem;
-                    color: var(--secondary-color);
-                    margin: 1rem 0 2rem;
-                    font-weight: 400;
-                }
-
-                /* Search box styling */
-                .search-container {
-                    background: white;
-                    border-radius: 12px;
-                    padding: 1.5rem;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                    color: #5f6368;
                     margin-bottom: 2rem;
                 }
 
+                /* Search box styling */
                 .stTextInput > div > div {
-                    background-color: var(--light-bg);
-                    border-radius: 8px !important;
-                    border: 1px solid var(--border-color) !important;
-                    padding: 0.75rem 1rem;
+                    background-color: #fff;
+                    border-radius: 24px !important;
+                    border: none !important;
+                    box-shadow: none;
+                    padding: 0 1rem;
+                    transition: all 0.3s ease;
                 }
 
-                /* Stage buttons */
-                .stage-button {
-                    background-color: white;
-                    border: 1px solid var(--border-color);
+                .stTextInput > div > div:hover,
+                .stTextInput > div > div:focus-within {
+                    box-shadow: 0 1px 6px rgba(32,33,36,.28);
+                }
+
+                /* Stage buttons container */
+                .stage-buttons {
+                    display: flex;
+                    justify-content: space-between;
+                    margin: 2rem 0;
+                    gap: 1rem;
+                }
+
+                /* Custom button styling */
+                div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button {
+                    background-color: rgb(255, 255, 255);
+                    border: 1px solid #dfe1e5;
                     border-radius: 8px;
-                    padding: 0.75rem;
-                    color: var(--text-color);
+                    padding: 0.75rem 1.5rem;
+                    color: #202124;
+                    font-weight: 500;
+                    cursor: pointer;
                     transition: all 0.2s ease;
                     width: 100%;
-                    margin: 0.25rem 0;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 0.5rem;
                 }
 
-                .stage-button:hover {
-                    border-color: var(--accent-color);
-                    color: var(--accent-color);
-                    transform: translateY(-1px);
+                div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button:hover {
+                    box-shadow: 0 1px 6px rgba(32,33,36,.28);
+                    border-color: rgb(31, 119, 180);
+                    color: rgb(31, 119, 180);
                 }
 
-                .stage-button[data-selected="true"] {
-                    background-color: var(--accent-color);
+                div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button[data-selected="true"] {
+                    background-color: rgb(31, 119, 180);
+                    border-color: rgb(31, 119, 180);
                     color: white;
-                    border-color: var(--accent-color);
                 }
 
                 /* Tab styling */
                 .stTabs {
-                    background: white;
+                    background: #fff;
                     border-radius: 12px;
-                    padding: 1rem;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-                }
-
-                .stTab {
-                    color: var(--text-color);
-                    font-weight: 500;
-                }
-
-                .stTab[aria-selected="true"] {
-                    color: var(--accent-color);
-                    border-bottom-color: var(--accent-color);
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+                    margin-top: 2rem;
                 }
             </style>
         </head>
-        <div class="corporate-container">
-            <div class="logo-section">
-                <h1 class="logo-title">DEEP CREW</h1>
-                <p class="subtitle">
-                    Advanced Research & Innovation Platform
-                </p>
-            </div>
+        <div class="main-container">
+            <div class="logo-title">DEEP CREW</div>
+            <h1 class="main-header">Research & Innovation Hub</h1>
+            <p class="subtitle">
+                Discover insights, analyze patents, and explore funding opportunities with AI-powered research tools
+            </p>
         </div>
     """, unsafe_allow_html=True)
 
-    # Search section
-    with st.container():
-        st.markdown('<div class="search-container">', unsafe_allow_html=True)
-        search_query = st.text_input(
-            "",
-            placeholder="Enter your research topic...",
-            help="Type your research query here",
-            label_visibility="collapsed"
-        )
-        st.markdown('</div>', unsafe_allow_html=True)
+    # Search input with modern styling
+    search_query = st.text_input(
+        "",
+        placeholder="Enter your research topic...",
+        help="Type your research query here",
+        label_visibility="collapsed"
+    )
 
-    # Initialize session state
+    # Initialize session state for selected stages
     if 'selected_stages' not in st.session_state:
         st.session_state.selected_stages = set()
 
-    # Stage selection buttons
+    # Create stage buttons using columns for horizontal layout
     col1, col2, col3, col4, col5 = st.columns(5)
+
     stages = {
-        'research': {'label': 'Research', 'icon': '📚'},
-        'patents': {'label': 'Patents', 'icon': '📋'},
-        'funding': {'label': 'Funding', 'icon': '💰'},
-        'network': {'label': 'Network', 'icon': '🔗'},
-        'compliance': {'label': 'Compliance', 'icon': '✓'}
+        'research': 'Research',
+        'patents': 'Patents',
+        'funding': 'Funding',
+        'network': 'Network',
+        'compliance': 'Compliance'
     }
 
-    for idx, (stage_key, info) in enumerate(stages.items()):
-        with [col1, col2, col3, col4, col5][idx]:
+    columns = [col1, col2, col3, col4, col5]
+
+    for idx, (stage_key, label) in enumerate(stages.items()):
+        with columns[idx]:
             is_selected = stage_key in st.session_state.selected_stages
             if st.button(
-                f"{info['icon']} {info['label']}",
+                label,
                 key=f"btn_{stage_key}",
-                help=f"Click to select {info['label']}",
+                help=f"Click to select {label}",
                 use_container_width=True,
                 type="secondary" if is_selected else "primary"
             ):
@@ -174,22 +170,23 @@ def main():
 
     selected_stages = list(st.session_state.selected_stages)
 
+    # Create tabs for selected stages if we have a search query
     if search_query:
         if not selected_stages:
             st.warning("Please select at least one research stage to proceed.")
             return
 
+        # Only add Results tab if more than one stage is selected
         if len(selected_stages) > 1:
             selected_stages.append("results")
 
-        tabs = st.tabs([stages[stage]['icon'] + ' ' + stage.capitalize() 
-                       if stage in stages else '📊 ' + stage.capitalize() 
-                       for stage in selected_stages])
+        # Create tabs with modern styling
+        tabs = st.tabs([stage.capitalize() for stage in selected_stages])
 
         for idx, tab in enumerate(tabs):
             with tab:
                 if selected_stages[idx] == "research":
-                    with st.spinner("🔍 Analyzing research papers..."):
+                    with st.spinner("🔍 Analyzing..."):
                         openalex_client = OpenAlexClient()
                         ai_analyzer = AIAnalyzer()
 
@@ -211,7 +208,7 @@ def main():
                             render_analysis_section(st.session_state.analysis)
 
                 elif selected_stages[idx] == "patents":
-                    with st.spinner("🔍 Analyzing patents..."):
+                    with st.spinner("🔍 Searching patents..."):
                         patent_client = PatentSearchClient()
                         if search_query != st.session_state.get('last_query', '') or st.session_state.get('patent_results') is None:
                             patent_results = patent_client.search_patents(search_query)
@@ -228,23 +225,10 @@ def main():
                             render_patent_results(st.session_state.patent_results, st.session_state.patent_analysis)
 
                 elif selected_stages[idx] == "results":
-                    if (st.session_state.get('search_results') and 
-                        st.session_state.get('patent_results') and 
-                        'combined_analysis' not in st.session_state):
-                        with st.spinner("🔄 Generating comprehensive analysis..."):
-                            ai_analyzer = AIAnalyzer()
-                            funding_results = st.session_state.get('funding_results', [])
-                            st.session_state.combined_analysis = ai_analyzer.analyze_combined_results(
-                                st.session_state.search_results,
-                                st.session_state.patent_results,
-                                funding_results
-                            )
-
-                    combined_analysis = st.session_state.get('combined_analysis', {})
                     render_combined_results(
-                        st.session_state.get('search_results', []),
-                        st.session_state.get('patent_results', []),
-                        combined_analysis
+                        st.session_state.get('search_results') or [],
+                        st.session_state.get('patent_results') or [],
+                        st.session_state.combined_analysis if 'combined_analysis' in st.session_state else None
                     )
 
                 elif selected_stages[idx] == "network":
