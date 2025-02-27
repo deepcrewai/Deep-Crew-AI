@@ -16,7 +16,6 @@ from funding import render_funding_section, FundingAgent
 def main():
     setup_page()
 
-    # Add modern styling
     st.markdown("""
         <head>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -73,6 +72,8 @@ def main():
                     justify-content: space-between;
                     gap: 1rem;
                     margin: 2rem 0;
+                    flex-direction: row;
+                    flex-wrap: nowrap;
                 }
 
                 .stage-button {
@@ -87,6 +88,10 @@ def main():
                     flex: 1;
                     text-align: center;
                     text-decoration: none;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-width: 120px;
                 }
 
                 .stage-button:hover {
@@ -114,8 +119,15 @@ def main():
             </style>
             <script>
                 function toggleStage(stageKey) {
+                    const buttons = document.querySelectorAll('.stage-button');
+                    buttons.forEach(button => {
+                        button.classList.remove('selected'); // Remove selection from all buttons
+                    });
                     const button = document.querySelector(`[data-stage="${stageKey}"]`);
-                    button.classList.toggle('selected');
+                    if (button) {
+                        button.classList.add('selected'); // Add selection to the clicked button
+                    }
+
                     // Send message to Streamlit
                     window.parent.postMessage({
                         type: 'streamlit:setComponentValue',
