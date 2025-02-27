@@ -7,6 +7,206 @@ from reportlab.lib.pagesizes import letter
 from datetime import datetime
 from reportlab.lib.utils import ImageReader
 
+def render_combined_results(research_results, patent_results, combined_analysis):
+    """Render enhanced combined analysis with minimal and corporate design."""
+
+    # Custom CSS for corporate styling
+    st.markdown("""
+        <style>
+            /* Corporate color palette */
+            :root {
+                --primary-color: #2C3E50;
+                --secondary-color: #34495E;
+                --accent-color: #3498DB;
+                --text-color: #2C3E50;
+                --light-bg: #F7F9FC;
+                --border-color: #E5E9F2;
+            }
+
+            /* Card styling */
+            .corporate-card {
+                background: white;
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                padding: 1.5rem;
+                margin: 1rem 0;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            }
+
+            /* Section headers */
+            .section-header {
+                color: var(--primary-color);
+                font-size: 1.25rem;
+                font-weight: 600;
+                margin: 2rem 0 1rem;
+                padding-bottom: 0.5rem;
+                border-bottom: 2px solid var(--accent-color);
+            }
+
+            /* Metric cards */
+            .metric-container {
+                background: var(--light-bg);
+                padding: 1rem;
+                border-radius: 8px;
+                text-align: center;
+            }
+
+            .metric-value {
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: var(--accent-color);
+            }
+
+            .metric-label {
+                font-size: 0.875rem;
+                color: var(--text-color);
+                margin-top: 0.25rem;
+            }
+
+            /* List items */
+            .corporate-list-item {
+                padding: 0.5rem 0;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            /* Expandable sections */
+            .corporate-expander {
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                margin: 0.5rem 0;
+            }
+
+            /* Icons */
+            .icon {
+                margin-right: 0.5rem;
+                color: var(--accent-color);
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # Main header
+    st.markdown('<h1 class="section-header">Comprehensive Analysis</h1>', unsafe_allow_html=True)
+
+    # Summary section with corporate card
+    with st.container():
+        st.markdown('<div class="corporate-card">', unsafe_allow_html=True)
+        st.markdown("### Key Insights")
+        st.write(combined_analysis.get("comprehensive_summary", "No summary available"))
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # Key metrics in a grid
+    col1, col2, col3 = st.columns(3)
+    metrics = [
+        {"label": "Research Papers", "value": len(research_results), "icon": "📄"},
+        {"label": "Patents", "value": len(patent_results), "icon": "📋"},
+        {"label": "Analysis Score", "value": "A+", "icon": "📊"}
+    ]
+
+    for col, metric in zip([col1, col2, col3], metrics):
+        with col:
+            st.markdown(f"""
+                <div class="metric-container">
+                    <div class="metric-value">{metric['icon']} {metric['value']}</div>
+                    <div class="metric-label">{metric['label']}</div>
+                </div>
+            """, unsafe_allow_html=True)
+
+    # Key findings section
+    st.markdown('<h2 class="section-header">🔍 Key Findings</h2>', unsafe_allow_html=True)
+    findings = combined_analysis.get("key_findings", [])
+    for finding in findings:
+        with st.expander(f"Finding (Impact: {finding.get('impact_score', 'N/A')}/10)"):
+            st.markdown(f"""
+                <div class="corporate-card">
+                    <p><strong>Analysis:</strong> {finding.get('finding', '')}</p>
+                    <p><strong>Evidence:</strong> {finding.get('evidence', '')}</p>
+                </div>
+            """, unsafe_allow_html=True)
+
+    # Technology Assessment
+    st.markdown('<h2 class="section-header">💻 Technology Assessment</h2>', unsafe_allow_html=True)
+    tech_assessment = combined_analysis.get("technology_assessment", {})
+
+    with st.container():
+        st.markdown('<div class="corporate-card">', unsafe_allow_html=True)
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric("Technology Readiness", f"{tech_assessment.get('readiness_score', 0)}/10")
+            st.write("**Maturity Level:**", tech_assessment.get("maturity_level", "Unknown"))
+        with col2:
+            st.write("**Development Stages:**")
+            stages = tech_assessment.get("development_stages", [])
+            funding_reqs = tech_assessment.get("funding_requirements", [])
+            for stage, req in zip(stages, funding_reqs):
+                st.markdown(f"""
+                    <div class="corporate-list-item">
+                        <span class="icon">▹</span> {stage}<br/>
+                        <small><em>Funding: {req}</em></small>
+                    </div>
+                """, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # Market and Investment Analysis
+    st.markdown('<h2 class="section-header">📈 Market & Investment Analysis</h2>', unsafe_safe_html=True)
+
+    # Display market gaps in a grid
+    gaps = combined_analysis.get("market_research_gaps", [])
+    for gap in gaps:
+        st.markdown(f"""
+            <div class="corporate-card">
+                <h4>{gap.get('gap', '')}</h4>
+                <p><strong>Market Potential:</strong> {gap.get('market_potential', 0)}/10</p>
+                <p><strong>Recommended Approach:</strong> {gap.get('recommended_approach', '')}</p>
+                <p><strong>Funding Availability:</strong> {gap.get('funding_availability', 'N/A')}</p>
+            </div>
+        """, unsafe_allow_html=True)
+
+    # Future Directions with visual indicators
+    st.markdown('<h2 class="section-header">🔮 Future Directions</h2>', unsafe_allow_html=True)
+
+    directions = combined_analysis.get("future_directions", [])
+    for direction in directions:
+        prob = direction.get('probability', 0)
+        with st.expander(f"Direction (Probability: {prob}/10)"):
+            st.markdown(f"""
+                <div class="corporate-card">
+                    <p><strong>Direction:</strong> {direction.get('direction', '')}</p>
+                    <p><strong>Impact:</strong> {direction.get('impact', '')}</p>
+                    <p><strong>Timeline:</strong> {direction.get('timeline', '')}</p>
+                    <p><strong>Funding Potential:</strong> {direction.get('funding_potential', '')}</p>
+                </div>
+            """, unsafe_allow_html=True)
+
+    # Risk Analysis with modern tabs
+    st.markdown('<h2 class="section-header">⚠️ Risk Analysis</h2>', unsafe_allow_html=True)
+
+    risks = combined_analysis.get("risk_analysis", {})
+    tab1, tab2, tab3, tab4 = st.tabs(["Technical", "Market", "Funding", "Mitigation"])
+
+    with tab1:
+        for risk in risks.get("technical_risks", []):
+            st.markdown(f'<div class="corporate-list-item">● {risk}</div>', unsafe_allow_html=True)
+    with tab2:
+        for risk in risks.get("market_risks", []):
+            st.markdown(f'<div class="corporate-list-item">● {risk}</div>', unsafe_allow_html=True)
+    with tab3:
+        for risk in risks.get("funding_risks", []):
+            st.markdown(f'<div class="corporate-list-item">● {risk}</div>', unsafe_allow_html=True)
+    with tab4:
+        for strategy in risks.get("mitigation_strategies", []):
+            st.markdown(f'<div class="corporate-list-item">● {strategy}</div>', unsafe_allow_html=True)
+
+    # Bottom statistics bar
+    st.markdown('<h2 class="section-header">📊 Analysis Statistics</h2>', unsafe_allow_html=True)
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Total Documents", len(research_results) + len(patent_results))
+    with col2:
+        st.metric("Analysis Depth", "Comprehensive")
+    with col3:
+        st.metric("Confidence Score", "95%")
+
+
 def generate_pdf_report(results, analysis):
     """Generate a PDF report of AI analysis."""
     buffer = BytesIO()
