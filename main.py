@@ -35,9 +35,9 @@ def main():
                 }
 
                 .logo-title {
-                    font-size: 1.75rem;
+                    font-size: 2.75rem;
                     font-weight: 600;
-                    color: #1a73e8;
+                    color: black;
                     margin-bottom: 0.5rem;
                 }
 
