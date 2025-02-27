@@ -79,7 +79,7 @@ def main():
 
                 /* Custom button styling */
                 div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button {
-                    background-color: white;
+                    background-color: rgb(255, 255, 255);
                     border: 1px solid #dfe1e5;
                     border-radius: 8px;
                     padding: 0.75rem 1.5rem;
@@ -96,13 +96,13 @@ def main():
 
                 div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button:hover {
                     box-shadow: 0 1px 6px rgba(32,33,36,.28);
-                    border-color: #1a73e8;
-                    color: #1a73e8;
+                    border-color: rgb(31, 119, 180);
+                    color: rgb(31, 119, 180);
                 }
 
                 div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button[data-selected="true"] {
-                    background-color: #1a73e8;
-                    border-color: #1a73e8;
+                    background-color: rgb(31, 119, 180);
+                    border-color: rgb(31, 119, 180);
                     color: white;
                 }
 
