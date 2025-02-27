@@ -32,12 +32,22 @@ def main():
         <head>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
             <style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;500;600;700&display=swap');
+
                 /* Accessibility Menu Styles */
+                #accessibility-container {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    z-index: 999999;
+                }
+
                 .accessibility-button {
                     position: fixed;
                     top: 0.5rem;
                     left: 1rem;
-                    z-index: 99999;
+                    z-index: 999999;
                     background: none;
                     border: none;
                     cursor: pointer;
@@ -66,7 +76,7 @@ def main():
                     border-radius: 8px;
                     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
                     padding: 15px;
-                    z-index: 99998;
+                    z-index: 999998;
                     display: none;
                     min-width: 200px;
                 }
@@ -95,9 +105,94 @@ def main():
                     text-align: center;
                 }
 
-                /* Remaining styles... */
-                .st-bt {
-                    background-color: transparent !important;
+                /* Main Container Styles */
+                .main-container {
+                    max-width: 800px;
+                    margin: 3rem auto;
+                    text-align: center;
+                    font-family: 'Inter', sans-serif;
+                }
+
+                .logo-title {
+                    font-size: 2.75rem;
+                    font-weight: 700;
+                    padding: 1.25rem 0px 1rem;
+                    font-family: "Source Sans Pro", sans-serif;
+                    color: black;
+                }
+
+                .main-header {
+                    font-size: 2.5rem;
+                    font-weight: 500;
+                    color: #202124;
+                    margin: 1rem 0;
+                    font-family: 'Inter', sans-serif;
+                }
+
+                .subtitle {
+                    font-size: 1.1rem;
+                    color: #5f6368;
+                    margin-bottom: 2rem;
+                }
+
+                /* Search box styling */
+                .stTextInput > div > div {
+                    background-color: #fff;
+                    border-radius: 24px !important;
+                    border: none !important;
+                    box-shadow: none;
+                    padding: 0 1rem;
+                    transition: all 0.3s ease;
+                }
+
+                .stTextInput > div > div:hover,
+                .stTextInput > div > div:focus-within {
+                    box-shadow: 0 1px 6px rgba(32,33,36,.28);
+                }
+
+                /* Stage buttons container */
+                .stage-buttons {
+                    display: flex;
+                    justify-content: space-between;
+                    margin: 2rem 0;
+                    gap: 1rem;
+                }
+
+                /* Custom button styling */
+                div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button {
+                    background-color: rgb(255, 255, 255);
+                    border: 1px solid #dfe1e5;
+                    border-radius: 8px;
+                    padding: 0.75rem 1.5rem;
+                    color: #202124;
+                    font-weight: 500;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    width: 100%;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 0.5rem;
+                }
+
+                div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button:hover {
+                    box-shadow: 0 1px 6px rgba(32,33,36,.28);
+                    border-color: rgb(31, 119, 180);
+                    color: rgb(31, 119, 180);
+                }
+
+                div[data-testid="stHorizontalBlock"] > div[data-testid="column"] button[data-selected="true"] {
+                    background-color: rgb(31, 119, 180);
+                    border-color: rgb(31, 119, 180);
+                    color: white;
+                }
+
+                /* Tab styling */
+                .stTabs {
+                    background: #fff;
+                    border-radius: 12px;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+                    margin-top: 2rem;
                 }
 
                 /* High Contrast Mode */
@@ -159,8 +254,7 @@ def main():
                 <div class="accessibility-option" onclick="document.body.classList.toggle('readable-font')">
                     <i class="fas fa-font"></i> Readable Font
                 </div>
-                <div class="accessibility-option" onclick="
-                    ['high-contrast', 'negative-contrast', 'light-background', 'links-underline', 'readable-font'].forEach(c => document.body.classList.remove(c))">
+                <div class="accessibility-option" onclick="['high-contrast', 'negative-contrast', 'light-background', 'links-underline', 'readable-font'].forEach(c => document.body.classList.remove(c))">
                     <i class="fas fa-undo"></i> Reset
                 </div>
             </div>
