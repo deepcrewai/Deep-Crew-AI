@@ -22,6 +22,10 @@ def main():
             <style>
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
+                .st-bt {
+                    background-color: transparent !important;
+                }
+
                 /* Modern styling */
                 .main-container {
                     max-width: 800px;
