@@ -165,7 +165,7 @@ def main():
         )
 
     with col_reset:
-        if st.button("🔄 Sıfırla", help="Aramayı ve seçili aşamaları sıfırla"):
+        if st.button("🔄 Reset", help="Aramayı ve seçili aşamaları sıfırla"):
             reset_app()
             st.rerun()
 
