@@ -13,6 +13,13 @@ from components import (
 from utils import setup_page
 from funding import render_funding_section, FundingAgent
 
+def reset_app():
+    """Reset all session state variables"""
+    for key in ['selected_stages', 'search_results', 'analysis', 'last_query', 
+                'patent_results', 'patent_analysis', 'combined_analysis']:
+        if key in st.session_state:
+            del st.session_state[key]
+
 def main():
     setup_page()
 
@@ -72,6 +79,25 @@ def main():
                     box-shadow: 0 1px 6px rgba(32,33,36,.28);
                 }
 
+                /* Reset button styling */
+                .reset-button {
+                    position: absolute;
+                    top: 1rem;
+                    right: 1rem;
+                    padding: 0.5rem 1rem;
+                    background-color: #f8f9fa;
+                    border: 1px solid #dfe1e5;
+                    border-radius: 8px;
+                    color: #5f6368;
+                    font-size: 0.9rem;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+
+                .reset-button:hover {
+                    background-color: #f1f3f4;
+                    box-shadow: 0 1px 3px rgba(32,33,36,.12);
+                }
                 /* Stage buttons container */
                 .stage-buttons {
                     display: flex;
@@ -127,15 +153,22 @@ def main():
         </div>
     """, unsafe_allow_html=True)
 
-    # Search input with modern styling
-    search_query = st.text_input(
-        "",
-        placeholder="Enter your research topic...",
-        help="Type your research query here",
-        label_visibility="collapsed"
-    )
+    # Add reset button
+    col_search, col_reset = st.columns([6, 1])
 
-    # Initialize session state for selected stages
+    with col_search:
+        search_query = st.text_input(
+            "Search",
+            placeholder="Enter your research topic...",
+            help="Type your research query here",
+            label_visibility="collapsed"
+        )
+
+    with col_reset:
+        if st.button("🔄 Sıfırla", help="Aramayı ve seçili aşamaları sıfırla"):
+            reset_app()
+            st.rerun()
+
     if 'selected_stages' not in st.session_state:
         st.session_state.selected_stages = set()
 
@@ -225,10 +258,13 @@ def main():
                             render_patent_results(st.session_state.patent_results, st.session_state.patent_analysis)
 
                 elif selected_stages[idx] == "results":
+                    if not st.session_state.get('combined_analysis'):
+                        st.session_state.combined_analysis = {}
+
                     render_combined_results(
                         st.session_state.get('search_results') or [],
                         st.session_state.get('patent_results') or [],
-                        st.session_state.combined_analysis if 'combined_analysis' in st.session_state else None
+                        st.session_state.combined_analysis
                     )
 
                 elif selected_stages[idx] == "network":
