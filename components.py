@@ -307,6 +307,26 @@ def render_search_section(results):
         .paper-link:hover {
             text-decoration: underline;
         }
+        .info-icon {
+            cursor: pointer;
+            color: #5f6368;
+            font-size: 0.9rem;
+            margin-left: 4px;
+        }
+        .info-tooltip {
+            display: none;
+            position: absolute;
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 300px;
+            z-index: 1000;
+        }
+        .info-icon:hover + .info-tooltip {
+            display: block;
+        }
         </style>
     """, unsafe_allow_html=True)
 
@@ -340,7 +360,16 @@ def render_search_section(results):
                 <div class="paper-citation">{format_citation(paper)}</div>
                 <div class="paper-abstract">{abstract}</div>
                 <div class="paper-metrics">
-                    <span>Similarity Score: {similarity:.2f}</span>
+                    <span>
+                        Similarity Score: {similarity:.2f}
+                        <span class="info-icon">ℹ️
+                            <span class="info-tooltip">
+                                The Similarity Score (0-1) indicates how well this paper matches your search query.
+                                A higher score means the paper is more relevant to your search terms.
+                                The score considers both title (70%) and abstract (30%) matches.
+                            </span>
+                        </span>
+                    </span>
                     <span>Citations: {paper.get('cited_by_count', 0)}</span>
                     {'<a href="' + paper['url'] + '" class="paper-link" target="_blank">View Paper</a>' if paper.get('url') else ''}
                 </div>
