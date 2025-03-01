@@ -10,7 +10,8 @@ class PatentSearchClient:
         self.base_url = "https://pqai-api.p.rapidapi.com"
         self.headers = {
             "X-RapidAPI-Key": os.environ.get("RAPIDAPI_KEY"),
-            "X-RapidAPI-Host": "pqai-api.p.rapidapi.com"
+            "X-RapidAPI-Host": "pqai-api.p.rapidapi.com",
+            "Content-Type": "application/json"
         }
         self.ai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
         self.model = "gpt-4o"
@@ -18,51 +19,60 @@ class PatentSearchClient:
     def search_patents(self, query: str) -> List[Dict]:
         """Search patents related to the query."""
         try:
+            # Print request details for debugging
+            print(f"Searching patents with query: {query}")
+            print(f"Using headers: {self.headers}")
+
+            payload = {
+                "question": query,
+                "limit": 10
+            }
+            print(f"Request payload: {payload}")
+
             response = requests.post(
                 f"{self.base_url}/patent/search",
                 headers=self.headers,
-                json={
-                    "question": query,
-                    "limit": 10
-                },
+                json=payload,
                 timeout=30
             )
 
-            print(f"Patent search response status: {response.status_code}")  # Debug log
+            print(f"Patent search response status: {response.status_code}")
+            print(f"Response headers: {response.headers}")
+            print(f"Response content: {response.text[:500]}")  # Print first 500 chars of response
 
             if response.status_code == 200:
-                results = response.json().get("patents", [])
-                print(f"Found {len(results)} patent results")  # Debug log
-                print("Raw API response structure:", json.dumps(results[0] if results else {}, indent=2))
+                data = response.json()
+                results = data.get("patents", [])
+                print(f"Found {len(results)} patent results")
+
+                if results:
+                    print("First result structure:", json.dumps(results[0], indent=2))
 
                 formatted_results = []
                 for result in results:
-                    # Get publication number
-                    publication_id = result.get('publication_number')
-
-                    # Extract inventors
-                    inventors = result.get('inventors', [])
-                    if isinstance(inventors, str):
-                        inventors = [inv.strip() for inv in inventors.split(',')]
-                    elif not isinstance(inventors, list):
-                        inventors = []
+                    # Extract publication number and clean it
+                    publication_id = result.get('publication_number', '')
+                    if publication_id:
+                        # Remove any whitespace or special characters
+                        publication_id = ''.join(filter(str.isalnum, publication_id))
 
                     formatted_result = {
                         'patent_id': publication_id,
                         'title': result.get('title', 'Untitled Patent'),
                         'abstract': result.get('abstract', 'No abstract available'),
                         'filing_date': result.get('filing_date', 'N/A'),
-                        'inventors': ', '.join(inventors) if inventors else 'No inventors listed',
+                        'inventors': result.get('inventors', 'No inventors listed'),
                         'url': f"https://patents.google.com/patent/{publication_id}" if publication_id else None
                     }
 
-                    print(f"Processed patent ID: {formatted_result['patent_id']}")  # Debug log
+                    print(f"Processed patent ID: {formatted_result['patent_id']}")
                     formatted_results.append(formatted_result)
 
                 return formatted_results
             else:
-                print(f"Error searching patents: {response.status_code}, {response.text}")
-                return []
+                error_msg = f"Error searching patents: {response.status_code}, {response.text}"
+                print(error_msg)
+                raise Exception(error_msg)
 
         except Exception as e:
             print(f"Error in patent search: {str(e)}")
@@ -71,15 +81,13 @@ class PatentSearchClient:
     def analyze_patents(self, patents: List[Dict]) -> Dict:
         """Analyze patent results using AI."""
         try:
-            # Prepare data for analysis
             patent_data = [
                 f"Patent ID: {p['patent_id']}\nTitle: {p['title']}\nAbstract: {p['abstract']}\nFiling Date: {p['filing_date']}\nInventors: {p['inventors']}"
                 for p in patents
             ]
 
-            print("Sending patents to OpenAI for analysis...")  # Debug log
+            print("Sending patents to OpenAI for analysis...")
 
-            # Generate analysis using OpenAI
             response = self.ai_client.chat.completions.create(
                 model=self.model,
                 messages=[{
@@ -99,7 +107,7 @@ class PatentSearchClient:
             )
 
             analysis = json.loads(response.choices[0].message.content)
-            print("Successfully received AI analysis")  # Debug log
+            print("Successfully received AI analysis")
             return analysis
 
         except Exception as e:
