@@ -244,51 +244,6 @@ def render_search_section(results):
     """Render the modernized search results section."""
     metrics = calculate_metrics(results)
 
-    # Modern metrics cards
-    st.markdown("""
-        <style>
-        .metric-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-            text-align: center;
-            transition: all 0.2s ease;
-        }
-        .metric-card:hover {
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-            transform: translateY(-2px);
-        }
-        .metric-value {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #1a73e8;
-            margin: 0.5rem 0;
-        }
-        .metric-label {
-            font-size: 0.9rem;
-            color: #5f6368;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-
-    col1, col2, col3, col4 = st.columns(4)
-    metrics_data = [
-        {"label": "Total Papers", "value": metrics["total_papers"]},
-        {"label": "Total Citations", "value": metrics["total_citations"]},
-        {"label": "Average Year", "value": metrics["avg_year"]},
-        {"label": "Average Citations", "value": metrics["avg_citations"]}
-    ]
-
-    for col, metric in zip([col1, col2, col3, col4], metrics_data):
-        with col:
-            st.markdown(f"""
-                <div class="metric-card">
-                    <div class="metric-value">{metric['value']}</div>
-                    <div class="metric-label">{metric['label']}</div>
-                </div>
-            """, unsafe_allow_html=True)
-
     # Modern results header with export button
     st.markdown("""
         <style>
@@ -318,7 +273,7 @@ def render_search_section(results):
         }
         </style>
         <div class="results-header">
-            <div class="results-title">Search Results</div>
+            <div class="results-title">Search Results ({len(results)})</div>
         </div>
     """, unsafe_allow_html=True)
 
