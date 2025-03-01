@@ -83,7 +83,7 @@ def main():
         col1, col2, col3, col4, col5 = st.columns(5)
 
         stages = {
-            'research': 'Litarature',
+            'research': 'Literature',
             'patents': 'Patent',
             'funding': 'Funding',
             'network': 'Collabration',
