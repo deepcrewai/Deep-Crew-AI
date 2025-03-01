@@ -135,27 +135,32 @@ def main():
                                 elsevier_client = ElsevierClient()
                                 ai_analyzer = AIAnalyzer()
 
-                                if search_query != st.session_state.get('last_query', ''):
-                                    # Get results from ScienceDirect
-                                    results = elsevier_client.search(search_query)
+                                try:
+                                    if search_query != st.session_state.get('last_query', ''):
+                                        # Get results from ScienceDirect
+                                        results = elsevier_client.search(search_query)
 
-                                    if results:
-                                        st.session_state.search_results = results
-                                        st.session_state.analysis = ai_analyzer.analyze_results(results)
-                                        st.session_state.last_query = search_query
-                                    else:
-                                        st.warning("No results found. Try different terms.")
-                                        st.session_state.search_results = None
-                                        st.session_state.analysis = None
+                                        if results:
+                                            st.session_state.search_results = results
+                                            st.session_state.analysis = ai_analyzer.analyze_results(results)
+                                            st.session_state.last_query = search_query
+                                        else:
+                                            st.warning("No results found in ScienceDirect. Try different search terms or check if you have access to the API.")
+                                            st.session_state.search_results = None
+                                            st.session_state.analysis = None
 
-                                # Create sub-tabs for Documents and AI Analysis
-                                doc_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
+                                    # Create sub-tabs for Documents and AI Analysis
+                                    doc_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
 
-                                if st.session_state.get('search_results'):
-                                    with doc_tab:
-                                        render_search_section(st.session_state.search_results)
-                                    with analysis_tab:
-                                        render_analysis_section(st.session_state.analysis)
+                                    if st.session_state.get('search_results'):
+                                        with doc_tab:
+                                            render_search_section(st.session_state.search_results)
+                                        with analysis_tab:
+                                            render_analysis_section(st.session_state.analysis)
+
+                                except Exception as e:
+                                    st.error(f"Error searching literature: {str(e)}")
+                                    logger.error(f"Literature search error: {str(e)}", exc_info=True)
 
                         elif selected_stages[idx] == "patents":
                             with st.spinner("🔍 Searching patents..."):
