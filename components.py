@@ -498,8 +498,36 @@ def render_patent_results(results, analysis):
                 unique_inventors.update(inventors_list)
         st.metric("Inventors", len(unique_inventors))
 
-    # Display results header
-    st.subheader("Patent Results")
+    # Display results header with export button
+    col1, col2 = st.columns([2, 3])
+    with col1:
+        st.subheader("Patent Results")
+    with col2:
+        # Right-align the button using a container and custom CSS
+        button_container = st.container()
+        with button_container:
+            st.markdown(
+                """
+                <style>
+                div[data-testid="stDownloadButton"] {
+                    display: flex;
+                    justify-content: flex-end;
+                }
+                </style>
+                """, 
+                unsafe_allow_html=True
+            )
+            if 'patent_pdf_generated' not in st.session_state:
+                st.session_state.patent_pdf_generated = False
+
+            st.download_button(
+                label="📑 Export Results as PDF",
+                data=generate_patent_pdf_report(results, analysis),
+                file_name="patent_report.pdf",
+                mime="application/pdf",
+                key="patent_pdf_download"
+            )
+            st.session_state.patent_pdf_generated = False
 
     # Display patents
     for patent in results:
@@ -516,48 +544,59 @@ def render_patent_results(results, analysis):
             {f"[View Details]({patent['url']})" if patent.get('url') else ''}
             """)
 
-    # Create AI Analysis section with export buttons
-    st.header("AI Analysis")
-
-    # Add export buttons side by side
-    col1, col2 = st.columns(2)
+def render_analysis_section(analysis):
+    """Render the AI analysis section."""
+    # Header with export button
+    col1, col2 = st.columns([2, 1])
     with col1:
-        st.download_button(
-            label="📑 Export Results as PDF",
-            data=generate_patent_pdf_report(results, analysis),
-            file_name="patent_report.pdf",
-            mime="application/pdf",
-            key="patent_pdf_download"
-        )
+        st.header("AI Analysis")
     with col2:
         st.download_button(
-            label="📊 Export Analysis as PDF",
+            label="📑 Export Analysis as PDF",
             data=generate_pdf_report([], analysis),
-            file_name="patent_analysis.pdf",
+            file_name="research_analysis.pdf",
             mime="application/pdf",
-            key="patent_analysis_pdf_download"
+            key="pdf_download"
         )
 
-    if analysis:
-        # Display Summary
-        st.write("### Summary")
-        st.write(analysis.get('summary', 'No summary available'))
+    # Summary
+    st.subheader("Research Summary")
+    st.write(analysis.get("summary", "No summary available"))
 
-        # Display Trends
-        st.write("### Trends")
-        for trend in analysis.get('trends', []):
-            st.write(f"• {trend}")
+    # Trends
+    st.subheader("Research Trends")
+    trends = analysis.get("trends", {})
+    col1, col2 = st.columns(2)
+    with col1:
+        st.write("Emerging Topics")
+        for topic in trends.get("emerging_topics", []):
+            st.write(f"• {topic}")
+    with col2:
+        st.write("Declining Topics")
+        for topic in trends.get("declining_topics", []):
+            st.write(f"• {topic}")
 
-        # Display Opportunities
-        st.write("### Opportunities")
-        for opportunity in analysis.get('opportunities', []):
-            st.write(f"• {opportunity}")
+    # Research Gaps
+    st.subheader("Research Gaps")
+    for gap in analysis.get("gaps", []):
+        st.write(f"• {gap}")
 
-        # Display Competition Analysis
-        st.write("### Competition Analysis")
-        st.write(analysis.get('competition', 'No competition analysis available'))
-    else:
-        st.info("AI analysis not available. Please try searching again.")
+    # Keyword Suggestions
+    st.subheader("Keyword Suggestions")
+    st.write("Consider using these keywords to refine your search:")
+    keywords = analysis.get("keywords", [])
+    if keywords:
+        cols = st.columns(3)
+        for i, keyword in enumerate(keywords):
+            cols[i % 3].write(f"• {keyword}")
+
+    # Complexity Assessment
+    st.subheader("Complexity Assessment")
+    complexity = analysis.get("complexity", {})
+    score = complexity.get("complexity_score", 0)
+    st.progress(score / 10)
+    st.write(f"Complexity Score: {score}/10")
+    st.write(complexity.get("explanation", "No explanation available"))
 
 def handle_pdf_export(results, analysis):
     """This function is now deprecated as the export functionality has been moved to render_search_section"""
@@ -681,57 +720,3 @@ def render_combined_results(research_results, patent_results, combined_analysis)
     with col3:
         total_documents = len(research_results) + len(patent_results)
         st.metric("Total Documents", total_documents)
-
-def render_analysis_section(analysis):
-    """Render the AI analysis section for literature search results."""
-    # Header with export button
-    col1, col2 = st.columns([2, 1])
-    with col1:
-        st.header("AI Analysis")
-    with col2:
-        st.download_button(
-            label="📊 Export Analysis as PDF",
-            data=generate_pdf_report([], analysis),
-            file_name="research_analysis.pdf",
-            mime="application/pdf",
-            key="literature_pdf_download"
-        )
-
-    # Summary
-    st.subheader("Research Summary")
-    st.write(analysis.get("summary", "No summary available"))
-
-    # Trends
-    st.subheader("Research Trends")
-    trends = analysis.get("trends", {})
-    col1, col2 = st.columns(2)
-    with col1:
-        st.write("**Emerging Topics**")
-        for topic in trends.get("emerging_topics", []):
-            st.write(f"• {topic}")
-    with col2:
-        st.write("**Declining Topics**")
-        for topic in trends.get("declining_topics", []):
-            st.write(f"• {topic}")
-
-    # Research Gaps
-    st.subheader("Research Gaps")
-    for gap in analysis.get("gaps", []):
-        st.write(f"• {gap}")
-
-    # Keyword Suggestions
-    st.subheader("Keyword Suggestions")
-    st.write("Consider using these keywords to refine your search:")
-    keywords = analysis.get("keywords", [])
-    if keywords:
-        cols = st.columns(3)
-        for i, keyword in enumerate(keywords):
-            cols[i % 3].write(f"• {keyword}")
-
-    # Complexity Assessment
-    st.subheader("Complexity Assessment")
-    complexity = analysis.get("complexity", {})
-    score = complexity.get("complexity_score", 0)
-    st.progress(score / 10)
-    st.write(f"Complexity Score: {score}/10")
-    st.write(complexity.get("explanation", "No explanation available"))
