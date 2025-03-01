@@ -534,16 +534,13 @@ def render_patent_results(results, analysis):
         with st.expander(f"📄 {patent.get('title', 'Untitled Patent')}"):
             # Create two columns for ID and copy button
             id_col, copy_col = st.columns([3, 1])
+            patent_id = patent.get('patent_id', 'N/A')
+
             with id_col:
-                st.markdown(f"**ID:** {patent.get('patent_id', 'N/A')}")
+                st.markdown(f"**ID:** {patent_id}")
+
             with copy_col:
-                if st.button("📋 Copy ID", key=f"copy_{patent.get('patent_id', 'N/A')}"):
-                    st.write("Copied to clipboard!")
-                    st.markdown(f"""
-                        <script>
-                            navigator.clipboard.writeText("{patent.get('patent_id', 'N/A')}");
-                        </script>
-                        """, unsafe_allow_html=True)
+                st.code(patent_id)  # This makes the ID easily selectable and adds a copy button
 
             st.markdown(f"""
             **Inventors:** {patent.get('inventors', 'N/A')}  
