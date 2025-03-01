@@ -94,7 +94,10 @@ class PatentSearchClient:
                     "content": """As a patent analysis expert, analyze these patents and provide a JSON response with the following structure:
                     {
                         "summary": "A detailed overview of the technology landscape...",
-                        "trends": ["trend1", "trend2", "trend3"],
+                        "trends": {
+                            "emerging_topics": ["trend1", "trend2"],
+                            "declining_topics": ["trend3", "trend4"]
+                        },
                         "opportunities": ["opportunity1", "opportunity2", "opportunity3"],
                         "competition": "A detailed competitive analysis..."
                     }"""
@@ -113,7 +116,10 @@ class PatentSearchClient:
             print(f"Error in patent analysis: {str(e)}")
             return {
                 "summary": f"Error generating analysis: {str(e)}",
-                "trends": [],
+                "trends": {
+                    "emerging_topics": [],
+                    "declining_topics": []
+                },
                 "opportunities": [],
                 "competition": "Analysis unavailable"
             }

@@ -84,7 +84,7 @@ def main():
 
         stages = {
             'research': 'Literature',
-            'patents': 'Patent',
+            'patents': 'Patents',
             'funding': 'Funding',
             'network': 'Collabration',
             'compliance': 'Legal'
