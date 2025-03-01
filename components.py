@@ -258,19 +258,6 @@ def render_search_section(results):
             color: #202124;
             margin-bottom: 1.5rem;
         }
-        </style>
-    """, unsafe_allow_html=True)
-
-    st.markdown(
-        f'<div class="results-header">'
-        f'<div class="results-title">Search Results ({results_count})</div>'
-        f'</div>',
-        unsafe_allow_html=True
-    )
-
-    # Modern paper cards
-    st.markdown("""
-        <style>
         .paper-card {
             background: white;
             border-radius: 12px;
@@ -286,6 +273,11 @@ def render_search_section(results):
             font-size: 1.1rem;
             font-weight: 500;
             color: #202124;
+            margin-bottom: 0.5rem;
+        }
+        .paper-authors {
+            font-size: 0.9rem;
+            color: #5f6368;
             margin-bottom: 0.5rem;
         }
         .paper-citation {
@@ -318,13 +310,36 @@ def render_search_section(results):
         </style>
     """, unsafe_allow_html=True)
 
+    st.markdown(
+        f'<div class="results-header">'
+        f'<div class="results-title">Search Results ({results_count})</div>'
+        f'</div>',
+        unsafe_allow_html=True
+    )
+
     for paper in results:
+        # Get authors from authorships
+        authors = []
+        for authorship in paper.get('authorships', []):
+            if 'author' in authorship and 'display_name' in authorship['author']:
+                authors.append(authorship['author']['display_name'])
+        authors_str = ', '.join(authors) if authors else 'Unknown Authors'
+
+        # Get abstract with proper fallback
+        abstract = paper.get('abstract')
+        if not abstract or abstract.lower() == 'none':
+            abstract = "Abstract is not available for this publication. Please check the full paper for more details."
+
+        similarity = paper.get('similarity_score', 0)
+
         st.markdown(f"""
             <div class="paper-card">
                 <div class="paper-title">{paper.get('title', 'Untitled')}</div>
+                <div class="paper-authors">Authors: {authors_str}</div>
                 <div class="paper-citation">{format_citation(paper)}</div>
-                <div class="paper-abstract">{paper.get('abstract', 'No abstract available')}</div>
+                <div class="paper-abstract">{abstract}</div>
                 <div class="paper-metrics">
+                    <span>Similarity Score: {similarity:.2f}</span>
                     <span>Citations: {paper.get('cited_by_count', 0)}</span>
                     {'<a href="' + paper['url'] + '" class="paper-link" target="_blank">View Paper</a>' if paper.get('url') else ''}
                 </div>
