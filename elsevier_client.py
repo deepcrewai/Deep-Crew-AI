@@ -1,12 +1,16 @@
 import os
 import requests
 from typing import List, Dict
+import logging
+
+logger = logging.getLogger(__name__)
 
 class ElsevierClient:
     def __init__(self):
         self.api_key = os.environ.get("ELSEVIER_API_KEY")
         if not self.api_key:
             raise ValueError("ELSEVIER_API_KEY environment variable is not set")
+        logger.info("Initializing ElsevierClient")
         self.base_url = "https://api.elsevier.com/content/search/sciencedirect"
         self.headers = {
             "X-ELS-APIKey": self.api_key,
@@ -17,8 +21,10 @@ class ElsevierClient:
         """Search for papers in ScienceDirect."""
         try:
             if not query:
+                logger.warning("Empty query provided")
                 return []
 
+            logger.info(f"Searching ScienceDirect for: {query}")
             params = {
                 "query": query,
                 "count": limit,
@@ -28,6 +34,7 @@ class ElsevierClient:
                 "suppressNavLinks": "true"
             }
 
+            logger.debug(f"Making API request to {self.base_url}")
             response = requests.get(
                 self.base_url,
                 headers=self.headers,
@@ -35,8 +42,14 @@ class ElsevierClient:
             )
 
             if response.status_code == 401:
-                print("Authentication failed: Please check your API key")
-                return []
+                logger.error("Authentication failed: Invalid API key")
+                raise ValueError("Invalid API key. Please check your Elsevier API key.")
+            elif response.status_code == 403:
+                logger.error("Authorization failed: Insufficient permissions")
+                raise ValueError("API key does not have sufficient permissions.")
+            elif response.status_code != 200:
+                logger.error(f"API request failed with status code: {response.status_code}")
+                raise ValueError(f"API request failed with status code: {response.status_code}")
 
             response.raise_for_status()
             data = response.json()
@@ -46,8 +59,10 @@ class ElsevierClient:
             entries = data.get("search-results", {}).get("entry", [])
 
             if not entries:
+                logger.info("No results found in API response")
                 return []
 
+            logger.info(f"Found {len(entries)} results")
             for entry in entries:
                 result = {
                     "title": entry.get("dc:title", "Untitled"),
@@ -63,12 +78,16 @@ class ElsevierClient:
                 results.append(result)
 
             return results
+
         except requests.exceptions.RequestException as e:
-            print(f"Error searching ScienceDirect: {str(e)}")
-            return []
+            logger.error(f"Network error while searching ScienceDirect: {str(e)}")
+            raise ValueError(f"Network error while connecting to ScienceDirect: {str(e)}")
+        except ValueError as e:
+            # Re-raise ValueError for authentication/authorization issues
+            raise
         except Exception as e:
-            print(f"Unexpected error: {str(e)}")
-            return []
+            logger.error(f"Unexpected error in search: {str(e)}", exc_info=True)
+            raise ValueError(f"Error searching ScienceDirect: {str(e)}")
 
     def format_authors(self, authors: List[Dict]) -> List[Dict]:
         """Format author information to match our existing schema."""

@@ -132,35 +132,41 @@ def main():
                     try:
                         if selected_stages[idx] == "research":
                             with st.spinner("🔍 Analyzing Literature..."):
-                                elsevier_client = ElsevierClient()
-                                ai_analyzer = AIAnalyzer()
-
                                 try:
-                                    if search_query != st.session_state.get('last_query', ''):
-                                        # Get results from ScienceDirect
-                                        results = elsevier_client.search(search_query)
+                                    elsevier_client = ElsevierClient()
+                                    ai_analyzer = AIAnalyzer()
 
-                                        if results:
-                                            st.session_state.search_results = results
-                                            st.session_state.analysis = ai_analyzer.analyze_results(results)
-                                            st.session_state.last_query = search_query
-                                        else:
-                                            st.warning("No results found in ScienceDirect. Try different search terms or check if you have access to the API.")
+                                    if search_query != st.session_state.get('last_query', ''):
+                                        try:
+                                            # Get results from ScienceDirect
+                                            results = elsevier_client.search(search_query)
+
+                                            if results:
+                                                st.session_state.search_results = results
+                                                st.session_state.analysis = ai_analyzer.analyze_results(results)
+                                                st.session_state.last_query = search_query
+                                            else:
+                                                st.warning("No results found in ScienceDirect for your search terms. Try using different keywords.")
+                                                st.session_state.search_results = None
+                                                st.session_state.analysis = None
+
+                                        except ValueError as e:
+                                            st.error(str(e))
+                                            logger.error(f"ScienceDirect API error: {str(e)}")
                                             st.session_state.search_results = None
                                             st.session_state.analysis = None
 
                                     # Create sub-tabs for Documents and AI Analysis
-                                    doc_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
-
-                                    if st.session_state.get('search_results'):
+                                    if st.session_state.get('search_results') is not None:
+                                        doc_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
                                         with doc_tab:
                                             render_search_section(st.session_state.search_results)
                                         with analysis_tab:
                                             render_analysis_section(st.session_state.analysis)
 
                                 except Exception as e:
-                                    st.error(f"Error searching literature: {str(e)}")
-                                    logger.error(f"Literature search error: {str(e)}", exc_info=True)
+                                    st.error(f"Error in Literature section: {str(e)}")
+                                    logger.error(f"Literature section error: {str(e)}", exc_info=True)
 
                         elif selected_stages[idx] == "patents":
                             with st.spinner("🔍 Searching patents..."):
