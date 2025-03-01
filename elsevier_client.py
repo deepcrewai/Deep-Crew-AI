@@ -18,8 +18,7 @@ class ElsevierClient:
         masked_key = f"{self.api_key[:4]}...{self.api_key[-4:]}" if len(self.api_key) > 8 else "***"
         logger.info(f"Initializing ElsevierClient with API key starting with: {masked_key}")
 
-        # Change the API endpoint to a more stable one
-        self.base_url = "https://api.elsevier.com/content/article/scopus"
+        self.base_url = "https://api.elsevier.com/content/search/scopus"
         self.headers = {
             "X-ELS-APIKey": self.api_key,
             "Accept": "application/json"
@@ -65,10 +64,9 @@ class ElsevierClient:
 
             logger.info(f"Searching Scopus for: {query}")
             params = {
-                "query": query,
+                "query": f"TITLE-ABS-KEY({query})",
                 "count": limit,
-                "field": "title-abs-key",
-                "view": "COMPLETE"
+                "sort": "-citedby-count"
             }
 
             logger.debug(f"Making API request to {self.base_url}")
@@ -93,7 +91,7 @@ class ElsevierClient:
             for entry in entries:
                 result = {
                     "title": entry.get("dc:title", "Untitled"),
-                    "authorships": self.format_authors(entry.get("authors", {}).get("author", [])),
+                    "authorships": self.format_authors(entry.get("author", [])),
                     "publication_year": entry.get("prism:coverDate", "")[:4],
                     "abstract": entry.get("dc:description", "No abstract available"),
                     "url": entry.get("prism:url", ""),
