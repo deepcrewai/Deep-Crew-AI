@@ -59,14 +59,18 @@ class OpenAlexClient:
             return 0
         return SequenceMatcher(None, text1.lower(), text2.lower()).ratio()
 
-    def search(self, query: str, keywords: List[str] = None) -> List[Dict]:
+    def search(self, query: str, keywords: List[str] = None, year_range: tuple = None, citation_range: tuple = None) -> List[Dict]:
         """Search OpenAlex for works matching the query with improved error handling."""
         try:
-            # Base search parameters with minimal filters
+            # Base search parameters with filters
             params = {
                 "search": query,
-                "per_page": 100  # Get more results initially for better relevance filtering
+                "per_page": 100  # Get more results initially for better filtering
             }
+
+            # Add year range filter if provided
+            if year_range:
+                params["filter"] = f"publication_year>={year_range[0]},publication_year<={year_range[1]}"
 
             # First attempt with exact query
             response = self._make_request("works", params)
@@ -121,6 +125,11 @@ class OpenAlexClient:
                     'cited_by_count': paper.get('cited_by_count', 0),
                     'authors': authors
                 }
+
+                # Apply citation range filter if provided
+                if citation_range and (paper_data['cited_by_count'] < citation_range[0] or 
+                                     paper_data['cited_by_count'] > citation_range[1]):
+                    continue
 
                 # Calculate similarity score with more weight on title matches
                 if keywords:
