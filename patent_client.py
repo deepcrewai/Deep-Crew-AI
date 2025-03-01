@@ -7,12 +7,8 @@ import time
 
 class PatentSearchClient:
     def __init__(self):
-        self.base_url = "https://pqai-api.p.rapidapi.com"
-        self.headers = {
-            "X-RapidAPI-Key": os.environ.get("RAPIDAPI_KEY"),
-            "X-RapidAPI-Host": "pqai-api.p.rapidapi.com",
-            "Content-Type": "application/json"
-        }
+        self.base_url = "https://api.projectpq.ai"
+        self.token = os.environ.get("RAPIDAPI_KEY")  # Using the existing environment variable
         self.ai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
         self.model = "gpt-4o"
 
@@ -21,28 +17,30 @@ class PatentSearchClient:
         try:
             # Print request details for debugging
             print(f"Searching patents with query: {query}")
-            print(f"Using headers: {self.headers}")
 
-            payload = {
-                "question": query,
-                "limit": 10
+            # Configure search parameters
+            params = {
+                "q": query,
+                "n": 10,
+                "type": "patent",
+                "after": "2016-01-01",
+                "token": self.token
             }
-            print(f"Request payload: {payload}")
+            print(f"Request params: {params}")
 
-            response = requests.post(
-                f"{self.base_url}/patent/search",
-                headers=self.headers,
-                json=payload,
+            # Make the request
+            response = requests.get(
+                f"{self.base_url}/search/102",
+                params=params,
                 timeout=30
             )
 
             print(f"Patent search response status: {response.status_code}")
-            print(f"Response headers: {response.headers}")
             print(f"Response content: {response.text[:500]}")  # Print first 500 chars of response
 
             if response.status_code == 200:
                 data = response.json()
-                results = data.get("patents", [])
+                results = data.get("results", [])
                 print(f"Found {len(results)} patent results")
 
                 if results:
@@ -50,10 +48,9 @@ class PatentSearchClient:
 
                 formatted_results = []
                 for result in results:
-                    # Extract publication number and clean it
+                    # Extract and clean publication number
                     publication_id = result.get('publication_number', '')
                     if publication_id:
-                        # Remove any whitespace or special characters
                         publication_id = ''.join(filter(str.isalnum, publication_id))
 
                     formatted_result = {
