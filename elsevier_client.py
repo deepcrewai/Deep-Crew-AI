@@ -10,7 +10,14 @@ class ElsevierClient:
         self.api_key = os.environ.get("ELSEVIER_API_KEY")
         if not self.api_key:
             raise ValueError("ELSEVIER_API_KEY environment variable is not set")
-        logger.info("Initializing ElsevierClient")
+
+        # Strip any whitespace from the API key
+        self.api_key = self.api_key.strip()
+
+        # Log a masked version of the API key for debugging
+        masked_key = f"{self.api_key[:4]}...{self.api_key[-4:]}" if len(self.api_key) > 8 else "***"
+        logger.info(f"Initializing ElsevierClient with API key starting with: {masked_key}")
+
         self.base_url = "https://api.elsevier.com/content/search/sciencedirect"
         self.headers = {
             "X-ELS-APIKey": self.api_key,
@@ -43,13 +50,14 @@ class ElsevierClient:
 
             if response.status_code == 401:
                 logger.error("Authentication failed: Invalid API key")
-                raise ValueError("Invalid API key. Please check your Elsevier API key.")
+                raise ValueError("Invalid API key. Please check your Elsevier API key and ensure it has access to ScienceDirect API.")
             elif response.status_code == 403:
                 logger.error("Authorization failed: Insufficient permissions")
-                raise ValueError("API key does not have sufficient permissions.")
+                raise ValueError("API key does not have sufficient permissions. Please ensure your API key has access to ScienceDirect API.")
             elif response.status_code != 200:
                 logger.error(f"API request failed with status code: {response.status_code}")
-                raise ValueError(f"API request failed with status code: {response.status_code}")
+                error_message = response.json().get('error-message', str(response.content))
+                raise ValueError(f"API request failed with status code {response.status_code}: {error_message}")
 
             response.raise_for_status()
             data = response.json()
@@ -66,7 +74,7 @@ class ElsevierClient:
             for entry in entries:
                 result = {
                     "title": entry.get("dc:title", "Untitled"),
-                    "authors": self.format_authors(entry.get("authors", {}).get("author", [])),
+                    "authorships": self.format_authors(entry.get("authors", {}).get("author", [])),
                     "publication_year": entry.get("prism:coverDate", "")[:4],
                     "abstract": entry.get("dc:description", "No abstract available"),
                     "url": entry.get("prism:url", ""),
