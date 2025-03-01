@@ -279,22 +279,11 @@ def render_search_section(results):
     st.markdown(
         f'<div class="results-header">'
         f'<div class="results-title">Search Results ({results_count})</div>'
-        '</div>',
+        f'<div><a href="#" class="export-button">Export as PDF</a></div>'
+        f'</div>',
         unsafe_allow_html=True
     )
 
-    # Export button
-    if 'pdf_generated' not in st.session_state:
-        st.session_state.pdf_generated = False
-
-    st.download_button(
-        label="📑 Export Results as PDF",
-        data=generate_pdf_report(results, st.session_state.analysis),
-        file_name="research_report.pdf",
-        mime="application/pdf",
-        key="pdf_download",
-        use_container_width=False
-    )
 
     # Modern paper cards
     st.markdown("""
