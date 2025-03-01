@@ -272,10 +272,16 @@ def render_search_section(results):
             box-shadow: 0 1px 6px rgba(32,33,36,.28);
         }
         </style>
-        <div class="results-header">
-            <div class="results-title">Search Results ({len(results)})</div>
-        </div>
     """, unsafe_allow_html=True)
+
+    # Display results count separately to ensure proper rendering
+    results_count = len(results) if results else 0
+    st.markdown(
+        f'<div class="results-header">'
+        f'<div class="results-title">Search Results ({results_count})</div>'
+        '</div>',
+        unsafe_allow_html=True
+    )
 
     # Export button
     if 'pdf_generated' not in st.session_state:
@@ -354,6 +360,7 @@ def render_search_section(results):
                 </div>
             </div>
         """, unsafe_allow_html=True)
+
 
 
 def render_patent_results(results, analysis):
