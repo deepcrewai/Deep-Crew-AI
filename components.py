@@ -6,6 +6,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from datetime import datetime
 from reportlab.lib.utils import ImageReader
+from api_client import OpenAlexClient
+from ai_analyzer import AIAnalyzer
 
 def generate_pdf_report(results, analysis):
     """Generate a PDF report of AI analysis."""
