@@ -44,7 +44,7 @@ class PatentSearchClient:
                 formatted_results = []
                 for result in results:
                     # Extract and clean publication number
-                    publication_id = result.get('publication_number', '')
+                    publication_id = result.get('id', '')
                     if publication_id:
                         publication_id = ''.join(filter(str.isalnum, publication_id))
 
@@ -56,12 +56,12 @@ class PatentSearchClient:
                         inventors = 'No inventors listed'
 
                     formatted_result = {
-                        'patent_id': publication_id,
+                        'patent_id': result.get('id', 'N/A'),  # Using 'id' field for patent_id
                         'title': result.get('title', 'Untitled Patent'),
                         'abstract': result.get('abstract', 'No abstract available'),
-                        'filing_date': result.get('filing_date', 'N/A'),
+                        'filing_date': result.get('publication_date', 'N/A'),  # Using 'publication_date' for filing_date
                         'inventors': inventors,
-                        'url': f"https://patents.google.com/patent/{publication_id}" if publication_id else None
+                        'url': result.get('www_link')  # Using 'www_link' for the patent URL
                     }
 
                     print(f"Processed patent ID: {formatted_result['patent_id']}")
