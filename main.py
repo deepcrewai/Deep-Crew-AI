@@ -121,13 +121,16 @@ def main():
                 selected_stages.append("results")
 
             # Create tabs
-            tabs = st.tabs([stage.capitalize() for stage in selected_stages])
+            tabs = st.tabs([
+                stages[stage].capitalize() if stage in stages else stage.capitalize() 
+                for stage in selected_stages
+            ])
 
             for idx, tab in enumerate(tabs):
                 with tab:
                     try:
                         if selected_stages[idx] == "research":
-                            with st.spinner("🔍 Analyzing..."):
+                            with st.spinner("🔍 Analyzing Literature..."):
                                 openalex_client = OpenAlexClient()
                                 ai_analyzer = AIAnalyzer()
 
