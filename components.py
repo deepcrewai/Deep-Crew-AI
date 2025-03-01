@@ -498,10 +498,8 @@ def render_patent_results(results, analysis):
                 unique_inventors.update(inventors_list)
         st.metric("Inventors", len(unique_inventors))
 
-    # Display results header without export button
-    col1, col2 = st.columns([2, 3])
-    with col1:
-        st.subheader("Patent Results")
+    # Display results header
+    st.subheader("Patent Results")
 
     # Create sub-tabs for Patents and AI Analysis
     patent_tab, analysis_tab = st.tabs(["Patents", "AI Analysis"])
