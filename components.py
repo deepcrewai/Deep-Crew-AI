@@ -244,6 +244,23 @@ def render_search_section(results):
     """Render the modernized search results section."""
     # Display results count separately to ensure proper rendering
     results_count = len(results) if results else 0
+    st.markdown("""
+        <style>
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0 1rem;
+        }
+        .results-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #202124;
+            margin-bottom: 1.5rem;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
     st.markdown(
         f'<div class="results-header">'
         f'<div class="results-title">Search Results ({results_count})</div>'
@@ -302,20 +319,17 @@ def render_search_section(results):
     """, unsafe_allow_html=True)
 
     for paper in results:
-        similarity = paper.get('similarity_score', 0)
         st.markdown(f"""
             <div class="paper-card">
                 <div class="paper-title">{paper.get('title', 'Untitled')}</div>
                 <div class="paper-citation">{format_citation(paper)}</div>
                 <div class="paper-abstract">{paper.get('abstract', 'No abstract available')}</div>
                 <div class="paper-metrics">
-                    <span>Similarity: {similarity:.2f}</span>
                     <span>Citations: {paper.get('cited_by_count', 0)}</span>
                     {'<a href="' + paper['url'] + '" class="paper-link" target="_blank">View Paper</a>' if paper.get('url') else ''}
                 </div>
             </div>
         """, unsafe_allow_html=True)
-
 
 def render_patent_results(results, analysis):
     """Render patent search results with export functionality."""
