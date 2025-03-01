@@ -327,8 +327,9 @@ def render_search_section(results):
 
         # Get abstract with proper fallback
         abstract = paper.get('abstract')
-        if not abstract or abstract.lower() == 'none':
-            abstract = "Abstract is not available for this publication. Please check the full paper for more details."
+        if not abstract or abstract.lower() == 'none' or abstract.strip() == '':
+            abstract = """No abstract is available for this publication. 
+            You can access more information about this research by clicking the 'View Paper' link below."""
 
         similarity = paper.get('similarity_score', 0)
 
