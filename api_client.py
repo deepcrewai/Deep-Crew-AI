@@ -88,10 +88,27 @@ class OpenAlexClient:
             # Process and enhance results
             enhanced_results = []
             for paper in results:
-                # Extract and format paper data
-                abstract = paper.get('abstract')
-                if abstract is None or abstract == "":
-                    abstract = "Abstract is not available for this paper. Please refer to the full paper for detailed information."
+                # Extract and format paper data with proper abstract handling
+                abstract = ""
+                abstract_inverted_index = paper.get('abstract_inverted_index')
+                if abstract_inverted_index:
+                    # Reconstruct abstract from inverted index
+                    words = []
+                    for word, positions in abstract_inverted_index.items():
+                        for pos in positions:
+                            while len(words) <= pos:
+                                words.append('')
+                            words[pos] = word
+                    abstract = ' '.join(words).strip()
+
+                if not abstract:
+                    abstract = "No abstract is available for this publication. You can access more information about this research by clicking the 'View Paper' link below."
+
+                # Get authors from authorships
+                authors = []
+                for authorship in paper.get('authorships', []):
+                    if authorship.get('author', {}).get('display_name'):
+                        authors.append(authorship['author']['display_name'])
 
                 paper_data = {
                     'title': paper.get('title', 'Title not found'),
@@ -99,7 +116,10 @@ class OpenAlexClient:
                     'doi': paper.get('doi'),
                     'publication_year': paper.get('publication_year'),
                     'url': f"https://doi.org/{paper.get('doi')}" if paper.get('doi') else None,
-                    'concepts': paper.get('concepts', [])
+                    'concepts': paper.get('concepts', []),
+                    'authorships': paper.get('authorships', []),
+                    'cited_by_count': paper.get('cited_by_count', 0),
+                    'authors': authors
                 }
 
                 # Calculate similarity score with more weight on title matches
@@ -117,7 +137,7 @@ class OpenAlexClient:
 
                 enhanced_results.append(paper_data)
 
-            # Sort only by similarity score
+            # Sort by similarity score
             enhanced_results.sort(key=lambda x: (-x['similarity_score']))
             enhanced_results = enhanced_results[:50]  # Return top 50 most relevant results
 
