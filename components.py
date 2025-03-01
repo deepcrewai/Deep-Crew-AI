@@ -297,13 +297,25 @@ def render_search_section(results):
                 value=(0, max_citations)
             )
 
+            # Similarity score filter
+            similarity_range = st.slider(
+                "Similarity Score",
+                min_value=0.0,
+                max_value=1.0,
+                value=(0.0, 1.0),
+                step=0.01,
+                help="Filter papers based on their relevance to your search query"
+            )
+
     # Filter results based on selected ranges
     filtered_results = [
         paper for paper in results
         if (paper.get('publication_year', 0) >= year_range[0] and 
             paper.get('publication_year', 0) <= year_range[1] and
             paper.get('cited_by_count', 0) >= citation_range[0] and
-            paper.get('cited_by_count', 0) <= citation_range[1])
+            paper.get('cited_by_count', 0) <= citation_range[1] and
+            paper.get('similarity_score', 0) >= similarity_range[0] and
+            paper.get('similarity_score', 0) <= similarity_range[1])
     ]
 
     # Modern paper cards style
