@@ -483,10 +483,51 @@ def render_search_section(results):
 
 def render_patent_results(results, analysis):
     """Render patent search results with export functionality."""
-    # Display results header
+    # Display metrics
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("Patents", len(results))
+    with col2:
+        # Convert inventors to a set of strings before counting unique inventors
+        unique_inventors = set()
+        for patent in results:
+            inventors = patent.get('inventors', '')
+            if isinstance(inventors, str):
+                # Split string of inventors into individual names
+                inventors_list = [inv.strip() for inv in inventors.split(',')]
+                unique_inventors.update(inventors_list)
+        st.metric("Inventors", len(unique_inventors))
+
+    # Display results header with export button
     col1, col2 = st.columns([2, 3])
     with col1:
-        st.subheader(f"Patent Results ({len(results)})")
+        st.subheader("Patent Results")
+    with col2:
+        # Right-align the button using a container and custom CSS
+        button_container = st.container()
+        with button_container:
+            st.markdown(
+                """
+                <style>
+                div[data-testid="stDownloadButton"] {
+                    display: flex;
+                    justify-content: flex-end;
+                }
+                </style>
+                """, 
+                unsafe_allow_html=True
+            )
+            if 'patent_pdf_generated' not in st.session_state:
+                st.session_state.patent_pdf_generated = False
+
+            st.download_button(
+                label="📑 Export Results as PDF",
+                data=generate_patent_pdf_report(results, analysis),
+                file_name="patent_report.pdf",
+                mime="application/pdf",
+                key="patent_pdf_download"
+            )
+            st.session_state.patent_pdf_generated = False
 
     # Display patents
     for patent in results:
@@ -503,18 +544,19 @@ def render_patent_results(results, analysis):
             {f"[View Details]({patent['url']})" if patent.get('url') else ''}
             """)
 
-def render_analysis_section(analysis, results=None):
+def render_analysis_section(analysis):
     """Render the AI analysis section."""
     # Header with export button
-    st.header("AI Analysis")
-
-    if analysis:  # Only show export button if we have analysis data
+    col1, col2 = st.columns([2, 1])
+    with col1:
+        st.header("AI Analysis")
+    with col2:
         st.download_button(
             label="📑 Export Analysis as PDF",
-            data=generate_pdf_report(results or [], analysis),
-            file_name="analysis_report.pdf",
+            data=generate_pdf_report([], analysis),
+            file_name="research_analysis.pdf",
             mime="application/pdf",
-            key="analysis_pdf_download"
+            key="pdf_download"
         )
 
     # Summary
@@ -523,18 +565,38 @@ def render_analysis_section(analysis, results=None):
 
     # Trends
     st.subheader("Research Trends")
-    for trend in analysis.get("trends", []):
-        st.write(f"• {trend}")
+    trends = analysis.get("trends", {})
+    col1, col2 = st.columns(2)
+    with col1:
+        st.write("Emerging Topics")
+        for topic in trends.get("emerging_topics", []):
+            st.write(f"• {topic}")
+    with col2:
+        st.write("Declining Topics")
+        for topic in trends.get("declining_topics", []):
+            st.write(f"• {topic}")
 
-    # Opportunities
-    st.subheader("Opportunities")
-    for opportunity in analysis.get("opportunities", []):
-        st.write(f"• {opportunity}")
+    # Research Gaps
+    st.subheader("Research Gaps")
+    for gap in analysis.get("gaps", []):
+        st.write(f"• {gap}")
 
-    # Competition Analysis
-    st.subheader("Competition Analysis")
-    st.write(analysis.get("competition", "No competition analysis available"))
+    # Keyword Suggestions
+    st.subheader("Keyword Suggestions")
+    st.write("Consider using these keywords to refine your search:")
+    keywords = analysis.get("keywords", [])
+    if keywords:
+        cols = st.columns(3)
+        for i, keyword in enumerate(keywords):
+            cols[i % 3].write(f"• {keyword}")
 
+    # Complexity Assessment
+    st.subheader("Complexity Assessment")
+    complexity = analysis.get("complexity", {})
+    score = complexity.get("complexity_score", 0)
+    st.progress(score / 10)
+    st.write(f"Complexity Score: {score}/10")
+    st.write(complexity.get("explanation", "No explanation available"))
 
 def handle_pdf_export(results, analysis):
     """This function is now deprecated as the export functionality has been moved to render_search_section"""

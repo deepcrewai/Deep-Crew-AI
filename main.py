@@ -179,7 +179,25 @@ def main():
 
                                     with analysis_tab:
                                         if st.session_state.get('patent_analysis'):
-                                            render_analysis_section(st.session_state.patent_analysis, st.session_state.patent_results)
+                                            st.subheader("AI Analysis of Patents")
+
+                                            # Display Summary
+                                            st.write("### Summary")
+                                            st.write(st.session_state.patent_analysis.get('summary', 'No summary available'))
+
+                                            # Display Trends
+                                            st.write("### Trends")
+                                            for trend in st.session_state.patent_analysis.get('trends', []):
+                                                st.write(f"• {trend}")
+
+                                            # Display Opportunities
+                                            st.write("### Opportunities")
+                                            for opportunity in st.session_state.patent_analysis.get('opportunities', []):
+                                                st.write(f"• {opportunity}")
+
+                                            # Display Competition Analysis
+                                            st.write("### Competition Analysis")
+                                            st.write(st.session_state.patent_analysis.get('competition', 'No competition analysis available'))
                                         else:
                                             st.info("AI analysis not available. Please try searching again.")
 
