@@ -9,7 +9,7 @@ class PatentSearchClient:
     def __init__(self):
         self.base_url = "https://pqai-api.p.rapidapi.com"
         self.headers = {
-            "X-RapidAPI-Key": "1afab331b39299fbe63c045eae037b73",
+            "X-RapidAPI-Key": os.environ.get("RAPIDAPI_KEY"),
             "X-RapidAPI-Host": "pqai-api.p.rapidapi.com"
         }
         self.ai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
@@ -110,22 +110,3 @@ class PatentSearchClient:
                 "opportunities": [],
                 "competition": "Analysis unavailable"
             }
-
-    def get_patent_details(self, patent_id: str) -> Dict:
-        """Get detailed information about a specific patent."""
-        try:
-            response = requests.get(
-                f"{self.base_url}/patents/{patent_id}",
-                params={"token": self.api_key},
-                timeout=30
-            )
-
-            if response.status_code == 200:
-                return response.json()
-            else:
-                print(f"Error getting patent details: {response.status_code}")
-                return {}
-
-        except Exception as e:
-            print(f"Error fetching patent details: {str(e)}")
-            return {}
