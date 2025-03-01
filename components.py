@@ -312,20 +312,28 @@ def render_search_section(results):
             color: #5f6368;
             font-size: 0.9rem;
             margin-left: 4px;
+            position: relative;
+            display: inline-block;
         }
         .info-tooltip {
-            display: none;
+            visibility: hidden;
             position: absolute;
-            background: #fff;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 100%;
+            background: white;
             border: 1px solid #ddd;
             padding: 8px 12px;
             border-radius: 4px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            max-width: 300px;
+            width: 300px;
             z-index: 1000;
+            margin-bottom: 8px;
+            text-align: left;
+            white-space: normal;
         }
-        .info-icon:hover + .info-tooltip {
-            display: block;
+        .info-icon:hover .info-tooltip {
+            visibility: visible;
         }
         </style>
     """, unsafe_allow_html=True)
@@ -365,13 +373,13 @@ def render_search_section(results):
                 <div class="paper-metrics">
                     <span>
                         Similarity Score: {similarity:.2f}
-                        <span class="info-icon">ℹ️
-                            <span class="info-tooltip">
+                        <div class="info-icon">ℹ️
+                            <div class="info-tooltip">
                                 The Similarity Score (0-1) indicates how well this paper matches your search query.
                                 A higher score means the paper is more relevant to your search terms.
                                 The score considers both title (70%) and abstract (30%) matches.
-                            </span>
-                        </span>
+                            </div>
+                        </div>
                     </span>
                     <span>Citations: {paper.get('cited_by_count', 0)}</span>
                     {url_link}
