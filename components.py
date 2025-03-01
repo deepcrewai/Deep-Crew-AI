@@ -483,25 +483,10 @@ def render_search_section(results):
 
 def render_patent_results(results, analysis):
     """Render patent search results with export functionality."""
-    # Display metrics
-    col1, col2 = st.columns(2)
-    with col1:
-        st.metric("Patents", len(results))
-    with col2:
-        # Convert inventors to a set of strings before counting unique inventors
-        unique_inventors = set()
-        for patent in results:
-            inventors = patent.get('inventors', '')
-            if isinstance(inventors, str):
-                # Split string of inventors into individual names
-                inventors_list = [inv.strip() for inv in inventors.split(',')]
-                unique_inventors.update(inventors_list)
-        st.metric("Inventors", len(unique_inventors))
-
     # Display results header with export button
     col1, col2 = st.columns([2, 3])
     with col1:
-        st.subheader("Patent Results")
+        st.subheader(f"Patent Results ({len(results)})")
     with col2:
         # Right-align the button using a container and custom CSS
         button_container = st.container()
