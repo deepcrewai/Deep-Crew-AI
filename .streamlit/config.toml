@@ -4,17 +4,7 @@ address = "0.0.0.0"
 port = 5000
 enableXsrfProtection = false
 enableCORS = false
-maxUploadSize = 200
-maxMessageSize = 200
-runOnSave = true
-
-[theme]
-primaryColor = "#1f77b4"
-backgroundColor = "#ffffff"
-secondaryBackgroundColor = "#f0f2f6"
-textColor = "#262730"
 
 [browser]
 serverAddress = "0.0.0.0"
 serverPort = 5000
-gatherUsageStats = false
