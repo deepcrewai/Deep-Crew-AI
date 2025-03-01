@@ -13,7 +13,6 @@ from components import (
     render_combined_results
 )
 from funding import render_funding_section
-from elsevier_client import ElsevierClient
 
 # Configure logging
 logging.basicConfig(
@@ -132,41 +131,30 @@ def main():
                     try:
                         if selected_stages[idx] == "research":
                             with st.spinner("🔍 Analyzing Literature..."):
-                                try:
-                                    elsevier_client = ElsevierClient()
-                                    ai_analyzer = AIAnalyzer()
+                                openalex_client = OpenAlexClient()
+                                ai_analyzer = AIAnalyzer()
 
-                                    if search_query != st.session_state.get('last_query', ''):
-                                        try:
-                                            # Get results from ScienceDirect
-                                            results = elsevier_client.search(search_query)
+                                if search_query != st.session_state.get('last_query', ''):
+                                    keywords = ai_analyzer.generate_search_keywords(search_query)
+                                    results = openalex_client.search(query=search_query, keywords=keywords)
 
-                                            if results:
-                                                st.session_state.search_results = results
-                                                st.session_state.analysis = ai_analyzer.analyze_results(results)
-                                                st.session_state.last_query = search_query
-                                            else:
-                                                st.warning("No results found in ScienceDirect for your search terms. Try using different keywords.")
-                                                st.session_state.search_results = None
-                                                st.session_state.analysis = None
+                                    if results:
+                                        st.session_state.search_results = results
+                                        st.session_state.analysis = ai_analyzer.analyze_results(results)
+                                        st.session_state.last_query = search_query
+                                    else:
+                                        st.warning("No results found. Try different terms.")
+                                        st.session_state.search_results = None
+                                        st.session_state.analysis = None
 
-                                        except ValueError as e:
-                                            st.error(str(e))
-                                            logger.error(f"ScienceDirect API error: {str(e)}")
-                                            st.session_state.search_results = None
-                                            st.session_state.analysis = None
+                                # Create sub-tabs for Documents and AI Analysis
+                                doc_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
 
-                                    # Create sub-tabs for Documents and AI Analysis
-                                    if st.session_state.get('search_results') is not None:
-                                        doc_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
-                                        with doc_tab:
-                                            render_search_section(st.session_state.search_results)
-                                        with analysis_tab:
-                                            render_analysis_section(st.session_state.analysis)
-
-                                except Exception as e:
-                                    st.error(f"Error in Literature section: {str(e)}")
-                                    logger.error(f"Literature section error: {str(e)}", exc_info=True)
+                                if st.session_state.get('search_results'):
+                                    with doc_tab:
+                                        render_search_section(st.session_state.search_results)
+                                    with analysis_tab:
+                                        render_analysis_section(st.session_state.analysis)
 
                         elif selected_stages[idx] == "patents":
                             with st.spinner("🔍 Searching patents..."):
