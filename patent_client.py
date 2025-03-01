@@ -7,21 +7,23 @@ import time
 
 class PatentSearchClient:
     def __init__(self):
-        self.base_url = "https://api.projectpq.ai"
-        self.api_key = "1afab331b39299fbe63c045eae037b73"
+        self.base_url = "https://pqai-api.p.rapidapi.com"
+        self.headers = {
+            "X-RapidAPI-Key": "1afab331b39299fbe63c045eae037b73",
+            "X-RapidAPI-Host": "pqai-api.p.rapidapi.com"
+        }
         self.ai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
         self.model = "gpt-4o"
 
     def search_patents(self, query: str) -> List[Dict]:
         """Search patents related to the query."""
         try:
-            response = requests.get(
-                f"{self.base_url}/search/102/",
-                params={
-                    "q": query,
-                    "token": self.api_key,
-                    "n": 10,
-                    "type": "patent"
+            response = requests.post(
+                f"{self.base_url}/patent/search",
+                headers=self.headers,
+                json={
+                    "question": query,
+                    "limit": 10
                 },
                 timeout=30
             )
@@ -29,25 +31,14 @@ class PatentSearchClient:
             print(f"Patent search response status: {response.status_code}")  # Debug log
 
             if response.status_code == 200:
-                results = response.json().get("results", [])
+                results = response.json().get("patents", [])
                 print(f"Found {len(results)} patent results")  # Debug log
-
-                # Debug: Print raw response to see data structure
                 print("Raw API response structure:", json.dumps(results[0] if results else {}, indent=2))
 
                 formatted_results = []
                 for result in results:
-                    # Try multiple possible ID fields
-                    patent_id = (
-                        result.get('document_number') or 
-                        result.get('publication_number') or 
-                        result.get('application_number') or 
-                        result.get('patent_number')
-                    )
-
-                    if patent_id:
-                        # Clean up the patent ID - remove spaces and non-alphanumeric chars
-                        patent_id = ''.join(filter(str.isalnum, patent_id))
+                    # Get publication number
+                    publication_id = result.get('publication_number')
 
                     # Extract inventors
                     inventors = result.get('inventors', [])
@@ -57,12 +48,12 @@ class PatentSearchClient:
                         inventors = []
 
                     formatted_result = {
-                        'patent_id': patent_id or 'Patent ID not available',
+                        'patent_id': publication_id,
                         'title': result.get('title', 'Untitled Patent'),
                         'abstract': result.get('abstract', 'No abstract available'),
-                        'filing_date': result.get('filing_date') or result.get('date', 'N/A'),
+                        'filing_date': result.get('filing_date', 'N/A'),
                         'inventors': ', '.join(inventors) if inventors else 'No inventors listed',
-                        'url': f"https://patents.google.com/patent/{patent_id}" if patent_id else None
+                        'url': f"https://patents.google.com/patent/{publication_id}" if publication_id else None
                     }
 
                     print(f"Processed patent ID: {formatted_result['patent_id']}")  # Debug log
