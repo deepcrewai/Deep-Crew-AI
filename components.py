@@ -353,6 +353,9 @@ def render_search_section(results):
 
         similarity = paper.get('similarity_score', 0)
 
+        # Create URL link HTML only if URL exists
+        url_link = f'<a href="{paper["url"]}" class="paper-link" target="_blank">View Paper</a>' if paper.get('url') else ''
+
         st.markdown(f"""
             <div class="paper-card">
                 <div class="paper-title">{paper.get('title', 'Untitled')}</div>
@@ -371,7 +374,7 @@ def render_search_section(results):
                         </span>
                     </span>
                     <span>Citations: {paper.get('cited_by_count', 0)}</span>
-                    {'<a href="' + paper['url'] + '" class="paper-link" target="_blank">View Paper</a>' if paper.get('url') else ''}
+                    {url_link}
                 </div>
             </div>
         """, unsafe_allow_html=True)
