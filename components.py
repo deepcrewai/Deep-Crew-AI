@@ -505,7 +505,7 @@ def render_patent_results(results, analysis):
 
 def render_analysis_section(analysis, results=None):
     """Render the AI analysis section."""
-    # Header with export button in a single row
+    # Header with export button
     st.header("AI Analysis")
 
     if analysis:  # Only show export button if we have analysis data
@@ -523,52 +523,18 @@ def render_analysis_section(analysis, results=None):
 
     # Trends
     st.subheader("Research Trends")
-    if isinstance(analysis.get("trends", []), list):
-        for trend in analysis.get("trends", []):
-            st.write(f"• {trend}")
-    else:
-        trends = analysis.get("trends", {})
-        col1, col2 = st.columns(2)
-        with col1:
-            st.write("Emerging Topics")
-            for topic in trends.get("emerging_topics", []):
-                st.write(f"• {topic}")
-        with col2:
-            st.write("Declining Topics")
-            for topic in trends.get("declining_topics", []):
-                st.write(f"• {topic}")
+    for trend in analysis.get("trends", []):
+        st.write(f"• {trend}")
 
     # Opportunities
     st.subheader("Opportunities")
     for opportunity in analysis.get("opportunities", []):
         st.write(f"• {opportunity}")
 
-    # Competition Analysis (if available)
-    if "competition" in analysis:
-        st.subheader("Competition Analysis")
-        st.write(analysis.get("competition", "No competition analysis available"))
+    # Competition Analysis
+    st.subheader("Competition Analysis")
+    st.write(analysis.get("competition", "No competition analysis available"))
 
-    # Research Gaps
-    st.subheader("Research Gaps")
-    for gap in analysis.get("gaps", []):
-        st.write(f"• {gap}")
-
-    # Keyword Suggestions
-    st.subheader("Keyword Suggestions")
-    st.write("Consider using these keywords to refine your search:")
-    keywords = analysis.get("keywords", [])
-    if keywords:
-        cols = st.columns(3)
-        for i, keyword in enumerate(keywords):
-            cols[i % 3].write(f"• {keyword}")
-
-    # Complexity Assessment
-    st.subheader("Complexity Assessment")
-    complexity = analysis.get("complexity", {})
-    score = complexity.get("complexity_score", 0)
-    st.progress(score / 10)
-    st.write(f"Complexity Score: {score}/10")
-    st.write(complexity.get("explanation", "No explanation available"))
 
 def handle_pdf_export(results, analysis):
     """This function is now deprecated as the export functionality has been moved to render_search_section"""
