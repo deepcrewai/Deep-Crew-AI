@@ -536,13 +536,12 @@ def render_patent_results(results, analysis):
                 unsafe_allow_html=True
             )
             st.download_button(
-                label="📑 Export Results as PDF",
+                label="📑 Export Analysis as PDF",
                 data=generate_patent_pdf_report(results, analysis),
-                file_name="patent_report.pdf",
+                file_name="patent_analysis.pdf",
                 mime="application/pdf",
                 key="patent_pdf_download"
             )
-            st.session_state.patent_pdf_generated = False
 
         # Display Summary
         st.write("### Summary")
