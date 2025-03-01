@@ -242,48 +242,14 @@ def generate_patent_pdf_report(results, analysis):
 
 def render_search_section(results):
     """Render the modernized search results section."""
-    metrics = calculate_metrics(results)
-
-    # Modern results header with export button
-    st.markdown("""
-        <style>
-        .results-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 2rem 0 1rem;
-        }
-        .results-title {
-            font-size: 1.5rem;
-            font-weight: 500;
-            color: #202124;
-        }
-        .export-button {
-            background-color: #1a73e8;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 24px;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-        }
-        .export-button:hover {
-            background-color: #1557b0;
-            box-shadow: 0 1px 6px rgba(32,33,36,.28);
-        }
-        </style>
-    """, unsafe_allow_html=True)
-
     # Display results count separately to ensure proper rendering
     results_count = len(results) if results else 0
     st.markdown(
         f'<div class="results-header">'
         f'<div class="results-title">Search Results ({results_count})</div>'
-        f'<div><a href="#" class="export-button">Export as PDF</a></div>'
         f'</div>',
         unsafe_allow_html=True
     )
-
 
     # Modern paper cards
     st.markdown("""
@@ -351,7 +317,6 @@ def render_search_section(results):
         """, unsafe_allow_html=True)
 
 
-
 def render_patent_results(results, analysis):
     """Render patent search results with export functionality."""
     # Display metrics
@@ -407,7 +372,18 @@ def render_patent_results(results, analysis):
 
 def render_analysis_section(analysis):
     """Render the AI analysis section."""
-    st.header("AI Analysis")
+    # Header with export button
+    col1, col2 = st.columns([2, 1])
+    with col1:
+        st.header("AI Analysis")
+    with col2:
+        st.download_button(
+            label="📑 Export Analysis as PDF",
+            data=generate_pdf_report([], analysis),
+            file_name="research_analysis.pdf",
+            mime="application/pdf",
+            key="pdf_download"
+        )
 
     # Summary
     st.subheader("Research Summary")
