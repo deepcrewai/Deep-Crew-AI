@@ -503,38 +503,19 @@ def render_patent_results(results, analysis):
             {f"[View Details]({patent['url']})" if patent.get('url') else ''}
             """)
 
-def render_analysis_section(analysis):
+def render_analysis_section(analysis, results=None):
     """Render the AI analysis section."""
-    # Header with export button
-    col1, col2 = st.columns([2, 3])
-    with col1:
-        st.header("AI Analysis")
-    with col2:
-        # Right-align the button using a container and custom CSS
-        button_container = st.container()
-        with button_container:
-            st.markdown(
-                """
-                <style>
-                div[data-testid="stDownloadButton"] {
-                    display: flex;
-                    justify-content: flex-end;
-                }
-                </style>
-                """, 
-                unsafe_allow_html=True
-            )
-            if 'analysis_pdf_generated' not in st.session_state:
-                st.session_state.analysis_pdf_generated = False
+    # Header with export button in a single row
+    st.header("AI Analysis")
 
-            st.download_button(
-                label="📑 Export Analysis as PDF",
-                data=generate_pdf_report([], analysis),
-                file_name="analysis_report.pdf",
-                mime="application/pdf",
-                key="analysis_pdf_download"
-            )
-            st.session_state.analysis_pdf_generated = False
+    if analysis:  # Only show export button if we have analysis data
+        st.download_button(
+            label="📑 Export Analysis as PDF",
+            data=generate_pdf_report(results or [], analysis),
+            file_name="analysis_report.pdf",
+            mime="application/pdf",
+            key="analysis_pdf_download"
+        )
 
     # Summary
     st.subheader("Research Summary")
