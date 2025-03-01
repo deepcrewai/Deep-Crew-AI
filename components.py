@@ -258,6 +258,57 @@ def render_search_section(results):
             color: #202124;
             margin-bottom: 1.5rem;
         }
+        .filter-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # Create columns for the header: title and filters
+    col1, col2 = st.columns([2, 1])
+
+    with col1:
+        st.markdown(
+            f'<div class="results-title">Search Results ({results_count})</div>',
+            unsafe_allow_html=True
+        )
+
+    with col2:
+        with st.expander("🔍 Filter Results"):
+            # Year range filter
+            min_year = min([p.get('publication_year', 2025) for p in results]) if results else 2000
+            max_year = max([p.get('publication_year', 2025) for p in results]) if results else 2025
+
+            year_range = st.slider(
+                "Publication Year",
+                min_value=min_year,
+                max_value=max_year,
+                value=(min_year, max_year)
+            )
+
+            # Citations range filter
+            max_citations = max([p.get('cited_by_count', 0) for p in results]) if results else 100
+            citation_range = st.slider(
+                "Citations",
+                min_value=0,
+                max_value=max_citations,
+                value=(0, max_citations)
+            )
+
+    # Filter results based on selected ranges
+    filtered_results = [
+        paper for paper in results
+        if (paper.get('publication_year', 0) >= year_range[0] and 
+            paper.get('publication_year', 0) <= year_range[1] and
+            paper.get('cited_by_count', 0) >= citation_range[0] and
+            paper.get('cited_by_count', 0) <= citation_range[1])
+    ]
+
+    # Modern paper cards style
+    st.markdown("""
+        <style>
         .paper-card {
             background: white;
             border-radius: 12px;
@@ -338,14 +389,8 @@ def render_search_section(results):
         </style>
     """, unsafe_allow_html=True)
 
-    st.markdown(
-        f'<div class="results-header">'
-        f'<div class="results-title">Search Results ({results_count})</div>'
-        f'</div>',
-        unsafe_allow_html=True
-    )
-
-    for paper in results:
+    # Display filtered papers
+    for paper in filtered_results:
         # Get authors from authorships
         authors = []
         for authorship in paper.get('authorships', []):
