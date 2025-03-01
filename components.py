@@ -415,7 +415,30 @@ def render_search_section(results):
         .info-icon:hover .info-tooltip {
             visibility: visible;
         }
+        .copy-button {
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 0.8em;
+            color: #666;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+        .copy-button:hover {
+            background: #f5f5f5;
+            border-color: #999;
+        }
         </style>
+        <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                console.log('Copying to clipboard was successful!');
+            }, function(err) {
+                console.error('Could not copy text: ', err);
+            });
+        }
+        </script>
     """, unsafe_allow_html=True)
 
     # Display filtered papers
@@ -509,8 +532,20 @@ def render_patent_results(results, analysis):
     # Display patents
     for patent in results:
         with st.expander(f"📄 {patent.get('title', 'Untitled Patent')}"):
+            # Create two columns for ID and copy button
+            id_col, copy_col = st.columns([3, 1])
+            with id_col:
+                st.markdown(f"**ID:** {patent.get('patent_id', 'N/A')}")
+            with copy_col:
+                if st.button("📋 Copy ID", key=f"copy_{patent.get('patent_id', 'N/A')}"):
+                    st.write("Copied to clipboard!")
+                    st.markdown(f"""
+                        <script>
+                            navigator.clipboard.writeText("{patent.get('patent_id', 'N/A')}");
+                        </script>
+                        """, unsafe_allow_html=True)
+
             st.markdown(f"""
-            **ID:** {patent.get('patent_id', 'N/A')}  
             **Inventors:** {patent.get('inventors', 'N/A')}  
             **Filing Date:** {patent.get('filing_date', 'N/A')}
 
