@@ -83,11 +83,11 @@ def main():
         col1, col2, col3, col4, col5 = st.columns(5)
 
         stages = {
-            'research': 'Research',
-            'patents': 'Patents',
+            'research': 'Litarature',
+            'patents': 'Patent',
             'funding': 'Funding',
-            'network': 'Network',
-            'compliance': 'Compliance'
+            'network': 'Collabration',
+            'compliance': 'Legal'
         }
 
         columns = [col1, col2, col3, col4, col5]
@@ -189,7 +189,7 @@ def main():
                         st.error(f"An error occurred in {selected_stages[idx]} tab: {str(e)}")
 
         else:
-            st.info("Enter a search query to begin your research journey.")
+            st.info("Please choose below your agents.")
 
         logger.info("Main content rendered successfully")
 
