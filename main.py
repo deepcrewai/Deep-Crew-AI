@@ -171,35 +171,16 @@ def main():
                                         st.session_state.patent_analysis = None
 
                                 if st.session_state.get('patent_results'):
-                                    # Create sub-tabs for Patents and AI Analysis
-                                    patent_tab, analysis_tab = st.tabs(["Patents", "AI Analysis"])
+                                    # Create sub-tabs for Documents and AI Analysis
+                                    patent_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
 
                                     with patent_tab:
                                         render_patent_results(st.session_state.patent_results, st.session_state.patent_analysis)
 
                                     with analysis_tab:
                                         if st.session_state.get('patent_analysis'):
-                                            st.subheader("AI Analysis of Patents")
+                                            render_analysis_section(st.session_state.patent_analysis)
 
-                                            # Display Summary
-                                            st.write("### Summary")
-                                            st.write(st.session_state.patent_analysis.get('summary', 'No summary available'))
-
-                                            # Display Trends
-                                            st.write("### Trends")
-                                            for trend in st.session_state.patent_analysis.get('trends', []):
-                                                st.write(f"• {trend}")
-
-                                            # Display Opportunities
-                                            st.write("### Opportunities")
-                                            for opportunity in st.session_state.patent_analysis.get('opportunities', []):
-                                                st.write(f"• {opportunity}")
-
-                                            # Display Competition Analysis
-                                            st.write("### Competition Analysis")
-                                            st.write(st.session_state.patent_analysis.get('competition', 'No competition analysis available'))
-                                        else:
-                                            st.info("AI analysis not available. Please try searching again.")
 
                         elif selected_stages[idx] == "funding":
                             render_funding_section(search_query)

@@ -486,7 +486,7 @@ def render_patent_results(results, analysis):
     # Display metrics
     col1, col2 = st.columns(2)
     with col1:
-        st.metric("Patents", len(results))
+        st.metric("Documents", len(results))
     with col2:
         # Convert inventors to a set of strings before counting unique inventors
         unique_inventors = set()
@@ -501,7 +501,7 @@ def render_patent_results(results, analysis):
     # Display results header with export button
     col1, col2 = st.columns([2, 3])
     with col1:
-        st.subheader("Patent Results")
+        st.subheader("Document Results")
     with col2:
         # Right-align the button using a container and custom CSS
         button_container = st.container()
@@ -716,7 +716,17 @@ def render_combined_results(research_results, patent_results, combined_analysis)
     with col1:
         st.metric("Research Papers", len(research_results))
     with col2:
-        st.metric("Patents", len(patent_results))
+        st.metric("Documents", len(patent_results))
     with col3:
         total_documents = len(research_results) + len(patent_results)
         st.metric("Total Documents", total_documents)
+
+    if st.session_state.get('patent_results'):
+        patent_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
+
+        with patent_tab:
+            render_patent_results(st.session_state.patent_results, st.session_state.patent_analysis)
+
+        with analysis_tab:
+            if st.session_state.get('patent_analysis'):
+                render_analysis_section(st.session_state.patent_analysis)
