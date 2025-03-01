@@ -6,8 +6,6 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from datetime import datetime
 from reportlab.lib.utils import ImageReader
-from api_client import OpenAlexClient
-from ai_analyzer import AIAnalyzer
 
 def generate_pdf_report(results, analysis):
     """Generate a PDF report of AI analysis."""
@@ -287,8 +285,7 @@ def render_search_section(results):
                 "Publication Year",
                 min_value=min_year,
                 max_value=max_year,
-                value=(min_year, max_year),
-                key="year_filter"
+                value=(min_year, max_year)
             )
 
             # Citations range filter
@@ -297,29 +294,17 @@ def render_search_section(results):
                 "Citations",
                 min_value=0,
                 max_value=max_citations,
-                value=(0, max_citations),
-                key="citation_filter"
+                value=(0, max_citations)
             )
 
-            # Add Apply Filters button
-            if st.button("Apply Filters", key="apply_filters"):
-                st.session_state.year_range = year_range
-                st.session_state.citation_range = citation_range
-                if "last_query" in st.session_state:
-                    # Trigger a new search with filters
-                    openalex_client = OpenAlexClient()
-                    ai_analyzer = AIAnalyzer()
-                    keywords = ai_analyzer.generate_search_keywords(st.session_state.last_query)
-                    results = openalex_client.search(
-                        query=st.session_state.last_query,
-                        keywords=keywords,
-                        year_range=year_range,
-                        citation_range=citation_range
-                    )
-                    if results:
-                        st.session_state.search_results = results
-                        st.session_state.analysis = ai_analyzer.analyze_results(results)
-                    st.rerun()
+    # Filter results based on selected ranges
+    filtered_results = [
+        paper for paper in results
+        if (paper.get('publication_year', 0) >= year_range[0] and 
+            paper.get('publication_year', 0) <= year_range[1] and
+            paper.get('cited_by_count', 0) >= citation_range[0] and
+            paper.get('cited_by_count', 0) <= citation_range[1])
+    ]
 
     # Modern paper cards style
     st.markdown("""
@@ -404,8 +389,8 @@ def render_search_section(results):
         </style>
     """, unsafe_allow_html=True)
 
-    # Display papers
-    for paper in results:
+    # Display filtered papers
+    for paper in filtered_results:
         # Get authors from authorships
         authors = []
         for authorship in paper.get('authorships', []):
