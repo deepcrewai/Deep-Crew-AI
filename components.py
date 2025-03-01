@@ -523,16 +523,30 @@ def render_analysis_section(analysis, results=None):
 
     # Trends
     st.subheader("Research Trends")
-    trends = analysis.get("trends", {})
-    col1, col2 = st.columns(2)
-    with col1:
-        st.write("Emerging Topics")
-        for topic in trends.get("emerging_topics", []):
-            st.write(f"• {topic}")
-    with col2:
-        st.write("Declining Topics")
-        for topic in trends.get("declining_topics", []):
-            st.write(f"• {topic}")
+    if isinstance(analysis.get("trends", []), list):
+        for trend in analysis.get("trends", []):
+            st.write(f"• {trend}")
+    else:
+        trends = analysis.get("trends", {})
+        col1, col2 = st.columns(2)
+        with col1:
+            st.write("Emerging Topics")
+            for topic in trends.get("emerging_topics", []):
+                st.write(f"• {topic}")
+        with col2:
+            st.write("Declining Topics")
+            for topic in trends.get("declining_topics", []):
+                st.write(f"• {topic}")
+
+    # Opportunities
+    st.subheader("Opportunities")
+    for opportunity in analysis.get("opportunities", []):
+        st.write(f"• {opportunity}")
+
+    # Competition Analysis (if available)
+    if "competition" in analysis:
+        st.subheader("Competition Analysis")
+        st.write(analysis.get("competition", "No competition analysis available"))
 
     # Research Gaps
     st.subheader("Research Gaps")
