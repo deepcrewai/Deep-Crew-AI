@@ -18,7 +18,7 @@ class ElsevierClient:
         masked_key = f"{self.api_key[:4]}...{self.api_key[-4:]}" if len(self.api_key) > 8 else "***"
         logger.info(f"Initializing ElsevierClient with API key starting with: {masked_key}")
 
-        self.base_url = "https://api.elsevier.com/content/search/scopus"
+        self.base_url = "https://api.elsevier.com/content/search/sciencedirect"
         self.headers = {
             "X-ELS-APIKey": self.api_key,
             "Accept": "application/json"
@@ -27,7 +27,7 @@ class ElsevierClient:
     def test_connection(self) -> bool:
         """Test the API connection and permissions."""
         try:
-            # Try to access the Scopus API info endpoint
+            # Try to access the ScienceDirect API info endpoint
             response = requests.get(
                 "https://api.elsevier.com/content/serial/title",
                 headers=self.headers,
@@ -53,7 +53,7 @@ class ElsevierClient:
             raise ValueError(f"Network error while connecting to Elsevier API: {str(e)}")
 
     def search(self, query: str, limit: int = 25) -> List[Dict]:
-        """Search for papers in Scopus."""
+        """Search for papers in ScienceDirect."""
         try:
             if not query:
                 logger.warning("Empty query provided")
@@ -62,11 +62,15 @@ class ElsevierClient:
             # First test the connection
             self.test_connection()
 
-            logger.info(f"Searching Scopus for: {query}")
+            logger.info(f"Searching ScienceDirect for: {query}")
             params = {
-                "query": f"TITLE-ABS-KEY({query})",
+                "query": query,
                 "count": limit,
-                "sort": "-citedby-count"
+                "start": 0,
+                "sort": "-date",  # Sort by date descending
+                "field": "all",  # Search in all fields
+                "httpAccept": "application/json",
+                "suppressNavLinks": "true"
             }
 
             logger.debug(f"Making API request to {self.base_url}")
@@ -91,7 +95,7 @@ class ElsevierClient:
             for entry in entries:
                 result = {
                     "title": entry.get("dc:title", "Untitled"),
-                    "authorships": self.format_authors(entry.get("author", [])),
+                    "authorships": self.format_authors(entry.get("authors", {}).get("author", [])),
                     "publication_year": entry.get("prism:coverDate", "")[:4],
                     "abstract": entry.get("dc:description", "No abstract available"),
                     "url": entry.get("prism:url", ""),
@@ -105,14 +109,14 @@ class ElsevierClient:
             return results
 
         except requests.exceptions.RequestException as e:
-            logger.error(f"Network error while searching Scopus: {str(e)}")
-            raise ValueError(f"Network error while connecting to Scopus: {str(e)}")
+            logger.error(f"Network error while searching ScienceDirect: {str(e)}")
+            raise ValueError(f"Network error while connecting to ScienceDirect: {str(e)}")
         except ValueError as e:
             # Re-raise ValueError for authentication/authorization issues
             raise
         except Exception as e:
             logger.error(f"Unexpected error in search: {str(e)}", exc_info=True)
-            raise ValueError(f"Error searching Scopus: {str(e)}")
+            raise ValueError(f"Error searching ScienceDirect: {str(e)}")
 
     def format_authors(self, authors: List[Dict]) -> List[Dict]:
         """Format author information to match our existing schema."""
