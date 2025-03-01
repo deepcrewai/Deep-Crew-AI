@@ -267,7 +267,7 @@ def render_search_section(results):
     """, unsafe_allow_html=True)
 
     # Create columns for the header: title and filters
-    col1, col2 = st.columns([2, 1])
+    col1, col2, col3 = st.columns([2, 1, 1])
 
     with col1:
         st.markdown(
@@ -307,6 +307,15 @@ def render_search_section(results):
                 help="Filter papers based on their relevance to your search query"
             )
 
+    with col3:
+        with st.expander("📊 Sort By"):
+            sort_option = st.selectbox(
+                "Sort papers by",
+                options=["Similarity Score", "Citations", "Publication Year"],
+                index=0,
+                label_visibility="collapsed"
+            )
+
     # Filter results based on selected ranges
     filtered_results = [
         paper for paper in results
@@ -317,6 +326,14 @@ def render_search_section(results):
             paper.get('similarity_score', 0) >= similarity_range[0] and
             paper.get('similarity_score', 0) <= similarity_range[1])
     ]
+
+    # Sort filtered results based on selected option
+    if sort_option == "Similarity Score":
+        filtered_results.sort(key=lambda x: (-x.get('similarity_score', 0)))
+    elif sort_option == "Citations":
+        filtered_results.sort(key=lambda x: (-x.get('cited_by_count', 0)))
+    else:  # Publication Year
+        filtered_results.sort(key=lambda x: (-x.get('publication_year', 0)))
 
     # Modern paper cards style
     st.markdown("""
