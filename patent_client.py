@@ -34,13 +34,26 @@ class PatentSearchClient:
 
                 formatted_results = []
                 for result in results:
+                    # Extract inventors correctly - handle both string and list formats
+                    inventors = result.get('inventors', [])
+                    if isinstance(inventors, str):
+                        inventors = [inv.strip() for inv in inventors.split(',')]
+                    elif not isinstance(inventors, list):
+                        inventors = []
+
+                    # Get publication number without any prefix
+                    pub_number = result.get('publication_number', '')
+                    if pub_number:
+                        # Remove any prefix/suffix and keep only the number
+                        pub_number = ''.join(filter(str.isalnum, pub_number))
+
                     formatted_result = {
-                        'patent_id': result.get('publication_number', 'N/A'),
+                        'patent_id': pub_number or result.get('patent_id', 'N/A'),
                         'title': result.get('title', 'Untitled Patent'),
                         'abstract': result.get('abstract', 'No abstract available'),
-                        'filing_date': result.get('filing_date', 'N/A'),
-                        'inventors': ', '.join(result.get('inventors', [])),
-                        'url': f"https://patents.google.com/patent/{result.get('publication_number', '')}"
+                        'filing_date': result.get('filing_date') or result.get('date', 'N/A'),
+                        'inventors': ', '.join(inventors) if inventors else 'No inventors listed',
+                        'url': f"https://patents.google.com/patent/{pub_number}" if pub_number else None
                     }
                     formatted_results.append(formatted_result)
                     print(f"Processed patent: {formatted_result['patent_id']}")  # Debug log
