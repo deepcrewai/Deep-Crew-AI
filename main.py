@@ -147,9 +147,14 @@ def main():
                                         st.session_state.search_results = None
                                         st.session_state.analysis = None
 
+                                # Create sub-tabs for Documents and AI Analysis
+                                doc_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
+
                                 if st.session_state.get('search_results'):
-                                    render_search_section(st.session_state.search_results)
-                                    render_analysis_section(st.session_state.analysis)
+                                    with doc_tab:
+                                        render_search_section(st.session_state.search_results)
+                                    with analysis_tab:
+                                        render_analysis_section(st.session_state.analysis)
 
                         elif selected_stages[idx] == "patents":
                             with st.spinner("🔍 Searching patents..."):
