@@ -21,7 +21,8 @@ class ElsevierClient:
         self.base_url = "https://api.elsevier.com/content/search/sciencedirect"
         self.headers = {
             "X-ELS-APIKey": self.api_key,
-            "Accept": "application/json"
+            "Accept": "application/json",
+            "X-ELS-Insttoken": self.api_key  # Add institution token header
         }
 
     def test_connection(self) -> bool:
@@ -69,8 +70,9 @@ class ElsevierClient:
                 "start": 0,
                 "sort": "-date",  # Sort by date descending
                 "field": "all",  # Search in all fields
-                "httpAccept": "application/json",
-                "suppressNavLinks": "true"
+                "view": "COMPLETE",  # Get complete record
+                "date": "2015-2025",  # Recent papers
+                "content": "journals"  # Only journal articles
             }
 
             logger.debug(f"Making API request to {self.base_url}")
