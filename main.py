@@ -13,6 +13,7 @@ from components import (
     render_combined_results
 )
 from funding import render_funding_section
+from elsevier_client import ElsevierClient
 
 # Configure logging
 logging.basicConfig(
@@ -131,12 +132,12 @@ def main():
                     try:
                         if selected_stages[idx] == "research":
                             with st.spinner("🔍 Analyzing Literature..."):
-                                openalex_client = OpenAlexClient()
+                                elsevier_client = ElsevierClient()
                                 ai_analyzer = AIAnalyzer()
 
                                 if search_query != st.session_state.get('last_query', ''):
-                                    keywords = ai_analyzer.generate_search_keywords(search_query)
-                                    results = openalex_client.search(query=search_query, keywords=keywords)
+                                    # Get results from ScienceDirect
+                                    results = elsevier_client.search(search_query)
 
                                     if results:
                                         st.session_state.search_results = results
