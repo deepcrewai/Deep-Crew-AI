@@ -15,8 +15,9 @@ class PatentSearchClient:
     def search_patents(self, query: str) -> List[Dict]:
         """Search patents related to the query."""
         try:
-            # Print request details for debugging
-            print(f"Searching patents with query: {query}")
+            # Configure the API endpoint
+            route = "/search/102"
+            url = f"{self.base_url}{route}"
 
             # Configure search parameters
             params = {
@@ -26,15 +27,9 @@ class PatentSearchClient:
                 "after": "2016-01-01",
                 "token": self.token
             }
-            print(f"Request params: {params}")
 
             # Make the request
-            response = requests.get(
-                f"{self.base_url}/search/102",
-                params=params,
-                timeout=30
-            )
-
+            response = requests.get(url, params=params, timeout=30)
             print(f"Patent search response status: {response.status_code}")
             print(f"Response content: {response.text[:500]}")  # Print first 500 chars of response
 
@@ -53,12 +48,19 @@ class PatentSearchClient:
                     if publication_id:
                         publication_id = ''.join(filter(str.isalnum, publication_id))
 
+                    # Handle inventors - ensure it's a string
+                    inventors = result.get('inventors', [])
+                    if isinstance(inventors, list):
+                        inventors = ', '.join(str(inv) for inv in inventors)
+                    elif not isinstance(inventors, str):
+                        inventors = 'No inventors listed'
+
                     formatted_result = {
                         'patent_id': publication_id,
                         'title': result.get('title', 'Untitled Patent'),
                         'abstract': result.get('abstract', 'No abstract available'),
                         'filing_date': result.get('filing_date', 'N/A'),
-                        'inventors': result.get('inventors', 'No inventors listed'),
+                        'inventors': inventors,
                         'url': f"https://patents.google.com/patent/{publication_id}" if publication_id else None
                     }
 
