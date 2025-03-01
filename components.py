@@ -503,65 +503,70 @@ def render_patent_results(results, analysis):
     with col1:
         st.subheader("Patent Results")
 
-    # Display patents
-    for patent in results:
-        with st.expander(f"📄 {patent.get('title', 'Untitled Patent')}"):
-            st.write("**ID:**")
-            st.code(patent.get('patent_id', 'N/A'), language='text')  # This makes the ID easily selectable and adds a copy button
+    # Create sub-tabs for Patents and AI Analysis
+    patent_tab, analysis_tab = st.tabs(["Patents", "AI Analysis"])
 
-            st.markdown(f"""
-            **Inventors:** {patent.get('inventors', 'N/A')}  
-            **Filing Date:** {patent.get('filing_date', 'N/A')}
+    with patent_tab:
+        # Display patents
+        for patent in results:
+            with st.expander(f"📄 {patent.get('title', 'Untitled Patent')}"):
+                st.write("**ID:**")
+                st.code(patent.get('patent_id', 'N/A'), language='text')  # This makes the ID easily selectable and adds a copy button
 
-            {patent.get('abstract', 'No abstract available')}
+                st.markdown(f"""
+                **Inventors:** {patent.get('inventors', 'N/A')}  
+                **Filing Date:** {patent.get('filing_date', 'N/A')}
 
-            {f"[View Details]({patent['url']})" if patent.get('url') else ''}
-            """)
+                {patent.get('abstract', 'No abstract available')}
 
-    if st.session_state.get('patent_analysis'):
-        # Create columns for the AI Analysis header and export button
-        header_col, export_col = st.columns([2, 2])
-        with header_col:
-            st.subheader("AI Analysis of Patents")
-        with export_col:
-            st.markdown(
-                """
-                <style>
-                div[data-testid="stDownloadButton"] {
-                    display: flex;
-                    justify-content: flex-end;
-                }
-                </style>
-                """, 
-                unsafe_allow_html=True
-            )
-            st.download_button(
-                label="📑 Export Analysis as PDF",
-                data=generate_patent_pdf_report(results, analysis),
-                file_name="patent_analysis.pdf",
-                mime="application/pdf",
-                key="patent_pdf_download"
-            )
+                {f"[View Details]({patent['url']})" if patent.get('url') else ''}
+                """)
 
-        # Display Summary
-        st.write("### Summary")
-        st.write(st.session_state.patent_analysis.get('summary', 'No summary available'))
+    with analysis_tab:
+        if st.session_state.get('patent_analysis'):
+            # Create columns for the AI Analysis header and export button
+            header_col, export_col = st.columns([2, 2])
+            with header_col:
+                st.subheader("AI Analysis of Patents")
+            with export_col:
+                st.markdown(
+                    """
+                    <style>
+                    div[data-testid="stDownloadButton"] {
+                        display: flex;
+                        justify-content: flex-end;
+                    }
+                    </style>
+                    """, 
+                    unsafe_allow_html=True
+                )
+                st.download_button(
+                    label="📑 Export Analysis as PDF",
+                    data=generate_patent_pdf_report(results, analysis),
+                    file_name="patent_analysis.pdf",
+                    mime="application/pdf",
+                    key="patent_pdf_download"
+                )
 
-        # Display Trends
-        st.write("### Trends")
-        for trend in st.session_state.patent_analysis.get('trends', []):
-            st.write(f"• {trend}")
+            # Display Summary
+            st.write("### Summary")
+            st.write(st.session_state.patent_analysis.get('summary', 'No summary available'))
 
-        # Display Opportunities
-        st.write("### Opportunities")
-        for opportunity in st.session_state.patent_analysis.get('opportunities', []):
-            st.write(f"• {opportunity}")
+            # Display Trends
+            st.write("### Trends")
+            for trend in st.session_state.patent_analysis.get('trends', []):
+                st.write(f"• {trend}")
 
-        # Display Competition Analysis
-        st.write("### Competition Analysis")
-        st.write(st.session_state.patent_analysis.get('competition', 'No competition analysis available'))
-    else:
-        st.info("AI analysis not available. Please try searching again.")
+            # Display Opportunities
+            st.write("### Opportunities")
+            for opportunity in st.session_state.patent_analysis.get('opportunities', []):
+                st.write(f"• {opportunity}")
+
+            # Display Competition Analysis
+            st.write("### Competition Analysis")
+            st.write(st.session_state.patent_analysis.get('competition', 'No competition analysis available'))
+        else:
+            st.info("AI analysis not available. Please try searching again.")
 
 def render_analysis_section(analysis):
     """Render the AI analysis section."""
