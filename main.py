@@ -60,7 +60,7 @@ def main():
         """,
                     unsafe_allow_html=True)
 
-        # Add reset button
+        # Add search section
         col_search, col_button = st.columns([6, 1])
 
         with col_search:
@@ -72,6 +72,13 @@ def main():
 
         with col_button:
             search_clicked = st.button("Search", help="Start searching with selected stages", use_container_width=True)
+
+        # Add centered "Choose your agents" text
+        st.markdown("""
+            <div style="text-align: center; margin: 20px 0;">
+                <p style="font-size: 1rem; color: #333;">Choose your agents.</p>
+            </div>
+        """, unsafe_allow_html=True)
 
         if 'selected_stages' not in st.session_state:
             st.session_state.selected_stages = set()
@@ -118,7 +125,7 @@ def main():
         selected_stages = list(st.session_state.selected_stages)
 
         # Create tabs for selected stages if we have a search query
-        if search_query or search_clicked: #Added search_clicked condition
+        if search_query or search_clicked:  # Added search_clicked condition
             if not selected_stages:
                 st.warning(
                     "Please select at least one research stage to proceed.")
@@ -241,7 +248,7 @@ def main():
                         st.error(f"An error occurred in {current_stage} tab: {str(e)}")
 
         else:
-            st.info("Please choose below your agents.")
+            st.info("") #Removed the "Please choose below your agents." message
 
         logger.info("Main content rendered successfully")
 
