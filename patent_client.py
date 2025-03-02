@@ -22,7 +22,7 @@ class PatentSearchClient:
             # Configure search parameters
             params = {
                 "q": query,
-                "n": 30,  # Increased from 10 to 30 results
+                "n": 100,  # Increased from 30 to 100 results
                 "type": "patent",
                 "after": "2016-01-01",
                 "token": self.token
