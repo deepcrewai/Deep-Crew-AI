@@ -216,41 +216,70 @@ def main():
                                 st.info("✓ Coming Soon")
 
                             elif current_stage == "results":
-                                # Validate data availability
-                                research_data = st.session_state.get('search_results', [])
-                                patent_data = st.session_state.get('patent_results', [])
-                                funding_data = st.session_state.get('funding_data', [])
+                                # Validate that we have data to analyze
+                                has_research = bool(st.session_state.get('search_results'))
+                                has_patents = bool(st.session_state.get('patent_results'))
+                                has_funding = bool(st.session_state.get('funding_data'))
 
-                                # Show summary of available data
-                                st.header("Combined Results Summary")
+                                if not (has_research or has_patents or has_funding):
+                                    st.warning("Please complete searches in at least one other tab before viewing combined results.")
+                                    continue
 
-                                if research_data:
-                                    st.subheader("Research Findings")
-                                    st.write(f"Found {len(research_data)} research papers")
-                                    # Show top 3 most relevant papers
-                                    for paper in research_data[:3]:
-                                        with st.expander(f"📄 {paper.get('title', 'Untitled')}"):
-                                            st.write(paper.get('abstract', 'No abstract available'))
+                                # Only generate combined analysis if we don't have it yet
+                                if not st.session_state.get('combined_analysis'):
+                                    try:
+                                        ai_analyzer = AIAnalyzer()
+                                        logger.info("Starting combined analysis generation...")
 
-                                if patent_data:
-                                    st.subheader("Patent Information")
-                                    st.write(f"Found {len(patent_data)} patents")
-                                    # Show top 3 most relevant patents
-                                    for patent in patent_data[:3]:
-                                        with st.expander(f"🔍 {patent.get('title', 'Untitled Patent')}"):
-                                            st.write(patent.get('abstract', 'No abstract available'))
+                                        # Get data from session state with proper defaults
+                                        research_data = st.session_state.get('search_results', [])
+                                        patent_data = st.session_state.get('patent_results', [])
+                                        funding_data = st.session_state.get('funding_data', {})
 
-                                if funding_data:
-                                    st.subheader("Funding Opportunities")
-                                    st.write(f"Found {len(funding_data)} funding opportunities")
-                                    # Show top 3 funding opportunities
-                                    for opportunity in funding_data[:3]:
-                                        with st.expander(f"💰 {opportunity.get('title', 'Untitled Opportunity')}"):
-                                            st.write(f"Amount: {opportunity.get('amount', 'Not specified')}")
-                                            st.write(f"Deadline: {opportunity.get('deadline', 'Not specified')}")
+                                        logger.info(f"Data collected - Research: {len(research_data)} items, Patents: {len(patent_data)} items, Funding data present: {bool(funding_data)}")
 
-                                if not any([research_data, patent_data, funding_data]):
-                                    st.warning("Please perform searches in other tabs to view combined results.")
+                                        # Extract network data from research results
+                                        network_data = []
+                                        if research_data:
+                                            network_data = [
+                                                {
+                                                    'author': authorship.get('author', {}).get('display_name'),
+                                                    'orcid': authorship.get('author', {}).get('orcid'),
+                                                    'institution': authorship.get('institutions', [{}])[0].get('display_name')
+                                                }
+                                                for paper in research_data
+                                                for authorship in paper.get('authorships', [])
+                                                if authorship.get('author', {}).get('display_name')  # Only include if we have author name
+                                            ]
+                                            logger.info(f"Network data extracted: {len(network_data)} authors found")
+
+                                        # Generate combined analysis
+                                        st.session_state.combined_analysis = ai_analyzer.analyze_combined_results(
+                                            research_data if research_data else [],
+                                            patent_data if patent_data else [],
+                                            funding_data if funding_data else {},
+                                            network_data if network_data else []
+                                        )
+                                        logger.info("Combined analysis generated successfully")
+
+                                    except Exception as e:
+                                        logger.error(f"Error generating combined analysis: {str(e)}", exc_info=True)
+                                        st.error(f"Error generating combined analysis: {str(e)}")
+                                        st.session_state.combined_analysis = None
+
+                                # Render combined results if available
+                                if st.session_state.get('combined_analysis'):
+                                    try:
+                                        render_combined_results(
+                                            st.session_state.get('search_results', []),
+                                            st.session_state.get('patent_results', []),
+                                            st.session_state.combined_analysis
+                                        )
+                                    except Exception as e:
+                                        logger.error(f"Error rendering combined results: {str(e)}", exc_info=True)
+                                        st.error(f"Error displaying combined results: {str(e)}")
+                                else:
+                                    st.info("No combined analysis available. Please try performing searches again.")
 
                         except Exception as e:
                             logger.error(f"Error in tab {current_stage}: {str(e)}")
