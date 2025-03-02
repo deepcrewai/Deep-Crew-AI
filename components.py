@@ -481,7 +481,7 @@ def render_search_section(results):
             </div>
         """, unsafe_allow_html=True)
 
-def render_patent_results(results, analysis):
+def render_patent_results(results, analysis, context="standalone"):
     """Render patent search results with export functionality."""
     # Create columns for the header and sort dropdown
     col1, col2, col3 = st.columns([2, 1, 1])
@@ -493,7 +493,7 @@ def render_patent_results(results, analysis):
         sort_option = st.selectbox(
             "Sort By",
             options=["Date (Newest)", "Date (Oldest)"],
-            key="patent_sort_option",
+            key=f"patent_sort_option_{context}",
             label_visibility="collapsed"
         )
 
@@ -504,7 +504,7 @@ def render_patent_results(results, analysis):
                 data=generate_patent_pdf_report(results, analysis),
                 file_name="patent_analysis.pdf",
                 mime="application/pdf",
-                key="patent_pdf_download"  # Unique key for patent section
+                key=f"patent_pdf_download_{context}"  # Make key unique based on context
             )
 
     # Sort results based on selection
@@ -535,7 +535,7 @@ def render_patent_results(results, analysis):
 
     with analysis_tab:
         if analysis:  # Only show analysis if we have it
-            render_analysis_section(analysis, section_type="patent")
+            render_analysis_section(analysis, section_type=f"patent_{context}")
         else:
             st.info("No patent analysis available yet.")
 
@@ -550,7 +550,7 @@ def render_analysis_section(analysis, section_type="research"):
         st.download_button(
             label="📑 Export Analysis as PDF",
             data=generate_pdf_report(
-                st.session_state.get('search_results' if section_type == "research" else 'patent_results', []),
+                st.session_state.get('search_results' if section_type.startswith("research") else 'patent_results', []),
                 analysis
             ),
             file_name=f"{section_type}_analysis.pdf",
@@ -789,18 +789,24 @@ def render_combined_results(research_results, patent_results, combined_analysis)
                 st.markdown(f"• {social}")
         with cols[2]:
             st.write("**Economic Effects:**")
-            for effect in sustainability.get("economic_effects", []):
-                st.markdown(f"• {effect}")
+            for effect in sustainability.get("economic_effects", []):                st.markdown(f"• {effect}")
 
     if st.session_state.get('patent_results'):
         patent_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
 
         with patent_tab:
-            render_patent_results(st.session_state.patent_results, st.session_state.patent_analysis)
+            render_patent_results(
+                st.session_state.patent_results,
+                st.session_state.patent_analysis,
+                context="combined"  # Add context to differentiate from standalone view
+            )
 
         with analysis_tab:
             if st.session_state.get('patent_analysis'):
-                render_analysis_section(st.session_state.patent_analysis, section_type="patent")
+                render_analysis_section(
+                    st.session_state.patent_analysis,
+                    section_type="patent_combined"  # Add context to differentiate from standalone view
+                )
 
 def render_network_section(research_results):
     """Render network section showing author ORCID links."""
@@ -870,261 +876,3 @@ def render_network_section(research_results):
 def handle_pdf_export(results, analysis):
     """This function is now deprecated as the export functionality has been moved to render_search_section"""
     pass
-
-def render_combined_results(research_results, patent_results, combined_analysis):
-    """Render enhanced combined analysis of research and patent results."""
-    st.header("Comprehensive Analysis")
-
-    # Summary
-    st.subheader("Overview")
-    st.write(combined_analysis.get("comprehensive_summary", "No summary available"))
-
-    # Key Findings with Impact Scores
-    st.subheader("Key Findings")
-    findings = combined_analysis.get("key_findings", [])
-    for finding in findings:
-        with st.expander(f"🔍 Finding from {finding.get('component', 'Research')} (Impact Score: {finding.get('impact_score', 'N/A')}/10)"):
-            st.write(finding.get('finding', ''))
-            st.write("**Evidence:**", finding.get('evidence', ''))
-
-    # Research-Patent Alignment (only if both components are present)
-    if research_results and patent_results:
-        st.subheader("Research & Patent Alignment")
-        alignment = combined_analysis.get("research_patent_alignment", {})
-        st.write(alignment.get("overview", "No alignment analysis available"))
-
-        col1, col2 = st.columns(2)
-        with col1:
-            st.write("**Gaps:**")
-            for gap in alignment.get("gaps", []):
-                st.markdown(f"• {gap}")
-        with col2:
-            st.write("**Opportunities:**")
-            for opp in alignment.get("opportunities", []):
-                st.markdown(f"• {opp}")
-
-    # Funding Landscape (if funding data is available)
-    funding = combined_analysis.get("funding_landscape")
-    if funding and any(funding.values()):
-        st.subheader("Funding Landscape")
-        st.write("**Available Opportunities:**")
-        for opp in funding.get("available_opportunities", []):
-            st.markdown(f"• {opp}")
-
-        st.write("**Alignment with Research:**")
-        st.write(funding.get("alignment_with_research", "No alignment analysis available"))
-
-        st.write("**Recommendations:**")
-        for rec in funding.get("recommendations", []):
-            st.markdown(f"• {rec}")
-
-    # Collaboration Insights
-    collab = combined_analysis.get("collaboration_insights")
-    if collab and any(collab.values()):
-        st.subheader("Collaboration Network Insights")
-        col1, col2 = st.columns(2)
-        with col1:
-            st.write("**Key Researchers:**")
-            for researcher in collab.get("key_researchers", []):
-                st.markdown(f"• {researcher}")
-        with col2:
-            st.write("**Institution Networks:**")
-            for inst in collab.get("institutional_networks", []):
-                st.markdown(f"• {inst}")
-
-        st.write("**Partnership Opportunities:**")
-        for partner in collab.get("partnership_opportunities", []):
-            st.markdown(f"• {partner}")
-
-    # Innovation Trajectory
-    st.subheader("Innovation Trajectory")
-    trajectory = combined_analysis.get("innovation_trajectory", {})
-    st.write("**Current State:**")
-    st.write(trajectory.get("current_state", "No current state analysis available"))
-
-    col1, col2 = st.columns(2)
-    with col1:
-        st.write("**Short-term Predictions (6-12 months):**")
-        for pred in trajectory.get("short_term_predictions", []):
-            st.markdown(f"• {pred}")
-    with col2:
-        st.write("**Long-term Outlook (2-5 years):**")
-        for outlook in trajectory.get("long_term_outlook", []):
-            st.markdown(f"• {outlook}")
-
-    # Market Potential
-    st.subheader("Market Potential")
-    market = combined_analysis.get("market_potential", {})
-    cols = st.columns(3)
-    with cols[0]:
-        st.write("**Immediate Applications:**")
-        for app in market.get("immediate_applications", []):
-            st.markdown(f"• {app}")
-    with cols[1]:
-        st.write("**Development Needs:**")
-        for need in market.get("development_needs", []):
-            st.markdown(f"• {need}")
-    with cols[2]:
-        st.write("**Market Size Estimates:**")
-        for est in market.get("market_size_estimates", []):
-            st.markdown(f"• {est}")
-
-    # Research Gaps
-    st.subheader("Research Gaps")
-    for gap in combined_analysis.get("research_gaps", []):
-        with st.expander(f"🔍 {gap.get('area', 'Research Area')} (Priority: {gap.get('priority', 'N/A')}/10)"):
-            st.write("**Resources Needed:**", gap.get('resources_needed', ''))
-
-    # Technology Assessment
-    st.subheader("Technology Assessment")
-    tech = combined_analysis.get("technology_assessment", {})
-    maturity = tech.get("maturity_levels", {})
-
-    if maturity:
-        cols = st.columns(len(maturity))
-        for i, (category, score) in enumerate(maturity.items()):
-            with cols[i]:
-                st.metric(f"{category.title()} Maturity", f"{score}/10")
-
-    st.write("**Development Stages:**")
-    for stage in tech.get("development_stages", []):
-        st.markdown(f"• {stage}")
-
-    st.write("**Commercialization Readiness:**")
-    st.write(tech.get("commercialization_readiness", "No readiness assessment available"))
-
-    # Risk Analysis
-    st.subheader("Risk Analysis")
-    risks = combined_analysis.get("risk_analysis", {})
-    tabs = st.tabs(["Technical Risks", "Market Risks", "Funding Risks", "Mitigation Strategies"])
-
-    with tabs[0]:
-        for risk in risks.get("technical_risks", []):
-            st.markdown(f"• {risk}")
-    with tabs[1]:
-        for risk in risks.get("market_risks", []):
-            st.markdown(f"• {risk}")
-    with tabs[2]:
-        for risk in risks.get("funding_risks", []):
-            st.markdown(f"• {risk}")
-    with tabs[3]:
-        for strategy in risks.get("mitigation_strategies", []):
-            st.markdown(f"• {strategy}")
-
-    # Investment Recommendations
-    st.subheader("Investment Recommendations")
-    for rec in combined_analysis.get("investment_recommendations", []):
-        with st.expander(f"💰 {rec.get('area', 'Investment Area')} (ROI: {rec.get('potential_roi', 'N/A')})"):
-            st.write(f"**Timeframe:** {rec.get('timeframe', 'N/A')}")
-            st.write(f"**Required Investment:** {rec.get('required_investment', 'N/A')}")
-
-    # Regulatory Compliance
-    compliance = combined_analysis.get("regulatory_compliance", {})
-    if any(compliance.values()):
-        st.subheader("Regulatory Compliance")
-        cols = st.columns(3)
-        with cols[0]:
-            st.write("**Current Requirements:**")
-            for req in compliance.get("current_requirements", []):
-                st.markdown(f"• {req}")
-        with cols[1]:
-            st.write("**Future Changes:**")
-            for change in compliance.get("future_changes", []):
-                st.markdown(f"• {change}")
-        with cols[2]:
-            st.write("**Compliance Strategies:**")
-            for strategy in compliance.get("compliance_strategies", []):
-                st.markdown(f"• {strategy}")
-
-    # Sustainability Impact
-    sustainability = combined_analysis.get("sustainability_impact", {})
-    if any(sustainability.values()):
-        st.subheader("Sustainability Impact")
-        cols = st.columns(3)
-        with cols[0]:
-            st.write("**Environmental Considerations:**")
-            for env in sustainability.get("environmental_considerations", []):
-                st.markdown(f"• {env}")
-        with cols[1]:
-            st.write("**Social Implications:**")
-            for social in sustainability.get("social_implications", []):
-                st.markdown(f"• {social}")
-        with cols[2]:
-            st.write("**Economic Effects:**")
-            for effect in sustainability.get("economic_effects", []):
-                st.markdown(f"• {effect}")
-
-    if st.session_state.get('patent_results'):
-        patent_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
-
-        with patent_tab:
-            render_patent_results(st.session_state.patent_results, st.session_state.patent_analysis)
-
-        with analysis_tab:
-            if st.session_state.get('patent_analysis'):
-                render_analysis_section(st.session_state.patent_analysis, section_type="patent")
-
-def render_network_section(research_results):
-    """Render network section showing author ORCID links."""
-    st.header("Collaboration Network")
-
-    # Check if Research is selected in session state
-    selected_stages = st.session_state.get('selected_stages', set())
-    if 'research' not in selected_stages:
-        st.info("Please select the Research tab first to view author networks.")
-        return
-
-    if not research_results:
-        st.info("Please perform a search in the Research tab first.")
-        return
-
-    # Add custom HTML/CSS for links
-    st.markdown("""
-        <style>
-        .orcid-link {
-            color: #1a73e8;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 8px;
-            border-radius: 4px;
-            background: #f8f9fa;
-            margin: 4px 0;
-        }
-        .orcid-link:hover {
-            background: #e8f0fe;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-
-    # Tüm yazarları topla
-    authors = {}
-    for paper in research_results:
-        for authorship in paper.get('authorships', []):
-            author = authorship.get('author', {})
-            author_name = author.get('display_name')
-            if author_name and author_name not in authors:
-                authors[author_name] = {
-                    'orcid': author.get('orcid'),
-                    'papers': []
-                }
-            if author_name:
-                authors[author_name]['papers'].append(paper.get('title'))
-
-    # Yazarları göster
-    for author_name, data in authors.items():
-        with st.expander(f"👤 {author_name}"):
-            if data['orcid']:
-                orcid_url = f"https://orcid.org/{data['orcid']}"
-                # Use custom HTML for the link
-                st.markdown(
-                    f'<a href="{orcid_url}" class="orcid-link" target="_blank" rel="noopener noreferrer">'
-                    f'🔗 ORCID: {data["orcid"]}</a>',
-                    unsafe_allow_html=True
-                )
-            else:
-                st.write("🚫 No ORCID ID found")
-
-            st.write("📚 Documents:")
-            for paper in data['papers']:
-                st.write(f"- {paper}")

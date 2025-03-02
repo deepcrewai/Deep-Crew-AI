@@ -193,13 +193,14 @@ def main():
                                     with patent_tab:
                                         render_patent_results(
                                             st.session_state.patent_results,
-                                            st.session_state.patent_analysis)
+                                            st.session_state.patent_analysis,
+                                            context="standalone")
 
                                     with analysis_tab:
                                         if st.session_state.get(
                                                 'patent_analysis'):
                                             render_analysis_section(
-                                                st.session_state.patent_analysis, section_type="patent")
+                                                st.session_state.patent_analysis, section_type="patent_standalone")
 
                         elif current_stage == "funding":
                             if 'funding_data' not in st.session_state:
