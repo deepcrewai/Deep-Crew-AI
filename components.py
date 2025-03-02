@@ -724,6 +724,25 @@ def render_network_section(research_results):
     st.header("Author Network")
     st.write("Literature araştırmanızdaki yazarların ORCID profilleri:")
 
+    # Add custom HTML/CSS for links
+    st.markdown("""
+        <style>
+        .orcid-link {
+            color: #1a73e8;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: #f8f9fa;
+            margin: 4px 0;
+        }
+        .orcid-link:hover {
+            background: #e8f0fe;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
     # Tüm yazarları topla
     authors = {}
     for paper in research_results:
@@ -743,7 +762,12 @@ def render_network_section(research_results):
         with st.expander(f"👤 {author_name}"):
             if data['orcid']:
                 orcid_url = f"https://orcid.org/{data['orcid']}"
-                st.markdown(f"🔗 ORCID: [{data['orcid']}]({orcid_url})")
+                # Use custom HTML for the link
+                st.markdown(
+                    f'<a href="{orcid_url}" class="orcid-link" target="_blank" rel="noopener noreferrer">'
+                    f'🔗 ORCID: {data["orcid"]}</a>',
+                    unsafe_allow_html=True
+                )
             else:
                 st.write("🚫 ORCID ID bulunamadı")
 
