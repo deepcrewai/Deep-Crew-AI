@@ -6,10 +6,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from datetime import datetime
 from reportlab.lib.utils import ImageReader
-import pandas as pd # Added for the edited code
-
-# Assuming OpenAlexClient is defined elsewhere, or you'll need to add its definition here.
-# For example: from openalex import OpenAlexClient 
+import pandas as pd
+from api_client import OpenAlexClient  # Added OpenAlexClient import
 
 
 def generate_pdf_report(results, analysis):
@@ -151,6 +149,7 @@ def generate_pdf_report(results, analysis):
     buffer.seek(0)
     return buffer
 
+
 def generate_patent_pdf_report(results, analysis):
     """Generate a PDF report of patent analysis."""
     buffer = BytesIO()
@@ -245,6 +244,7 @@ def generate_patent_pdf_report(results, analysis):
     buffer.seek(0)
     return buffer
 
+
 def render_search_section(results):
     """Render the modernized search results section."""
     # Display results count separately to ensure proper rendering
@@ -324,7 +324,7 @@ def render_search_section(results):
     # Filter results based on selected ranges
     filtered_results = [
         paper for paper in results
-        if (paper.get('publication_year', 0) >= year_range[0] and 
+        if (paper.get('publication_year', 0) >= year_range[0] and
             paper.get('publication_year', 0) <= year_range[1] and
             paper.get('cited_by_count', 0) >= citation_range[0] and
             paper.get('cited_by_count', 0) <= citation_range[1] and
@@ -486,6 +486,7 @@ def render_search_section(results):
             </div>
         """, unsafe_allow_html=True)
 
+
 def render_patent_results(results, analysis):
     """Render patent search results with export functionality."""
     # Create columns for the header and sort dropdown
@@ -523,6 +524,7 @@ def render_patent_results(results, analysis):
 
             {f"[View Details]({patent['url']})" if patent.get('url') else ''}
             """)
+
 
 def render_analysis_section(analysis):
     """Render the AI analysis section."""
@@ -586,9 +588,11 @@ def render_analysis_section(analysis):
         st.write(f"Complexity Score: {score}/10")
         st.write(complexity.get("explanation", "No explanation available"))
 
+
 def handle_pdf_export(results, analysis):
     """This function is now deprecated as the export functionality has been moved to render_search_section"""
     pass
+
 
 def render_combined_results(research_results, patent_results, combined_analysis):
     """Render enhanced combined analysis of research and patent results."""
@@ -800,7 +804,7 @@ def render_network_section(research_results):
                 st.markdown(
                     f'<a href="{orcid_url}" class="orcid-link" target="_blank" rel="noopener noreferrer">'
                     f'🔗 ORCID: {data["orcid"]}</a>',
-                    unsafe_allowhtml=True
+                    unsafe_allow_html=True
                 )
 
             # Institution and metrics
@@ -833,7 +837,7 @@ def render_network_section(research_results):
             if details.get('counts_by_year'):
                 st.write("📈 **Atıf Trendi**")
                 df = pd.DataFrame(details['counts_by_year'])
-                fig = px.line(df, x='year', y='cited_by_count', 
+                fig = px.line(df, x='year', y='cited_by_count',
                             title='Yıllara Göre Atıf Sayısı')
                 st.plotly_chart(fig, use_container_width=True)
 
