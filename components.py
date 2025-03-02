@@ -538,7 +538,10 @@ def render_analysis_section(analysis, section_type="research"):
     with col2:
         st.download_button(
             label="📑 Export Analysis as PDF",
-            data=generate_pdf_report(st.session_state.get('search_results', []), analysis),
+            data=generate_pdf_report(
+                st.session_state.get('search_results' if section_type == "research" else 'patent_results', []),
+                analysis
+            ),
             file_name=f"{section_type}_analysis.pdf",
             mime="application/pdf",
             key=f"{section_type}_analysis_pdf_download"  # Make key unique based on section type
@@ -784,7 +787,7 @@ def render_combined_results(research_results, patent_results, combined_analysis)
         with patent_tab:
             render_patent_results(st.session_state.patent_results, st.session_state.patent_analysis)
 
-        with analysis_tab:
+        with analysistab:
             if st.session_state.get('patent_analysis'):
                 render_analysis_section(st.session_state.patent_analysis, section_type="patent")
 
