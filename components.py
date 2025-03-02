@@ -484,7 +484,7 @@ def render_search_section(results):
 def render_patent_results(results, analysis):
     """Render patent search results with export functionality."""
     # Create columns for the header and sort dropdown
-    col1, col2 = st.columns([3, 1])
+    col1, col2, col3 = st.columns([2, 1, 1])
 
     with col1:
         st.subheader(f"Document Results({len(results)})")
@@ -497,6 +497,16 @@ def render_patent_results(results, analysis):
             label_visibility="collapsed"
         )
 
+    with col3:
+        if analysis:  # Only show export button if we have analysis
+            st.download_button(
+                label="📑 Export Patent Analysis",
+                data=generate_patent_pdf_report(results, analysis),
+                file_name="patent_analysis.pdf",
+                mime="application/pdf",
+                key="patent_pdf_download"  # Unique key for patent section
+            )
+
     # Sort results based on selection
     sorted_results = list(results)  # Create a copy to avoid modifying original
     if sort_option == "Date (Newest)":
@@ -508,7 +518,7 @@ def render_patent_results(results, analysis):
     for patent in sorted_results:
         with st.expander(f"📄 {patent.get('title', 'Untitled Patent')}"):
             st.write("**ID:**")
-            st.code(patent.get('patent_id', 'N/A'), language='text')  # This makes the ID easily selectable and adds a copy button
+            st.code(patent.get('patent_id', 'N/A'), language='text')
 
             st.markdown(f"""
             **Inventors:** {patent.get('inventors', 'N/A')}  
@@ -531,7 +541,7 @@ def render_analysis_section(analysis):
             data=generate_pdf_report([], analysis),
             file_name="research_analysis.pdf",
             mime="application/pdf",
-            key="research_pdf_download"  # Changed from pdf_download to research_pdf_download
+            key="research_pdf_download"  # Unique key for research section
         )
 
     # Summary
