@@ -483,6 +483,10 @@ def render_search_section(results):
 
 def render_patent_results(results, analysis):
     """Render patent search results with export functionality."""
+    # Initialize sort option in session state if not exists
+    if 'patent_sort_option' not in st.session_state:
+        st.session_state.patent_sort_option = "Date (Newest)"
+
     # Create columns for the header and sort dropdown
     col1, col2 = st.columns([3, 1])
 
@@ -490,18 +494,20 @@ def render_patent_results(results, analysis):
         st.subheader(f"Document Results({len(results)})")
 
     with col2:
-        sort_option = st.selectbox(
+        # Use session state to maintain sort selection
+        st.session_state.patent_sort_option = st.selectbox(
             "Sort By",
             options=["Date (Newest)", "Date (Oldest)"],
-            key="patent_sort_option",
-            label_visibility="collapsed"
+            key="patent_sort_dropdown",
+            label_visibility="collapsed",
+            index=["Date (Newest)", "Date (Oldest)"].index(st.session_state.patent_sort_option)
         )
 
     # Sort results based on selection
     sorted_results = list(results)  # Create a copy to avoid modifying original
-    if sort_option == "Date (Newest)":
+    if st.session_state.patent_sort_option == "Date (Newest)":
         sorted_results.sort(key=lambda x: x.get('filing_date', ''), reverse=True)
-    elif sort_option == "Date (Oldest)":
+    elif st.session_state.patent_sort_option == "Date (Oldest)":
         sorted_results.sort(key=lambda x: x.get('filing_date', ''))
 
     # Display patents
