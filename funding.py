@@ -47,7 +47,8 @@ class FundingAgent:
                             {{
                                 "title": "Grant name",
                                 "funder": "Organization name",
-                                "amount": "Funding amount",
+                                "funder_url": "Organization website URL",
+                                "amount": "Funding amount (format as $X,XXX,XXX)",
                                 "deadline": "Application deadline (must be between {current_year} and {current_year + 2})",
                                 "eligibility": "Eligibility criteria",
                                 "region": "Geographical region",
@@ -135,11 +136,14 @@ def render_funding_section(research_query: str):
                 for opp in opportunities:
                     with st.expander(f"{opp['title']} - {opp['funder']}"):
                         st.markdown(f"""
-                            **Amount:** {opp['amount']}  
+                            **Amount:** `{opp['amount']}`  
                             **Deadline:** {opp['deadline']}  
                             **Eligibility:** {opp['eligibility']}  
                             **Success Rate:** {opp['success_rate']}  
                             **Priority Level:** {opp['priority_level']}
+
+                            ---
+                            **Institution:** [{opp['funder']}]({opp.get('funder_url', '#')})
                         """)
 
     # Funding Trends Tab
