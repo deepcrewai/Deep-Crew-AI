@@ -56,10 +56,7 @@ def main():
                          alt="Deep Crew Logo" 
                          style="max-width: 350px; height: auto; margin: 30px auto;">
                 </div>
-                <h1 class="main-header">Research & Innovation Hub</h1>
-                <p class="subtitle">
-                    Discover insights, analyze patents, and explore funding opportunities with AI-powered research tools
-                </p>
+                <h1 class="main-header" style="text-align: center; font-size: 1.75rem;">Research & Innovation Hub</h1>
             </div>
         """,
                     unsafe_allow_html=True)
