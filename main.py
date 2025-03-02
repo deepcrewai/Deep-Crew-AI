@@ -50,6 +50,13 @@ def main():
 
         # Main content
         st.markdown("""
+            <style>
+            div.stAlert {
+                text-align: center;
+                max-width: 750px;
+                margin: 1rem auto;
+            }
+            </style>
             <div class="main-container">
                 <div class="logo-container" style="text-align: center; width: 100%;">
                     <img src="https://deep-crew.ai/wp-content/uploads/2025/03/9128379182739812873.png" 
@@ -60,7 +67,7 @@ def main():
         """,
                     unsafe_allow_html=True)
 
-        # Add reset button
+        # Add search section
         col_search, col_button = st.columns([6, 1])
 
         with col_search:
