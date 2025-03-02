@@ -57,6 +57,17 @@ def main():
                 max-width: 750px;
                 margin: 1rem auto;
             }
+            .submarine-container {
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                z-index: 1000;
+                cursor: pointer;
+                transition: transform 0.3s ease;
+            }
+            .submarine-container:hover {
+                transform: scale(1.1);
+            }
             </style>
             <div class="main-container">
                 <div class="logo-container" style="text-align: center; width: 100%;">
@@ -64,11 +75,11 @@ def main():
                          alt="Deep Crew Logo" 
                          style="max-width: 350px; height: auto; margin: 30px auto;">
                 </div>
-                <div style="text-align: center; margin: 20px auto; cursor: pointer;">
-                    <a href="#" onclick="window.open('/static/game/game.html', 'Clean The Sea Game', 'width=800,height=800,top=50,left=50')">
+                <div class="submarine-container">
+                    <a href="javascript:void(0)" onclick="window.open('/static/game/game.html', 'Clean The Sea Game', 'width=800,height=800,top=50,left=50')" style="display: block;">
                         <img src="https://deep-crew.ai/wp-content/uploads/2025/03/animation-submarine-062119.gif" 
                              alt="Play Clean The Sea Game" 
-                             style="max-width: 200px; height: auto;">
+                             style="max-width: 150px; height: auto;">
                     </a>
                 </div>
             </div>
