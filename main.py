@@ -61,7 +61,7 @@ def main():
                     unsafe_allow_html=True)
 
         # Add reset button
-        col_search, col_reset = st.columns([6, 1])
+        col_search, col_button = st.columns([6, 1])
 
         with col_search:
             search_query = st.text_input(
@@ -70,10 +70,8 @@ def main():
                 help="Type your research query here",
                 label_visibility="collapsed")
 
-        with col_reset:
-            if st.button("🔄 Reset", help="Reset search and selected stages"):
-                reset_app()
-                st.rerun()
+        with col_button:
+            search_clicked = st.button("🔍 Search", help="Start searching with selected stages", use_container_width=True)
 
         if 'selected_stages' not in st.session_state:
             st.session_state.selected_stages = set()
@@ -120,7 +118,7 @@ def main():
         selected_stages = list(st.session_state.selected_stages)
 
         # Create tabs for selected stages if we have a search query
-        if search_query:
+        if search_query or search_clicked: #Added search_clicked condition
             if not selected_stages:
                 st.warning(
                     "Please select at least one research stage to proceed.")
