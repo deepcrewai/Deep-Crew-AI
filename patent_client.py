@@ -85,21 +85,23 @@ class PatentSearchClient:
                 for p in patents
             ]
 
-            print("Sending patents to OpenAI for analysis...")
+            print(f"Sending {len(patents)} patents to OpenAI for comprehensive analysis...")
 
             response = self.ai_client.chat.completions.create(
                 model=self.model,
                 messages=[{
                     "role": "system",
-                    "content": """As a patent analysis expert, analyze these patents and provide a JSON response with the following structure:
+                    "content": """As a patent analysis expert, perform a comprehensive analysis of ALL provided patents. 
+                    Consider every patent in the dataset to identify overarching patterns and insights.
+                    Provide a JSON response with the following structure:
                     {
-                        "summary": "A detailed overview of the technology landscape...",
+                        "summary": "A detailed overview analyzing ALL patents in the dataset, highlighting key technological trends and developments...",
                         "trends": {
-                            "emerging_topics": ["trend1", "trend2"],
-                            "declining_topics": ["trend3", "trend4"]
+                            "emerging_topics": ["Identify at least 5 emerging technology trends from the entire patent set"],
+                            "declining_topics": ["Identify at least 5 declining or mature technology areas"]
                         },
-                        "opportunities": ["opportunity1", "opportunity2", "opportunity3"],
-                        "competition": "A detailed competitive analysis..."
+                        "opportunities": ["List at least 5 specific opportunities based on gaps in the patent landscape"],
+                        "competition": "A thorough competitive analysis based on all patent filings, including market dynamics and key players"
                     }"""
                 }, {
                     "role": "user",
@@ -109,7 +111,7 @@ class PatentSearchClient:
             )
 
             analysis = json.loads(response.choices[0].message.content)
-            print("Successfully received AI analysis")
+            print("Successfully received comprehensive AI analysis")
             return analysis
 
         except Exception as e:
