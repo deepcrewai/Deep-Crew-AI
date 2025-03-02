@@ -708,14 +708,14 @@ def render_network_section(research_results):
     """Render network section showing author ORCID links."""
     st.header("Collaboration Network")
 
-    # Check if Literature is selected in session state
+    # Check if Research is selected in session state
     selected_stages = st.session_state.get('selected_stages', set())
     if 'research' not in selected_stages:
-        st.info("Please select the Literature tab first to view author networks.")
+        st.info("Please select the Research tab first to view author networks.")
         return
 
     if not research_results:
-        st.info("Please perform a search in the Literature tab first.")
+        st.info("Please perform a search in the Research tab first.")
         return
 
     # Add custom HTML/CSS for links

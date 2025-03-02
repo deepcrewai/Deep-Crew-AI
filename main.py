@@ -82,7 +82,7 @@ def main():
         col1, col2, col3, col4, col5 = st.columns(5)
 
         stages = {
-            'research': 'Literature',
+            'research': 'Research',  # Changed from 'Literature' to 'Research'
             'patents': 'Patents',
             'funding': 'Funding',
             'network': 'Network',
@@ -128,8 +128,8 @@ def main():
             for idx, tab in enumerate(tabs):
                 with tab:
                     try:
-                        if selected_stages[idx] == "research":
-                            with st.spinner("🔍 Analyzing Literature..."):
+                        if selected_stages[idx] == "research":  # Updated condition
+                            with st.spinner("🔍 Analyzing Research..."):  # Updated spinner text
                                 openalex_client = OpenAlexClient()
                                 ai_analyzer = AIAnalyzer()
 
@@ -198,8 +198,7 @@ def main():
                                         if st.session_state.get(
                                                 'patent_analysis'):
                                             render_analysis_section(
-                                                st.session_state.
-                                                patent_analysis)
+                                                st.session_state.patent_analysis)
 
                         elif selected_stages[idx] == "funding":
                             render_funding_section(search_query)
