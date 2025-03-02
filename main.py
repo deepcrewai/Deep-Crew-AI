@@ -86,7 +86,7 @@ def main():
             'research': 'Literature',
             'patents': 'Patents',
             'funding': 'Funding',
-            'network': 'Network',
+            'network': 'Collabration',
             'compliance': 'Legal'
         }
 
