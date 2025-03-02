@@ -185,22 +185,22 @@ def main():
                                         st.session_state.patent_results = None
                                         st.session_state.patent_analysis = None
 
-                                if st.session_state.get('patent_results'):
-                                    # Create sub-tabs for Documents and AI Analysis
-                                    patent_tab, analysis_tab = st.tabs(
-                                        ["Documents", "AI Analysis"])
+                                # Create sub-tabs for Documents and AI Analysis
+                                patent_tab, analysis_tab = st.tabs(
+                                    ["Documents", "AI Analysis"])
 
-                                    with patent_tab:
+                                with patent_tab:
+                                    if st.session_state.get('patent_results'):
                                         render_patent_results(
                                             st.session_state.patent_results,
                                             st.session_state.patent_analysis,
                                             context="standalone")
 
-                                    with analysis_tab:
-                                        if st.session_state.get(
-                                                'patent_analysis'):
-                                            render_analysis_section(
-                                                st.session_state.patent_analysis, section_type="patent_standalone")
+                                with analysis_tab:
+                                    if st.session_state.get('patent_analysis'):
+                                        render_analysis_section(
+                                            st.session_state.patent_analysis,
+                                            section_type="patent_standalone")
 
                         elif current_stage == "funding":
                             if 'funding_data' not in st.session_state:
