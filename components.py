@@ -514,20 +514,31 @@ def render_patent_results(results, analysis):
     elif sort_option == "Date (Oldest)":
         sorted_results.sort(key=lambda x: x.get('filing_date', ''))
 
-    # Display patents
-    for patent in sorted_results:
-        with st.expander(f"📄 {patent.get('title', 'Untitled Patent')}"):
-            st.write("**ID:**")
-            st.code(patent.get('patent_id', 'N/A'), language='text')
+    # Create sub-tabs for Documents and AI Analysis
+    patent_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
 
-            st.markdown(f"""
-            **Inventors:** {patent.get('inventors', 'N/A')}  
-            **Filing Date:** {patent.get('filing_date', 'N/A')}
+    with patent_tab:
+        # Display patents
+        for patent in sorted_results:
+            with st.expander(f"📄 {patent.get('title', 'Untitled Patent')}"):
+                st.write("**ID:**")
+                st.code(patent.get('patent_id', 'N/A'), language='text')
 
-            {patent.get('abstract', 'No abstract available')}
+                st.markdown(f"""
+                **Inventors:** {patent.get('inventors', 'N/A')}  
+                **Filing Date:** {patent.get('filing_date', 'N/A')}
 
-            {f"[View Details]({patent['url']})" if patent.get('url') else ''}
-            """)
+                {patent.get('abstract', 'No abstract available')}
+
+                {f"[View Details]({patent['url']})" if patent.get('url') else ''}
+                """)
+
+    with analysis_tab:
+        if analysis:  # Only show analysis if we have it
+            render_analysis_section(analysis, section_type="patent")
+        else:
+            st.info("No patent analysis available yet.")
+
 
 def render_analysis_section(analysis, section_type="research"):
     """Render the AI analysis section."""
@@ -787,7 +798,7 @@ def render_combined_results(research_results, patent_results, combined_analysis)
         with patent_tab:
             render_patent_results(st.session_state.patent_results, st.session_state.patent_analysis)
 
-        with analysistab:
+        with analysis_tab:
             if st.session_state.get('patent_analysis'):
                 render_analysis_section(st.session_state.patent_analysis, section_type="patent")
 
