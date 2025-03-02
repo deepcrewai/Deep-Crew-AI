@@ -120,24 +120,27 @@ def main():
                 display_stages = list(selected_stages) + ["results"]
 
                 # Create tabs with proper names
-                tabs = st.tabs([
-                    stages.get(stage, "Results") if stage == "results" else stages.get(stage, stage.capitalize())
-                    for stage in display_stages
-                ])
+                tab_names = []
+                for stage in display_stages:
+                    if stage == "results":
+                        tab_names.append("Results")
+                    else:
+                        tab_names.append(stages.get(stage, stage.capitalize()))
 
-                for i, tab in enumerate(display_stages):  # Iterate over display_stages directly
-                    with tabs[i]:
+                tabs = st.tabs(tab_names)
+
+                # Process each tab
+                for idx, tab in enumerate(tabs):
+                    with tab:
                         try:
-                            current_stage = display_stages[i]
+                            current_stage = display_stages[idx]
 
                             if current_stage == "research":
                                 with st.spinner("🔍 Analyzing Research..."):
                                     openalex_client = OpenAlexClient()
                                     ai_analyzer = AIAnalyzer()
 
-                                    # Only do a new search if:
-                                    # 1. We have a new search query OR
-                                    # 2. We don't have any search results yet
+                                    # Only do a new search if needed
                                     if (search_query != st.session_state.get('last_query', '') or
                                         'search_results' not in st.session_state):
                                         try:
@@ -213,27 +216,30 @@ def main():
                                 st.info("✓ Coming Soon")
 
                             elif current_stage == "results":
+                                # Only generate combined analysis if we don't have it yet
                                 if not st.session_state.get('combined_analysis'):
-                                    ai_analyzer = AIAnalyzer()
-                                    research_data = st.session_state.get('search_results', [])
-                                    patent_data = st.session_state.get('patent_results', [])
-                                    funding_data = st.session_state.get('funding_data', {})
-
-                                    # Extract network data
-                                    network_data = []
-                                    if research_data:
-                                        network_data = [
-                                            {
-                                                'author': authorship.get('author', {}).get('display_name'),
-                                                'orcid': authorship.get('author', {}).get('orcid'),
-                                                'institution': authorship.get('institutions', [{}])[0].get('display_name')
-                                            }
-                                            for paper in research_data
-                                            for authorship in paper.get('authorships', [])
-                                        ]
-
-                                    # Generate combined analysis
                                     try:
+                                        ai_analyzer = AIAnalyzer()
+
+                                        # Get data from session state with proper defaults
+                                        research_data = st.session_state.get('search_results', [])
+                                        patent_data = st.session_state.get('patent_results', [])
+                                        funding_data = st.session_state.get('funding_data', {})
+
+                                        # Extract network data from research results
+                                        network_data = []
+                                        if research_data:
+                                            network_data = [
+                                                {
+                                                    'author': authorship.get('author', {}).get('display_name'),
+                                                    'orcid': authorship.get('author', {}).get('orcid'),
+                                                    'institution': authorship.get('institutions', [{}])[0].get('display_name')
+                                                }
+                                                for paper in research_data
+                                                for authorship in paper.get('authorships', [])
+                                            ]
+
+                                        # Generate combined analysis
                                         st.session_state.combined_analysis = ai_analyzer.analyze_combined_results(
                                             research_data,
                                             patent_data,
@@ -245,7 +251,7 @@ def main():
                                         st.error("Error generating combined analysis. Please try again.")
                                         st.session_state.combined_analysis = None
 
-                                # Only render if we have combined analysis
+                                # Render combined results if available
                                 if st.session_state.get('combined_analysis'):
                                     render_combined_results(
                                         st.session_state.get('search_results', []),
