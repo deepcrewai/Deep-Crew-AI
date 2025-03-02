@@ -71,7 +71,7 @@ def main():
                 label_visibility="collapsed")
 
         with col_button:
-            search_clicked = st.button("🔍 Search", help="Start searching with selected stages", use_container_width=True)
+            search_clicked = st.button("Search", help="Start searching with selected stages", use_container_width=True)
 
         if 'selected_stages' not in st.session_state:
             st.session_state.selected_stages = set()
