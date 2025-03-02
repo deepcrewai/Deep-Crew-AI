@@ -706,8 +706,7 @@ def render_combined_results(research_results, patent_results, combined_analysis)
 
 def render_network_section(research_results):
     """Render network section showing author ORCID links."""
-    st.header("Author Network")
-    st.write("Literature araştırmanızdaki yazarların ORCID profilleri:")
+    st.header("Collaboration Network")
 
     # Check if Literature is selected in session state
     selected_stages = st.session_state.get('selected_stages', set())
