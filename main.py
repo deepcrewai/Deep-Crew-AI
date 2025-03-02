@@ -79,19 +79,30 @@ def main():
             st.session_state.selected_stages = set()
 
         # Create stage buttons using columns for horizontal layout
-        col1, col2, col3, col4, col5, col6 = st.columns(6)
+        col1, col2, col3, col4, col5 = st.columns(5)
 
         stages = {
             'research': 'Research',
             'patents': 'Patents',
             'funding': 'Funding',
             'network': 'Network',
-            'synthesis': 'Synthesis',  # Yeni eklenen
             'compliance': 'Legal'
         }
 
-        columns = [col1, col2, col3, col4, col5, col6]  # Updated columns list
+        columns = [col1, col2, col3, col4, col5]
 
+        # Synthesis otomatik seçim kontrolü
+        visible_stages = ['research', 'patents', 'funding', 'network', 'compliance']
+        selected_count = len([stage for stage in visible_stages if stage in st.session_state.selected_stages])
+
+        # En az 2 modül seçiliyse synthesis'i otomatik ekle
+        if selected_count >= 2 and 'synthesis' not in st.session_state.selected_stages:
+            st.session_state.selected_stages.add('synthesis')
+        # 2'den az modül seçiliyse synthesis'i kaldır
+        elif selected_count < 2 and 'synthesis' in st.session_state.selected_stages:
+            st.session_state.selected_stages.remove('synthesis')
+
+        # Görünür butonları oluştur
         for idx, (stage_key, label) in enumerate(stages.items()):
             with columns[idx]:
                 is_selected = stage_key in st.session_state.selected_stages
@@ -116,7 +127,8 @@ def main():
                 return
 
             # Create tabs with stage names
-            tabs = st.tabs([stages.get(stage, stage.capitalize()) for stage in selected_stages])
+            tabs = st.tabs([stages.get(stage, stage.capitalize()) if stage != 'synthesis' else 'Synthesis'
+                            for stage in selected_stages])
 
             # Process each tab
             for idx, tab in enumerate(tabs):
@@ -164,12 +176,14 @@ def main():
                         elif current_stage == "patents":
                             with st.spinner("🔍 Searching patents..."):
                                 patent_client = PatentSearchClient()
-                                if search_query != st.session_state.get('last_query', '') or st.session_state.get('patent_results') is None:
+                                if search_query != st.session_state.get('last_query', '') or st.session_state.get(
+                                        'patent_results') is None:
                                     patent_results = patent_client.search_patents(search_query)
                                     if patent_results:
                                         st.session_state.patent_results = patent_results
                                         with st.spinner("🤖 Analyzing patents..."):
-                                            st.session_state.patent_analysis = patent_client.analyze_patents(patent_results)
+                                            st.session_state.patent_analysis = patent_client.analyze_patents(
+                                                patent_results)
                                     else:
                                         st.warning("No patent results found.")
                                         st.session_state.patent_results = None
@@ -202,17 +216,14 @@ def main():
                             render_network_section(st.session_state.get('search_results', []))
 
                         elif current_stage == "synthesis":
-                            # En az 2 modül seçili olmalı
-                            if len(selected_stages) >= 2:
-                                with st.spinner("🔄 Synthesizing insights..."):
-                                    render_synthesis_section(
-                                        research_data=st.session_state.get('search_results', []),
-                                        patent_data=st.session_state.get('patent_results', []),
-                                        funding_data=st.session_state.get('funding_data', []),
-                                        selected_stages=selected_stages
-                                    )
-                            else:
-                                st.warning("Please select at least 2 research modules to generate synthesis.")
+                            # En az 2 modül seçili olmalı kontrolü kaldırıldı çünkü otomatik seçim yapılıyor
+                            with st.spinner("🔄 Synthesizing insights..."):
+                                render_synthesis_section(
+                                    research_data=st.session_state.get('search_results', []),
+                                    patent_data=st.session_state.get('patent_results', []),
+                                    funding_data=st.session_state.get('funding_data', []),
+                                    selected_stages=selected_stages
+                                )
 
                         elif current_stage == "compliance":
                             st.info("✓ Coming Soon")
