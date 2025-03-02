@@ -134,36 +134,39 @@ def main():
                                 openalex_client = OpenAlexClient()
                                 ai_analyzer = AIAnalyzer()
 
-                                if search_query != st.session_state.get(
-                                        'last_query', ''):
-                                    keywords = ai_analyzer.generate_search_keywords(
-                                        search_query)
-                                    results = openalex_client.search(
-                                        query=search_query, keywords=keywords)
+                                # Only do a new search if:
+                                # 1. We have a new search query OR
+                                # 2. We don't have any search results yet
+                                if (search_query != st.session_state.get('last_query', '') or
+                                    'search_results' not in st.session_state):
+                                    try:
+                                        keywords = ai_analyzer.generate_search_keywords(search_query)
+                                        results = openalex_client.search(query=search_query, keywords=keywords)
 
-                                    if results:
-                                        st.session_state.search_results = results
-                                        st.session_state.analysis = ai_analyzer.analyze_results(
-                                            results)
-                                        st.session_state.last_query = search_query
-                                    else:
-                                        st.warning(
-                                            "No results found. Try different terms."
-                                        )
-                                        st.session_state.search_results = None
+                                        if results:
+                                            st.session_state.search_results = results
+                                            st.session_state.analysis = ai_analyzer.analyze_results(results)
+                                            st.session_state.last_query = search_query
+                                        else:
+                                            st.warning("No results found. Try different terms.")
+                                            st.session_state.search_results = []
+                                            st.session_state.analysis = None
+                                    except Exception as e:
+                                        logger.error(f"Error in research search: {str(e)}")
+                                        st.error(f"An error occurred during search: {str(e)}")
+                                        st.session_state.search_results = []
                                         st.session_state.analysis = None
 
                                 # Create sub-tabs for Documents and AI Analysis
-                                doc_tab, analysis_tab = st.tabs(
-                                    ["Documents", "AI Analysis"])
+                                doc_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
 
+                                # Show results if we have them
                                 if st.session_state.get('search_results'):
                                     with doc_tab:
-                                        render_search_section(
-                                            st.session_state.search_results)
+                                        render_search_section(st.session_state.search_results)
                                     with analysis_tab:
-                                        render_analysis_section(
-                                            st.session_state.analysis, section_type="research")
+                                        if st.session_state.get('analysis'):
+                                            render_analysis_section(st.session_state.analysis, section_type="research")
 
                         elif current_stage == "patents":
                             with st.spinner("🔍 Searching patents..."):
