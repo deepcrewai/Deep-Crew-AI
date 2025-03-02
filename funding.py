@@ -97,7 +97,7 @@ class FundingAgent:
             print(f"Error analyzing funding trends: {str(e)}")
             return {}
 
-def render_funding_section(research_query: str):
+def render_funding_section(research_query: str, funding_data: List[Dict] = None):
     """Render the funding section in the Streamlit app."""
     funding_agent = FundingAgent()
 
@@ -128,23 +128,25 @@ def render_funding_section(research_query: str):
                 <h3>Available Opportunities</h3>
             </div>
         """, unsafe_allow_html=True)
-        with st.spinner("🔍 Finding and analyzing funding opportunities..."):
-            opportunities = funding_agent.get_funding_opportunities(research_query, selected_region)
 
-            if opportunities:
-                st.markdown("### 📑 Available Opportunities")
-                for opp in opportunities:
-                    with st.expander(f"{opp['title']} - {opp['funder']}"):
-                        st.markdown(f"""
-                            **Amount:** `{opp['amount']}`  
-                            **Deadline:** {opp['deadline']}  
-                            **Eligibility:** {opp['eligibility']}  
-                            **Success Rate:** {opp['success_rate']}  
-                            **Priority Level:** {opp['priority_level']}
+        if not funding_data:
+            with st.spinner("🔍 Finding and analyzing funding opportunities..."):
+                funding_data = funding_agent.get_funding_opportunities(research_query, selected_region)
 
-                            ---
-                            **Institution:** [{opp['funder']}]({opp.get('funder_url', '#')})
-                        """)
+        if funding_data:
+            st.markdown("### 📑 Available Opportunities")
+            for opp in funding_data:
+                with st.expander(f"{opp['title']} - {opp['funder']}"):
+                    st.markdown(f"""
+                        **Amount:** `{opp['amount']}`  
+                        **Deadline:** {opp['deadline']}  
+                        **Eligibility:** {opp['eligibility']}  
+                        **Success Rate:** {opp['success_rate']}  
+                        **Priority Level:** {opp['priority_level']}
+
+                        ---
+                        **Institution:** [{opp['funder']}]({opp.get('funder_url', '#')})
+                    """)
 
     # Funding Trends Tab
     with main_tabs[1]:
