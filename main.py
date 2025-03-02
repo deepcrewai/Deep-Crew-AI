@@ -119,16 +119,16 @@ def main():
                 # Create a new list with existing stages plus results
                 display_stages = list(selected_stages) + ["results"]
 
-                # Create tabs
+                # Create tabs with proper names
                 tabs = st.tabs([
-                    stages.get(stage, "Results" if stage == "results" else stage.capitalize())
+                    stages.get(stage, "Results") if stage == "results" else stages.get(stage, stage.capitalize())
                     for stage in display_stages
                 ])
 
-                for i, tab in enumerate(tabs):
-                    with tab:
+                for i, tab in enumerate(display_stages):  # Iterate over display_stages directly
+                    with tabs[i]:
                         try:
-                            current_stage = display_stages[i]  # Use display_stages instead of selected_stages
+                            current_stage = display_stages[i]
 
                             if current_stage == "research":
                                 with st.spinner("🔍 Analyzing Research..."):
@@ -256,8 +256,8 @@ def main():
                                     st.info("Please perform searches in other tabs first to view combined results.")
 
                         except Exception as e:
-                            logger.error(f"Error in tab {display_stages[i]}: {str(e)}")
-                            st.error(f"An error occurred in {display_stages[i]} tab: {str(e)}")
+                            logger.error(f"Error in tab {current_stage}: {str(e)}")
+                            st.error(f"An error occurred in {current_stage} tab: {str(e)}")
 
             else:
                 st.info("Please choose multiple research stages to see combined results.")
