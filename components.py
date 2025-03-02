@@ -709,6 +709,12 @@ def render_network_section(research_results):
     st.header("Author Network")
     st.write("Literature araştırmanızdaki yazarların ORCID profilleri:")
 
+    # Check if Literature is selected in session state
+    selected_stages = st.session_state.get('selected_stages', set())
+    if 'research' not in selected_stages:
+        st.info("Please select the Literature tab first to view author networks.")
+        return
+
     if not research_results:
         st.info("Please perform a search in the Literature tab first.")
         return
