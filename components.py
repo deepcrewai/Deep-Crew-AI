@@ -481,6 +481,25 @@ def render_search_section(results):
             </div>
         """, unsafe_allow_html=True)
 
+    # Add Network Analysis tab
+    if st.session_state.get('show_network_analysis', True):
+        st.markdown("### 🔍 Research Network")
+
+        # Extract authors from all papers
+        all_authors = []
+        for paper in results:
+            for authorship in paper.get('authorships', []):
+                if 'author' in authorship:
+                    all_authors.append(authorship['author'])
+
+        # Remove duplicates based on display_name
+        unique_authors = {author.get('display_name'): author for author in all_authors}.values()
+
+        # Render network analysis
+        from network_client import render_network_section
+        render_network_section(list(unique_authors))
+
+
 def render_patent_results(results, analysis):
     """Render patent search results with export functionality."""
     # Create columns for the header and sort dropdown
