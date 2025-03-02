@@ -713,3 +713,52 @@ def render_combined_results(research_results, patent_results, combined_analysis)
         with analysis_tab:
             if st.session_state.get('patent_analysis'):
                 render_analysis_section(st.session_state.patent_analysis)
+
+
+def render_network_section(research_results):
+    """Render network section showing author ORCID links."""
+    if not research_results:
+        st.info("Önce Literature sekmesinde bir arama yapın.")
+        return
+
+    st.header("Author Network")
+    st.write("Literature araştırmanızdaki yazarların ORCID profilleri:")
+
+    # Tüm yazarları topla
+    authors = {}
+    for paper in research_results:
+        for authorship in paper.get('authorships', []):
+            author = authorship.get('author', {})
+            author_name = author.get('display_name')
+            if author_name and author_name not in authors:
+                authors[author_name] = {
+                    'orcid': author.get('orcid'),
+                    'papers': []
+                }
+            if author_name:
+                authors[author_name]['papers'].append(paper.get('title'))
+
+    # Yazarları göster
+    for author_name, data in authors.items():
+        with st.expander(f"👤 {author_name}"):
+            if data['orcid']:
+                orcid_url = f"https://orcid.org/{data['orcid']}"
+                st.markdown(f"🔗 ORCID: [{data['orcid']}]({orcid_url})")
+            else:
+                st.write("🚫 ORCID ID bulunamadı")
+
+            st.write("📚 Makaleler:")
+            for paper in data['papers']:
+                st.write(f"- {paper}")
+
+    # İstatistikler
+    st.subheader("İstatistikler")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Toplam Yazar", len(authors))
+    with col2:
+        orcid_count = sum(1 for data in authors.values() if data['orcid'])
+        st.metric("ORCID'li Yazarlar", orcid_count)
+    with col3:
+        avg_papers = sum(len(data['papers']) for data in authors.values()) / len(authors) if authors else 0
+        st.metric("Ortalama Makale/Yazar", f"{avg_papers:.1f}")

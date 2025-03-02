@@ -7,7 +7,8 @@ from api_client import OpenAlexClient
 from ai_analyzer import AIAnalyzer
 from patent_client import PatentSearchClient
 from components import (render_search_section, render_analysis_section,
-                        render_patent_results, render_combined_results)
+                        render_patent_results, render_combined_results,
+                        render_network_section)
 from funding import render_funding_section
 
 # Configure logging
@@ -204,7 +205,10 @@ def main():
                             render_funding_section(search_query)
 
                         elif selected_stages[idx] == "network":
-                            st.info("🔄 Coming Soon")
+                            if st.session_state.get('search_results'):
+                                render_network_section(st.session_state.search_results)
+                            else:
+                                st.info("Önce Literature sekmesinde bir arama yapın.")
 
                         elif selected_stages[idx] == "compliance":
                             st.info("✓ Coming Soon")
