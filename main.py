@@ -224,8 +224,8 @@ def main():
                                 ai_analyzer = AIAnalyzer()
 
                                 # Collect all available data
-                                research_data = st.session_state.get('search_results') or []
-                                patent_data = st.session_state.get('patent_results') or []
+                                research_data = st.session_state.get('search_results', [])
+                                patent_data = st.session_state.get('patent_results', [])
                                 funding_data = st.session_state.get('funding_data', {})
 
                                 # Extract network data
@@ -242,19 +242,27 @@ def main():
                                     ]
 
                                 # Generate combined analysis
-                                st.session_state.combined_analysis = ai_analyzer.analyze_combined_results(
-                                    research_data,
-                                    patent_data,
-                                    funding_data,
-                                    network_data
-                                )
+                                try:
+                                    st.session_state.combined_analysis = ai_analyzer.analyze_combined_results(
+                                        research_data,
+                                        patent_data,
+                                        funding_data,
+                                        network_data
+                                    )
+                                except Exception as e:
+                                    logger.error(f"Error generating combined analysis: {str(e)}")
+                                    st.error("Error generating combined analysis. Please try again.")
+                                    st.session_state.combined_analysis = None
 
-                            # Render combined results
-                            render_combined_results(
-                                st.session_state.get('search_results') or [],
-                                st.session_state.get('patent_results') or [],
-                                st.session_state.combined_analysis
-                            )
+                            # Only render if we have combined analysis
+                            if st.session_state.get('combined_analysis'):
+                                render_combined_results(
+                                    st.session_state.get('search_results', []),
+                                    st.session_state.get('patent_results', []),
+                                    st.session_state.combined_analysis
+                                )
+                            else:
+                                st.info("Please perform searches in other tabs first to view combined results.")
 
                     except Exception as e:
                         logger.error(f"Error in tab {selected_stages[idx]}: {str(e)}")
