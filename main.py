@@ -73,6 +73,9 @@ def main():
         with col_button:
             search_clicked = st.button("Search", help="Start searching with selected stages", use_container_width=True)
 
+        # Move info message here, after search and before buttons
+        st.info("Please choose below your agents.")
+
         if 'selected_stages' not in st.session_state:
             st.session_state.selected_stages = set()
 
@@ -105,10 +108,10 @@ def main():
             with columns[idx]:
                 is_selected = stage_key in st.session_state.selected_stages
                 if st.button(label,
-                             key=f"btn_{stage_key}",
-                             help=f"Click to select {label}",
-                             use_container_width=True,
-                             type="secondary" if is_selected else "primary"):
+                              key=f"btn_{stage_key}",
+                              help=f"Click to select {label}",
+                              use_container_width=True,
+                              type="secondary" if is_selected else "primary"):
                     if stage_key in st.session_state.selected_stages:
                         st.session_state.selected_stages.remove(stage_key)
                     else:
@@ -118,13 +121,12 @@ def main():
         selected_stages = list(st.session_state.selected_stages)
 
         # Create tabs for selected stages if we have a search query
-        if search_query or search_clicked: #Added search_clicked condition
+        if search_query or search_clicked:  # Added search_clicked condition
             if not selected_stages:
                 st.warning(
                     "Please select at least one research stage to proceed.")
                 return
 
-            # Create tabs with stage names
             # Sort stages in the desired order
             ordered_stages = []
             preferred_order = ['research', 'patents', 'funding', 'network', 'synthesis', 'compliance']
@@ -151,7 +153,7 @@ def main():
 
                                 # Only do a new search if needed
                                 if (search_query != st.session_state.get('last_query', '') or
-                                    'search_results' not in st.session_state):
+                                        'search_results' not in st.session_state):
                                     try:
                                         keywords = ai_analyzer.generate_search_keywords(search_query)
                                         results = openalex_client.search(query=search_query, keywords=keywords)
@@ -241,7 +243,7 @@ def main():
                         st.error(f"An error occurred in {current_stage} tab: {str(e)}")
 
         else:
-            st.info("Please choose below your agents.")
+            pass  # Remove the info message from here since we moved it above
 
         logger.info("Main content rendered successfully")
 
