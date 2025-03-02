@@ -735,7 +735,7 @@ def render_synthesis_section(research_data, patent_data, funding_data, selected_
 
     client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-    # Prepare data for analysis - Improve data preparation
+    # Prepare data for analysis
     synthesis_data = {
         "research": [],
         "patents": [],
@@ -764,41 +764,48 @@ def render_synthesis_section(research_data, patent_data, funding_data, selected_
         synthesis_data["funding"] = funding_data
 
     try:
+        # Log synthesis data for debugging
+        st.write("Debug - Synthesis Data:", synthesis_data)
+
         # Create analysis prompt
-        analysis_prompt = """You are an expert research analyst. Analyze the provided research, patent, and funding data to generate a comprehensive synthesis report.
-        Focus on identifying trends, opportunities, and strategic insights across all selected modules.
+        analysis_prompt = f"""You are an expert research analyst. Based on the provided data, generate a comprehensive synthesis report 
+        analyzing {', '.join(selected_stages)} information.
 
-        For each point in your analysis:
-        1. Use complete sentences
-        2. Provide specific, actionable insights
-        3. Make clear connections between different data sources
-        4. Highlight practical implications
+        The data includes:
+        Research papers: {len(synthesis_data['research'])} documents
+        Patents: {len(synthesis_data['patents'])} documents
+        Funding opportunities: {len(synthesis_data['funding'])} records
 
-        Return a JSON object with the following structure:
-        {
-            "funding_analysis": {
-                "summary": "Detailed overview of funding landscape with specific examples",
-                "trends": ["Clear trend 1", "Clear trend 2"],
-                "risks": ["Specific risk 1", "Specific risk 2"],
+        Please provide a detailed analysis with the following structure:
+        1. Summarize key findings across all selected areas
+        2. Identify major trends and patterns
+        3. Highlight opportunities and risks
+        4. Provide actionable recommendations
+
+        Format your response as a JSON object with this exact structure:
+        {{
+            "funding_analysis": {{
+                "summary": "Detailed funding landscape analysis...",
+                "trends": ["Specific trend 1", "Specific trend 2"],
+                "risks": ["Clear risk 1", "Clear risk 2"],
                 "recommendations": ["Actionable recommendation 1", "Actionable recommendation 2"],
-                "opportunities": ["Concrete opportunity 1", "Concrete opportunity 2"]
-            },
-            "research_analysis": {
-                "summary": "Overview of research findings with key breakthroughs",
+                "opportunities": ["Specific opportunity 1", "Specific opportunity 2"]
+            }},
+            "research_analysis": {{
+                "summary": "Comprehensive research findings overview...",
                 "trends": ["Research trend 1", "Research trend 2"]
-            },
-            "network_analysis": {
-                "key_players": ["Key player 1 with role", "Key player 2 with role"],
-                "networks": ["Network 1 with impact", "Network 2 with impact"]
-            },
-            "patents_analysis": {
-                "summary": "Overview of patent landscape with key innovations",
+            }},
+            "network_analysis": {{
+                "key_players": ["Major player 1", "Major player 2"],
+                "networks": ["Network insight 1", "Network insight 2"]
+            }},
+            "patents_analysis": {{
+                "summary": "Patent landscape overview...",
                 "trends": ["Patent trend 1", "Patent trend 2"],
                 "opportunities": ["Innovation opportunity 1", "Innovation opportunity 2"],
-                "competition": "Detailed competitive landscape analysis"
-            }
-        }
-        """
+                "competition": "Competitive landscape analysis"
+            }}
+        }}"""
 
         # Get AI analysis
         with st.spinner("🤖 Generating comprehensive synthesis report..."):
@@ -817,36 +824,46 @@ def render_synthesis_section(research_data, patent_data, funding_data, selected_
 
             analysis = json.loads(response.choices[0].message.content)
 
+            # Log analysis response for debugging
+            st.write("Debug - API Response:", analysis)
+
         # Display Analysis Results
         st.header("💰 Funding Analysis")
         with st.expander("📊 Detailed Summary", expanded=True):
-            st.write(analysis.get('`funding_analysis', {}).get('summary', 'No summary available'))
+            funding_summary = analysis.get('funding_analysis', {}).get('summary', 'No summary available')
+            st.markdown(funding_summary)
 
             col1, col2 = st.columns(2)
             with col1:
                 st.subheader("📈 Key Trends")
-                for trend in analysis.get('funding_analysis', {}).get('trends', []):
+                trends = analysis.get('funding_analysis', {}).get('trends', [])
+                for trend in trends:
                     st.write(f"• {trend}")
 
             with col2:
                 st.subheader("⚠️ Risk Factors")
-                for risk in analysis.get('funding_analysis', {}).get('risks', []):
+                risks = analysis.get('funding_analysis', {}).get('risks', [])
+                for risk in risks:
                     st.write(f"• {risk}")
 
             st.subheader("💡 Recommendations")
-            for rec in analysis.get('funding_analysis', {}).get('recommendations', []):
+            recs = analysis.get('funding_analysis', {}).get('recommendations', [])
+            for rec in recs:
                 st.write(f"• {rec}")
 
             st.subheader("🎯 Opportunities")
-            for opp in analysis.get('funding_analysis', {}).get('opportunities', []):
+            opps = analysis.get('funding_analysis', {}).get('opportunities', [])
+            for opp in opps:
                 st.write(f"• {opp}")
 
         st.header("🔬 Research Analysis")
         with st.expander("📚 Research Insights", expanded=True):
-            st.write(analysis.get('research_analysis', {}).get('summary', 'No summary available'))
+            research_summary = analysis.get('research_analysis', {}).get('summary', 'No summary available')
+            st.markdown(research_summary)
 
             st.subheader("📊 Research Trends")
-            for trend in analysis.get('research_analysis', {}).get('trends', []):
+            trends = analysis.get('research_analysis', {}).get('trends', [])
+            for trend in trends:
                 st.write(f"• {trend}")
 
         st.header("🌐 Network Analysis")
@@ -854,31 +871,37 @@ def render_synthesis_section(research_data, patent_data, funding_data, selected_
             col1, col2 = st.columns(2)
             with col1:
                 st.subheader("👥 Key Players")
-                for player in analysis.get('network_analysis', {}).get('key_players', []):
+                players = analysis.get('network_analysis', {}).get('key_players', [])
+                for player in players:
                     st.write(f"• {player}")
 
             with col2:
                 st.subheader("🔗 Influential Networks")
-                for network in analysis.get('network_analysis', {}).get('networks', []):
+                networks = analysis.get('network_analysis', {}).get('networks', [])
+                for network in networks:
                     st.write(f"• {network}")
 
         st.header("📋 Patents Analysis")
         with st.expander("🔍 Patent Insights", expanded=True):
-            st.write(analysis.get('patents_analysis', {}).get('summary', 'No summary available'))
+            patent_summary = analysis.get('patents_analysis', {}).get('summary', 'No summary available')
+            st.markdown(patent_summary)
 
             col1, col2 = st.columns(2)
             with col1:
                 st.subheader("📈 Patent Trends")
-                for trend in analysis.get('patents_analysis', {}).get('trends', []):
+                trends = analysis.get('patents_analysis', {}).get('trends', [])
+                for trend in trends:
                     st.write(f"• {trend}")
 
             with col2:
                 st.subheader("💡 Innovation Opportunities")
-                for opp in analysis.get('patents_analysis', {}).get('opportunities', []):
+                opps = analysis.get('patents_analysis', {}).get('opportunities', [])
+                for opp in opps:
                     st.write(f"• {opp}")
 
             st.subheader("🏢 Competitive Analysis")
-            st.write(analysis.get('patents_analysis', {}).get('competition', 'No competition analysis available'))
+            competition = analysis.get('patents_analysis', {}).get('competition', 'No competition analysis available')
+            st.markdown(competition)
 
         # Export Button
         st.download_button(
