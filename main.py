@@ -93,14 +93,14 @@ def main():
             'research': 'Research',
             'patents': 'Patents',
             'funding': 'Funding',
-            'network': 'Network',
+            'collaboration': 'Collaboration',
             'compliance': 'Legal'
         }
 
         columns = [col1, col2, col3, col4, col5]
 
         # Synthesis otomatik seçim kontrolü
-        visible_stages = ['research', 'patents', 'funding', 'network', 'compliance']
+        visible_stages = ['research', 'patents', 'funding', 'collaboration', 'compliance']
         selected_count = len([stage for stage in visible_stages if stage in st.session_state.selected_stages])
 
         # En az 2 modül seçiliyse synthesis'i otomatik ekle
@@ -136,7 +136,7 @@ def main():
 
             # Sort stages in the desired order
             ordered_stages = []
-            preferred_order = ['research', 'patents', 'funding', 'network', 'synthesis', 'compliance']
+            preferred_order = ['research', 'patents', 'funding', 'collaboration', 'synthesis', 'compliance']
 
             # First add stages in preferred order if they are selected
             for stage in preferred_order:
@@ -229,7 +229,7 @@ def main():
                                 st.session_state.funding_data = funding_agent.get_funding_opportunities(search_query)
                             render_funding_section(search_query, st.session_state.funding_data)
 
-                        elif current_stage == "network":
+                        elif current_stage == "collaboration":
                             render_network_section(st.session_state.get('search_results', []))
 
                         elif current_stage == "synthesis":
