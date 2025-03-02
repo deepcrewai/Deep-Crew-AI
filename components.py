@@ -652,50 +652,77 @@ def generate_synthesis_pdf_report(analysis):
 
     # Title
     c.setFont("Helvetica-Bold", 24)
-    c.drawString(50, y, "Research Synthesis Report")
+    c.drawString(50, y, "Research & Innovation Synthesis Report")
     y -= 40
 
-    # Overview
-    c.setFont("Helvetica-Bold", 14)
-    c.drawString(50, y, "Overview")
-    y -= 20
-
-    # Add content sections
     sections = [
-        ("Cross-Domain Insights", analysis.get('cross_domain_insights', [])),
-        ("Innovation Opportunities", analysis.get('innovation_opportunities', [])),
-        ("Market Analysis", [
-            f"Potential: {analysis.get('market_analysis', {}).get('potential', '')}",
-            *[f"Risk: {risk}" for risk in analysis.get('market_analysis', {}).get('risks', [])]
+        # 1. Funding Analysis
+        ("Funding Analysis", [
+            ("Summary", [analysis.get('funding_analysis', {}).get('summary', '')]),
+            ("Key Trends", analysis.get('funding_analysis', {}).get('trends', [])),
+            ("Risk Factors", analysis.get('funding_analysis', {}).get('risks', [])),
+            ("Recommendations", analysis.get('funding_analysis', {}).get('recommendations', [])),
+            ("Opportunities", analysis.get('funding_analysis', {}).get('opportunities', []))
         ]),
-        ("Research Gaps", analysis.get('research_gaps', [])),
-        ("Collaboration Suggestions", analysis.get('collaboration_suggestions', [])),
-        ("Future Predictions", analysis.get('future_predictions', [])),
-        ("Recommendations", analysis.get('recommendations', []))
+        # 2. Research Analysis
+        ("Research Analysis", [
+            ("Summary", [analysis.get('research_analysis', {}).get('summary', '')]),
+            ("Research Trends", analysis.get('research_analysis', {}).get('trends', []))
+        ]),
+        # 3. Network Analysis
+        ("Network Analysis", [
+            ("Key Players", analysis.get('network_analysis', {}).get('key_players', [])),
+            ("Influential Networks", analysis.get('network_analysis', {}).get('networks', []))
+        ]),
+        # 4. Patents Analysis
+        ("Patents Analysis", [
+            ("Summary", [analysis.get('patents_analysis', {}).get('summary', '')]),
+            ("Patent Trends", analysis.get('patents_analysis', {}).get('trends', [])),
+            ("Innovation Opportunities", analysis.get('patents_analysis', {}).get('opportunities', [])),
+            ("Competition Analysis", [analysis.get('patents_analysis', {}).get('competition', '')])
+        ])
     ]
 
-    for title, items in sections:
+    for section_title, subsections in sections:
         if y < 100:
             add_page_footer()
             c.showPage()
             y = page_height - 50
 
-        c.setFont("Helvetica-Bold", 12)
-        c.drawString(50, y, title)
-        y -= 20
+        # Section Title
+        c.setFont("Helvetica-Bold", 16)
+        c.drawString(50, y, section_title)
+        y -= 30
 
-        c.setFont("Helvetica", 10)
-        for item in items:
+        # Subsections
+        for subsection_title, items in subsections:
             if y < 100:
                 add_page_footer()
                 c.showPage()
                 y = page_height - 50
 
-            wrapped_text = [item[i:i+80] for i in range(0, len(item), 80)]
-            for line in wrapped_text:
-                c.drawString(70, y, f"• {line}")
-                y -= 15
-            y -= 5
+            c.setFont("Helvetica-Bold", 12)
+            c.drawString(70, y, subsection_title)
+            y -= 20
+
+            c.setFont("Helvetica", 10)
+            for item in items:
+                if not item:  # Skip empty items
+                    continue
+
+                if y < 100:
+                    add_page_footer()
+                    c.showPage()
+                    y = page_height - 50
+
+                # Wrap text to fit page width
+                wrapped_text = [item[i:i+80] for i in range(0, len(item), 80)]
+                for line in wrapped_text:
+                    c.drawString(90, y, f"• {line}")
+                    y -= 15
+                y -= 5
+
+        y -= 20  # Extra space between sections
 
     add_page_footer()
     c.save()
@@ -704,7 +731,7 @@ def generate_synthesis_pdf_report(analysis):
 
 def render_synthesis_section(research_data, patent_data, funding_data, selected_stages):
     """Render the synthesis section that combines and analyzes data from multiple modules."""
-    st.title("🔄 Research Synthesis")
+    st.title("🔄 Research & Innovation Synthesis")
 
     client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
@@ -719,40 +746,59 @@ def render_synthesis_section(research_data, patent_data, funding_data, selected_
     }
 
     try:
-        # Create analysis prompt
-        analysis_prompt = f"""As an AI research analyst, provide a comprehensive synthesis of the following research data.
-        Focus on these aspects and return in JSON format:
+        # Create analysis prompt based on the provided template
+        analysis_prompt = """As an AI research analyst, provide a comprehensive synthesis report with the following structure:
 
-        1. Cross-domain insights
-        2. Innovation opportunities
-        3. Market potential
-        4. Research gaps
-        5. Development timeline
-        6. Risk assessment
-        7. Collaboration opportunities
-        8. Future predictions
+        1. Funding Analysis
+        - Detailed Summary: Overview of key funding sources and investment trends
+        - Key Trends: Emerging patterns in financing and technological shifts
+        - Risk Factors: Financial, regulatory, and market risks
+        - Recommendations: Strategic funding suggestions
+        - Opportunities: Available grants and funding programs
 
-        Data to analyze: {json.dumps(synthesis_data)}
+        2. Research Analysis
+        - Research Summary: Major findings and breakthroughs
+        - Research Trends: Evolution of research focus areas
 
-        Return format:
+        3. Network Analysis
+        - Key Players: Organizations and researchers
+        - Influential Networks: Partnerships and industry alliances
+
+        4. Patents Analysis
+        - Summary: Key patents defining the landscape
+        - Trends: Patent filing patterns
+        - Opportunities: Innovation potential areas
+        - Competition: Comparative analysis
+
+        Data to analyze: {data}
+
+        Return in JSON format:
         {{
-            "overview": "Brief overview of findings",
-            "cross_domain_insights": ["insight1", "insight2", ...],
-            "innovation_opportunities": ["opportunity1", "opportunity2", ...],
-            "market_analysis": {{
-                "potential": "Market potential analysis",
-                "risks": ["risk1", "risk2", ...],
-                "timeline": "Development timeline analysis"
+            "funding_analysis": {{
+                "summary": "string",
+                "trends": ["string"],
+                "risks": ["string"],
+                "recommendations": ["string"],
+                "opportunities": ["string"]
             }},
-            "research_gaps": ["gap1", "gap2", ...],
-            "collaboration_suggestions": ["suggestion1", "suggestion2", ...],
-            "future_predictions": ["prediction1", "prediction2", ...],
-            "recommendations": ["recommendation1", "recommendation2", ...]
-        }}
-        """
+            "research_analysis": {{
+                "summary": "string",
+                "trends": ["string"]
+            }},
+            "network_analysis": {{
+                "key_players": ["string"],
+                "networks": ["string"]
+            }},
+            "patents_analysis": {{
+                "summary": "string",
+                "trends": ["string"],
+                "opportunities": ["string"],
+                "competition": "string"
+            }}
+        }}""".format(data=json.dumps(synthesis_data))
 
         # Get AI analysis
-        with st.spinner("🤖 Generating comprehensive analysis..."):
+        with st.spinner("🤖 Generating comprehensive synthesis report..."):
             response = client.chat.completions.create(
                 model="gpt-4o",  # Latest model as of May 13, 2024
                 messages=[{
@@ -765,67 +811,94 @@ def render_synthesis_section(research_data, patent_data, funding_data, selected_
             analysis = json.loads(response.choices[0].message.content)
 
         # Display Analysis Results with Modern UI
-        st.header("📊 Cross-Domain Analysis")
 
-        # Overview
-        st.markdown(f"""
-        <div style='background-color: #f0f2f6; padding: 20px; border-radius: 10px;'>
-            <h3 style='margin-top: 0;'>Overview</h3>
-            <p>{analysis.get('overview', 'No overview available')}</p>
-        </div>
-        """, unsafe_allow_html=True)
+        # 1. Funding Analysis Section
+        st.header("💰 Funding Analysis")
 
-        # Cross-Domain Insights
-        with st.expander("🔄 Cross-Domain Insights", expanded=True):
-            for insight in analysis.get('cross_domain_insights', []):
-                st.markdown(f"• {insight}")
+        with st.expander("📊 Detailed Summary", expanded=True):
+            st.markdown(f"""
+            <div style='background-color: #f0f2f6; padding: 20px; border-radius: 10px;'>
+                {analysis.get('funding_analysis', {}).get('summary', 'No summary available')}
+            </div>
+            """, unsafe_allow_html=True)
 
-        # Innovation & Market Analysis
-        col1, col2 = st.columns(2)
-        with col1:
-            st.subheader("💡 Innovation Opportunities")
-            for opp in analysis.get('innovation_opportunities', []):
+            col1, col2 = st.columns(2)
+            with col1:
+                st.subheader("📈 Key Trends")
+                for trend in analysis.get('funding_analysis', {}).get('trends', []):
+                    st.markdown(f"• {trend}")
+
+            with col2:
+                st.subheader("⚠️ Risk Factors")
+                for risk in analysis.get('funding_analysis', {}).get('risks', []):
+                    st.markdown(f"• {risk}")
+
+            st.subheader("💡 Recommendations")
+            for rec in analysis.get('funding_analysis', {}).get('recommendations', []):
+                st.markdown(f"• {rec}")
+
+            st.subheader("🎯 Opportunities")
+            for opp in analysis.get('funding_analysis', {}).get('opportunities', []):
                 st.markdown(f"• {opp}")
 
-        with col2:
-            st.subheader("📈 Market Analysis")
-            st.write("**Potential:**")
-            st.write(analysis.get('market_analysis', {}).get('potential', ''))
-            st.write("**Risks:**")
-            for risk in analysis.get('market_analysis', {}).get('risks', []):
-                st.markdown(f"• {risk}")
+        # 2. Research Analysis Section
+        st.header("🔬 Research Analysis")
 
-        # Timeline
-        st.subheader("⏳ Development Timeline")
-        st.write(analysis.get('market_analysis', {}).get('timeline', ''))
+        with st.expander("📚 Research Insights", expanded=True):
+            st.markdown(f"""
+            <div style='background-color: #f0f2f6; padding: 20px; border-radius: 10px;'>
+                {analysis.get('research_analysis', {}).get('summary', 'No summary available')}
+            </div>
+            """, unsafe_allow_html=True)
 
-        # Research Gaps and Collaboration
-        col1, col2 = st.columns(2)
-        with col1:
-            st.subheader("🔍 Research Gaps")
-            for gap in analysis.get('research_gaps', []):
-                st.markdown(f"• {gap}")
+            st.subheader("📊 Research Trends")
+            for trend in analysis.get('research_analysis', {}).get('trends', []):
+                st.markdown(f"• {trend}")
 
-        with col2:
-            st.subheader("🤝 Collaboration Opportunities")
-            for suggestion in analysis.get('collaboration_suggestions', []):
-                st.markdown(f"• {suggestion}")
+        # 3. Network Analysis Section
+        st.header("🌐 Network Analysis")
 
-        # Future Predictions
-        st.subheader("🔮 Future Predictions")
-        for prediction in analysis.get('future_predictions', []):
-            st.markdown(f"• {prediction}")
+        with st.expander("🤝 Collaboration Network", expanded=True):
+            col1, col2 = st.columns(2)
+            with col1:
+                st.subheader("👥 Key Players")
+                for player in analysis.get('network_analysis', {}).get('key_players', []):
+                    st.markdown(f"• {player}")
 
-        # Recommendations
-        st.subheader("📋 Strategic Recommendations")
-        for recommendation in analysis.get('recommendations', []):
-            st.markdown(f"• {recommendation}")
+            with col2:
+                st.subheader("🔗 Influential Networks")
+                for network in analysis.get('network_analysis', {}).get('networks', []):
+                    st.markdown(f"• {network}")
+
+        # 4. Patents Analysis Section
+        st.header("📋 Patents Analysis")
+
+        with st.expander("🔍 Patent Insights", expanded=True):
+            st.markdown(f"""
+            <div style='background-color: #f0f2f6; padding: 20px; border-radius: 10px;'>
+                {analysis.get('patents_analysis', {}).get('summary', 'No summary available')}
+            </div>
+            """, unsafe_allow_html=True)
+
+            col1, col2 = st.columns(2)
+            with col1:
+                st.subheader("📈 Patent Trends")
+                for trend in analysis.get('patents_analysis', {}).get('trends', []):
+                    st.markdown(f"• {trend}")
+
+            with col2:
+                st.subheader("💡 Innovation Opportunities")
+                for opp in analysis.get('patents_analysis', {}).get('opportunities', []):
+                    st.markdown(f"• {opp}")
+
+            st.subheader("🏢 Competitive Analysis")
+            st.markdown(analysis.get('patents_analysis', {}).get('competition', 'No competition analysis available'))
 
         # Export Button
         st.download_button(
-            label="📥 Export Synthesis Report",
+            label="📥 Export Complete Synthesis Report",
             data=generate_synthesis_pdf_report(analysis),
-            file_name="research_synthesis.pdf",
+            file_name="research_innovation_synthesis.pdf",
             mime="application/pdf"
         )
 

@@ -1,0 +1,64 @@
+AI Agent Prompt: Funding, Research, Network & Patents Synthesis Report
+Objective:
+Generate a comprehensive Funding, Research, Network, and Patents Synthesis Report by analyzing and structuring data retrieved from USPTO API and additional research sources.
+
+Instructions:
+Integrate and analyze all retrieved data points under four major sections:
+
+Funding (Trends, Risks, Recommendations, and Opportunities)
+Research (Summary & Trends)
+Network (Key Players & Collaborations)
+Patents (Summary, Trends, Opportunities, and Competitive Analysis)
+Ensure coherence and correlation across sections to provide a holistic view.
+
+Report Structure
+1. Funding Analysis
+Detailed Summary: Provide an overview of key funding sources, investment trends, and notable fund allocations.
+Key Trends: Identify emerging patterns in financing, such as growth areas, declining sectors, or technological shifts.
+Risk Factors: Analyze possible financial risks (e.g., regulatory hurdles, market saturation, investment volatility).
+Recommendations: Suggest funding strategies based on trend analysis and historical data.
+Funding Opportunities: Highlight available grants, venture capital interests, and government funding programs relevant to the researched industry.
+2. Research Analysis
+Research Summary: Summarize major findings, innovations, and breakthroughs from the retrieved patents and research papers.
+Research Trends: Identify how research in the relevant domain is evolving over time, highlighting key focus areas and emerging innovations.
+3. Network Analysis
+Key Players & Collaborations: Map out organizations, institutions, and researchers involved in funding, innovation, and patent applications.
+Influential Networks: Identify major partnerships, funding consortiums, and industry alliances shaping the market landscape.
+4. Patents Analysis
+Research Summary: Summarize key patents that define the landscape, mentioning their impact on industry trends.
+Research Trends: Identify patterns in patent filings, technological advancements, and growth sectors.
+Opportunities: Highlight white spaces in patent filings where innovation potential exists.
+Competition Analysis: Compare major competitors’ patent portfolios and their innovation strategies.
+Data Processing Requirements:
+Correlate funding and research data to highlight investment focus areas.
+Extract key trends across patents and funding to predict future technological growth.
+Provide actionable insights in each section with clear takeaways.
+Output Format:
+Generate a structured, professional, and easy-to-read report-style output. Use bullet points, subheadings, and structured paragraphs for clarity.
+
+Final Deliverable Example:
+yaml
+Kopyala
+Düzenle
+# Funding, Research, Network & Patents Synthesis Report  
+
+## 1. Funding Analysis  
+- Summary: [Detailed overview]  
+- Key Trends: [Emerging trends]  
+- Risk Factors: [Identified risks]  
+- Recommendations: [Strategic suggestions]  
+- Funding Opportunities: [Available funding sources]  
+
+## 2. Research Analysis  
+- Summary: [Notable research findings]  
+- Trends: [Key research areas]  
+
+## 3. Network Analysis  
+- Key Players: [Top organizations and collaborations]  
+- Industry Networks: [Major partnerships and alliances]  
+
+## 4. Patents Analysis  
+- Summary: [Overview of key patents]  
+- Research Trends: [Industry growth and focus]  
+- Opportunities: [Areas for innovation]  
+- Competition: [Comparative analysis of competitors]  
