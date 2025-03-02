@@ -205,10 +205,7 @@ def main():
                             render_funding_section(search_query)
 
                         elif selected_stages[idx] == "network":
-                            if st.session_state.get('search_results'):
-                                render_network_section(st.session_state.search_results)
-                            else:
-                                st.info("Önce Literature sekmesinde bir arama yapın.")
+                            render_network_section(st.session_state.get('search_results', []))
 
                         elif selected_stages[idx] == "compliance":
                             st.info("✓ Coming Soon")
