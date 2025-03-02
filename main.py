@@ -76,7 +76,7 @@ def main():
                          style="max-width: 350px; height: auto; margin: 30px auto;">
                 </div>
                 <div class="submarine-container">
-                    <a href="javascript:void(0)" onclick="window.open('/static/game/game.html', 'Clean The Sea Game', 'width=800,height=800,top=50,left=50')" style="display: block;">
+                    <a href="#" onclick="var w = 800; var h = 800; var left = (screen.width/2)-(w/2); var top = (screen.height/2)-(h/2); window.open('/static/game/game.html', 'Clean The Sea Game', 'popup=yes,width='+w+',height='+h+',top='+top+',left='+left+',menubar=no,toolbar=no,location=no,status=no'); return false;" style="display: block;">
                         <img src="https://deep-crew.ai/wp-content/uploads/2025/03/animation-submarine-062119.gif" 
                              alt="Play Clean The Sea Game" 
                              style="max-width: 150px; height: auto;">
