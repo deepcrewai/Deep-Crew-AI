@@ -498,7 +498,7 @@ def render_patent_results(results, analysis):
         st.session_state.patent_sort_option = st.selectbox(
             "Sort By",
             options=["Date (Newest)", "Date (Oldest)"],
-            key="patent_sort_dropdown",
+            key=f"patent_sort_dropdown_{id(results)}",  # Unique key based on results
             label_visibility="collapsed",
             index=["Date (Newest)", "Date (Oldest)"].index(st.session_state.patent_sort_option)
         )
