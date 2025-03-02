@@ -531,7 +531,7 @@ def render_analysis_section(analysis):
             data=generate_pdf_report([], analysis),
             file_name="research_analysis.pdf",
             mime="application/pdf",
-            key="pdf_download"
+            key="research_pdf_download"  # Changed from pdf_download to research_pdf_download
         )
 
     # Summary
