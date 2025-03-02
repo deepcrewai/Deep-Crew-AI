@@ -7,7 +7,8 @@ from api_client import OpenAlexClient
 from ai_analyzer import AIAnalyzer
 from patent_client import PatentSearchClient
 from components import (render_search_section, render_analysis_section,
-                        render_patent_results, render_network_section)
+                        render_patent_results, render_network_section,
+                        render_synthesis_section)  # Yeni eklenen
 from funding import render_funding_section
 
 # Configure logging
@@ -78,17 +79,18 @@ def main():
             st.session_state.selected_stages = set()
 
         # Create stage buttons using columns for horizontal layout
-        col1, col2, col3, col4, col5 = st.columns(5)
+        col1, col2, col3, col4, col5, col6 = st.columns(6)
 
         stages = {
             'research': 'Research',
             'patents': 'Patents',
             'funding': 'Funding',
             'network': 'Network',
+            'synthesis': 'Synthesis',  # Yeni eklenen
             'compliance': 'Legal'
         }
 
-        columns = [col1, col2, col3, col4, col5]
+        columns = [col1, col2, col3, col4, col5, col6]  # Updated columns list
 
         for idx, (stage_key, label) in enumerate(stages.items()):
             with columns[idx]:
@@ -198,6 +200,19 @@ def main():
 
                         elif current_stage == "network":
                             render_network_section(st.session_state.get('search_results', []))
+
+                        elif current_stage == "synthesis":
+                            # En az 2 modül seçili olmalı
+                            if len(selected_stages) >= 2:
+                                with st.spinner("🔄 Synthesizing insights..."):
+                                    render_synthesis_section(
+                                        research_data=st.session_state.get('search_results', []),
+                                        patent_data=st.session_state.get('patent_results', []),
+                                        funding_data=st.session_state.get('funding_data', []),
+                                        selected_stages=selected_stages
+                                    )
+                            else:
+                                st.warning("Please select at least 2 research modules to generate synthesis.")
 
                         elif current_stage == "compliance":
                             st.info("✓ Coming Soon")

@@ -1,10 +1,13 @@
 import streamlit as st
 import plotly.express as px
 from utils import format_citation, calculate_metrics
+from openai import OpenAI
+import os
+import json
+from datetime import datetime
 from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
-from datetime import datetime
 from reportlab.lib.utils import ImageReader
 
 def generate_pdf_report(results, analysis):
@@ -606,7 +609,7 @@ def render_network_section(research_results):
             if author_name and author_name not in authors:
                 authors[author_name] = {
                     'orcid': author.get('orcid'),
-                                        'papers': []
+                    'papers': []
                 }
             if author_name:
                 authors[author_name]['papers'].append(paper.get('title'))
@@ -629,6 +632,202 @@ def render_network_section(research_results):
             for paper in data['papers']:
                 st.write(f"- {paper}")
 
-def handle_pdf_export(results, analysis):
-    """This function is now deprecated as the export functionality has been moved to render_search_section"""
-    pass
+def generate_synthesis_pdf_report(analysis):
+    """Generate a PDF report for the synthesis analysis."""
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=letter)
+    page_width, page_height = letter
+
+    def add_page_footer():
+        c.setFont("Helvetica", 10)
+        c.drawString(50, 30, datetime.now().strftime('%Y-%m-%d'))
+        c.setFillColorRGB(0, 0, 1)
+        c.drawString(page_width - 150, 30, "deep-crew.ai")
+
+    # Add logo
+    logo = ImageReader("attached_assets/deep-crew.jpg")
+    c.drawImage(logo, page_width - 250, page_height - 100, width=200, preserveAspectRatio=True)
+
+    y = page_height - 150
+
+    # Title
+    c.setFont("Helvetica-Bold", 24)
+    c.drawString(50, y, "Research Synthesis Report")
+    y -= 40
+
+    # Overview
+    c.setFont("Helvetica-Bold", 14)
+    c.drawString(50, y, "Overview")
+    y -= 20
+
+    # Add content sections
+    sections = [
+        ("Cross-Domain Insights", analysis.get('cross_domain_insights', [])),
+        ("Innovation Opportunities", analysis.get('innovation_opportunities', [])),
+        ("Market Analysis", [
+            f"Potential: {analysis.get('market_analysis', {}).get('potential', '')}",
+            *[f"Risk: {risk}" for risk in analysis.get('market_analysis', {}).get('risks', [])]
+        ]),
+        ("Research Gaps", analysis.get('research_gaps', [])),
+        ("Collaboration Suggestions", analysis.get('collaboration_suggestions', [])),
+        ("Future Predictions", analysis.get('future_predictions', [])),
+        ("Recommendations", analysis.get('recommendations', []))
+    ]
+
+    for title, items in sections:
+        if y < 100:
+            add_page_footer()
+            c.showPage()
+            y = page_height - 50
+
+        c.setFont("Helvetica-Bold", 12)
+        c.drawString(50, y, title)
+        y -= 20
+
+        c.setFont("Helvetica", 10)
+        for item in items:
+            if y < 100:
+                add_page_footer()
+                c.showPage()
+                y = page_height - 50
+
+            wrapped_text = [item[i:i+80] for i in range(0, len(item), 80)]
+            for line in wrapped_text:
+                c.drawString(70, y, f"• {line}")
+                y -= 15
+            y -= 5
+
+    add_page_footer()
+    c.save()
+    buffer.seek(0)
+    return buffer
+
+def render_synthesis_section(research_data, patent_data, funding_data, selected_stages):
+    """Render the synthesis section that combines and analyzes data from multiple modules."""
+    st.title("🔄 Research Synthesis")
+
+    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+
+    # Prepare data for analysis
+    synthesis_data = {
+        "research": [{"title": r.get("title"), "abstract": r.get("abstract"), 
+                     "year": r.get("publication_year")} for r in research_data] if "research" in selected_stages else [],
+        "patents": [{"title": p.get("title"), "abstract": p.get("abstract"),
+                    "filing_date": p.get("filing_date")} for p in patent_data] if "patents" in selected_stages else [],
+        "funding": funding_data if "funding" in selected_stages else [],
+        "selected_modules": list(selected_stages)
+    }
+
+    try:
+        # Create analysis prompt
+        analysis_prompt = f"""As an AI research analyst, provide a comprehensive synthesis of the following research data.
+        Focus on these aspects and return in JSON format:
+
+        1. Cross-domain insights
+        2. Innovation opportunities
+        3. Market potential
+        4. Research gaps
+        5. Development timeline
+        6. Risk assessment
+        7. Collaboration opportunities
+        8. Future predictions
+
+        Data to analyze: {json.dumps(synthesis_data)}
+
+        Return format:
+        {{
+            "overview": "Brief overview of findings",
+            "cross_domain_insights": ["insight1", "insight2", ...],
+            "innovation_opportunities": ["opportunity1", "opportunity2", ...],
+            "market_analysis": {{
+                "potential": "Market potential analysis",
+                "risks": ["risk1", "risk2", ...],
+                "timeline": "Development timeline analysis"
+            }},
+            "research_gaps": ["gap1", "gap2", ...],
+            "collaboration_suggestions": ["suggestion1", "suggestion2", ...],
+            "future_predictions": ["prediction1", "prediction2", ...],
+            "recommendations": ["recommendation1", "recommendation2", ...]
+        }}
+        """
+
+        # Get AI analysis
+        with st.spinner("🤖 Generating comprehensive analysis..."):
+            response = client.chat.completions.create(
+                model="gpt-4o",  # Latest model as of May 13, 2024
+                messages=[{
+                    "role": "system",
+                    "content": analysis_prompt
+                }],
+                response_format={"type": "json_object"}
+            )
+
+            analysis = json.loads(response.choices[0].message.content)
+
+        # Display Analysis Results with Modern UI
+        st.header("📊 Cross-Domain Analysis")
+
+        # Overview
+        st.markdown(f"""
+        <div style='background-color: #f0f2f6; padding: 20px; border-radius: 10px;'>
+            <h3 style='margin-top: 0;'>Overview</h3>
+            <p>{analysis.get('overview', 'No overview available')}</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # Cross-Domain Insights
+        with st.expander("🔄 Cross-Domain Insights", expanded=True):
+            for insight in analysis.get('cross_domain_insights', []):
+                st.markdown(f"• {insight}")
+
+        # Innovation & Market Analysis
+        col1, col2 = st.columns(2)
+        with col1:
+            st.subheader("💡 Innovation Opportunities")
+            for opp in analysis.get('innovation_opportunities', []):
+                st.markdown(f"• {opp}")
+
+        with col2:
+            st.subheader("📈 Market Analysis")
+            st.write("**Potential:**")
+            st.write(analysis.get('market_analysis', {}).get('potential', ''))
+            st.write("**Risks:**")
+            for risk in analysis.get('market_analysis', {}).get('risks', []):
+                st.markdown(f"• {risk}")
+
+        # Timeline
+        st.subheader("⏳ Development Timeline")
+        st.write(analysis.get('market_analysis', {}).get('timeline', ''))
+
+        # Research Gaps and Collaboration
+        col1, col2 = st.columns(2)
+        with col1:
+            st.subheader("🔍 Research Gaps")
+            for gap in analysis.get('research_gaps', []):
+                st.markdown(f"• {gap}")
+
+        with col2:
+            st.subheader("🤝 Collaboration Opportunities")
+            for suggestion in analysis.get('collaboration_suggestions', []):
+                st.markdown(f"• {suggestion}")
+
+        # Future Predictions
+        st.subheader("🔮 Future Predictions")
+        for prediction in analysis.get('future_predictions', []):
+            st.markdown(f"• {prediction}")
+
+        # Recommendations
+        st.subheader("📋 Strategic Recommendations")
+        for recommendation in analysis.get('recommendations', []):
+            st.markdown(f"• {recommendation}")
+
+        # Export Button
+        st.download_button(
+            label="📥 Export Synthesis Report",
+            data=generate_synthesis_pdf_report(analysis),
+            file_name="research_synthesis.pdf",
+            mime="application/pdf"
+        )
+
+    except Exception as e:
+        st.error(f"An error occurred during synthesis: {str(e)}")
