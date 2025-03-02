@@ -6,9 +6,9 @@ import json
 class AIAnalyzer:
     def __init__(self):
         self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-        self.model = "gpt-4o"
+        self.model = "gpt-4"
 
-    def analyze_combined_results(self, research_results: List[Dict], patent_results: List[Dict]) -> Dict:
+    def analyze_combined_results(self, research_results: List[Dict], patent_results: List[Dict], funding_data: Dict = None, network_data: List[Dict] = None) -> Dict:
         """Analyze combined research and patent results for comprehensive insights with enhanced detail."""
         try:
             # Prepare enhanced combined data for analysis
@@ -20,9 +20,10 @@ class AIAnalyzer:
                         'year': r.get('publication_year', ''),
                         'type': 'research',
                         'concepts': r.get('concepts', []),
-                        'citations': r.get('cited_by_count', 0)
+                        'citations': r.get('cited_by_count', 0),
+                        'authors': r.get('authors', [])
                     } for r in research_results
-                ],
+                ] if research_results else [],
                 'patents': [
                     {
                         'title': p.get('title', ''),
@@ -32,54 +33,73 @@ class AIAnalyzer:
                         'inventors': p.get('inventors', ''),
                         'patent_id': p.get('patent_id', '')
                     } for p in patent_results
-                ]
+                ] if patent_results else [],
+                'funding_data': funding_data if funding_data else {},
+                'network_data': network_data if network_data else []
             }
 
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[{
                     "role": "system",
-                    "content": """As an expert research analyst, provide a comprehensive analysis of the research papers and patents.
+                    "content": """As an expert research analyst, provide a comprehensive analysis of the research ecosystem including papers, patents, funding opportunities, and collaboration networks.
                     Include detailed insights, recommendations, and future predictions. Return a JSON object with the following structure:
                     {
-                        "comprehensive_summary": "Detailed overview analyzing both research papers and patents, including key themes and overall direction of the field",
+                        "comprehensive_summary": "Detailed overview analyzing all available components, including key themes and overall direction of the field",
                         "key_findings": [
-                            {"finding": "description", "impact_score": 1-10, "evidence": "supporting evidence"}
+                            {"finding": "description", "impact_score": 1-10, "evidence": "supporting evidence", "component": "research/patent/funding/network"}
                         ],
                         "research_patent_alignment": {
                             "overview": "Detailed analysis of how research aligns with patent activity",
                             "gaps": ["specific gaps between research and patents"],
                             "opportunities": ["specific opportunities based on gaps"]
                         },
-                        "innovation_opportunities": [
-                            {"opportunity": "description", "potential_impact": "high/medium/low", "implementation_timeline": "short/medium/long", "required_resources": "description"}
-                        ],
-                        "market_research_gaps": [
-                            {"gap": "description", "market_potential": 1-10, "recommended_approach": "description"}
+                        "funding_landscape": {
+                            "available_opportunities": ["detailed funding descriptions"],
+                            "alignment_with_research": "how funding aligns with current research",
+                            "recommendations": ["specific funding pursuit strategies"]
+                        },
+                        "collaboration_insights": {
+                            "key_researchers": ["prominent researchers in the field"],
+                            "institutional_networks": ["major research institutions"],
+                            "partnership_opportunities": ["potential collaboration suggestions"]
+                        },
+                        "innovation_trajectory": {
+                            "current_state": "description of present innovation landscape",
+                            "short_term_predictions": ["6-12 month predictions"],
+                            "long_term_outlook": ["2-5 year predictions"]
+                        },
+                        "market_potential": {
+                            "immediate_applications": ["ready-to-market innovations"],
+                            "development_needs": ["required improvements"],
+                            "market_size_estimates": ["potential market valuations"]
+                        },
+                        "research_gaps": [
+                            {"area": "description", "priority": 1-10, "resources_needed": "description"}
                         ],
                         "technology_assessment": {
-                            "maturity_level": "description",
-                            "readiness_score": 1-10,
-                            "development_stages": ["stage descriptions"]
+                            "maturity_levels": {"research": 1-10, "patents": 1-10},
+                            "development_stages": ["stage descriptions"],
+                            "commercialization_readiness": "assessment"
                         },
                         "risk_analysis": {
                             "technical_risks": ["risk descriptions"],
                             "market_risks": ["risk descriptions"],
+                            "funding_risks": ["risk descriptions"],
                             "mitigation_strategies": ["strategy descriptions"]
                         },
                         "investment_recommendations": [
                             {"area": "description", "potential_roi": "high/medium/low", "timeframe": "description", "required_investment": "estimation"}
                         ],
-                        "future_directions": [
-                            {"direction": "description", "probability": 1-10, "impact": "description", "timeline": "short/medium/long"}
-                        ],
-                        "collaboration_opportunities": [
-                            {"type": "description", "potential_partners": ["suggestions"], "expected_benefits": ["benefits"]}
-                        ],
-                        "industry_implications": {
-                            "affected_sectors": ["sector names"],
-                            "impact_analysis": ["detailed impact descriptions"],
-                            "adaptation_strategies": ["strategy descriptions"]
+                        "regulatory_compliance": {
+                            "current_requirements": ["regulatory considerations"],
+                            "future_changes": ["anticipated regulatory changes"],
+                            "compliance_strategies": ["recommended approaches"]
+                        },
+                        "sustainability_impact": {
+                            "environmental_considerations": ["impact descriptions"],
+                            "social_implications": ["impact on society"],
+                            "economic_effects": ["economic implications"]
                         }
                     }"""
                 }, {
@@ -95,14 +115,16 @@ class AIAnalyzer:
                 "comprehensive_summary": "Error performing combined analysis",
                 "key_findings": [],
                 "research_patent_alignment": {"overview": "Analysis unavailable", "gaps": [], "opportunities": []},
-                "innovation_opportunities": [],
-                "market_research_gaps": [],
-                "technology_assessment": {"maturity_level": "Unknown", "readiness_score": 0, "development_stages": []},
-                "risk_analysis": {"technical_risks": [], "market_risks": [], "mitigation_strategies": []},
+                "funding_landscape": {"available_opportunities": [], "alignment_with_research": "", "recommendations": []},
+                "collaboration_insights": {"key_researchers": [], "institutional_networks": [], "partnership_opportunities": []},
+                "innovation_trajectory": {"current_state": "", "short_term_predictions": [], "long_term_outlook": []},
+                "market_potential": {"immediate_applications": [], "development_needs": [], "market_size_estimates": []},
+                "research_gaps": [],
+                "technology_assessment": {"maturity_levels": {}, "development_stages": [], "commercialization_readiness": ""},
+                "risk_analysis": {"technical_risks": [], "market_risks": [], "funding_risks": [], "mitigation_strategies": []},
                 "investment_recommendations": [],
-                "future_directions": [],
-                "collaboration_opportunities": [],
-                "industry_implications": {"affected_sectors": [], "impact_analysis": [], "adaptation_strategies": []}
+                "regulatory_compliance": {"current_requirements": [], "future_changes": [], "compliance_strategies": []},
+                "sustainability_impact": {"environmental_considerations": [], "social_implications": [], "economic_effects": []}
             }
 
     def generate_search_keywords(self, query: str) -> List[str]:

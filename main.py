@@ -31,7 +31,7 @@ def reset_app():
     try:
         for key in [
                 'selected_stages', 'search_results', 'analysis', 'last_query',
-                'patent_results', 'patent_analysis', 'combined_analysis'
+                'patent_results', 'patent_analysis', 'combined_analysis', 'funding_data'
         ]:
             if key in st.session_state:
                 del st.session_state[key]
@@ -201,7 +201,10 @@ def main():
                                                 st.session_state.patent_analysis)
 
                         elif selected_stages[idx] == "funding":
-                            render_funding_section(search_query)
+                            if 'funding_data' not in st.session_state:
+                                funding_client = FundingClient() # Assuming a FundingClient exists
+                                st.session_state.funding_data = funding_client.search_funding(search_query) #Get funding data
+                            render_funding_section(search_query, st.session_state.funding_data) #Pass funding data
 
                         elif selected_stages[idx] == "network":
                             render_network_section(st.session_state.get('search_results', []))
@@ -211,12 +214,41 @@ def main():
 
                         elif selected_stages[idx] == "results":
                             if not st.session_state.get('combined_analysis'):
-                                st.session_state.combined_analysis = {}
+                                # Get AI analyzer instance
+                                ai_analyzer = AIAnalyzer()
 
+                                # Collect all available data
+                                research_data = st.session_state.get('search_results') or []
+                                patent_data = st.session_state.get('patent_results') or []
+                                funding_data = st.session_state.get('funding_data', {})
+
+                                # Get network data if available
+                                network_data = []
+                                if research_data:
+                                    network_data = [
+                                        {
+                                            'author': authorship.get('author', {}).get('display_name'),
+                                            'orcid': authorship.get('author', {}).get('orcid'),
+                                            'institution': authorship.get('institutions', [{}])[0].get('display_name')
+                                        }
+                                        for paper in research_data
+                                        for authorship in paper.get('authorships', [])
+                                    ]
+
+                                # Generate combined analysis
+                                st.session_state.combined_analysis = ai_analyzer.analyze_combined_results(
+                                    research_data,
+                                    patent_data,
+                                    funding_data,
+                                    network_data
+                                )
+
+                            # Render the combined results
                             render_combined_results(
                                 st.session_state.get('search_results') or [],
                                 st.session_state.get('patent_results') or [],
-                                st.session_state.combined_analysis)
+                                st.session_state.combined_analysis
+                            )
 
                     except Exception as e:
                         logger.error(

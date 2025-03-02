@@ -597,56 +597,131 @@ def render_combined_results(research_results, patent_results, combined_analysis)
     st.subheader("Key Findings")
     findings = combined_analysis.get("key_findings", [])
     for finding in findings:
-        with st.expander(f"🔍 Finding (Impact Score: {finding.get('impact_score', 'N/A')}/10)"):
+        with st.expander(f"🔍 Finding from {finding.get('component', 'Research')} (Impact Score: {finding.get('impact_score', 'N/A')}/10)"):
             st.write(finding.get('finding', ''))
             st.write("**Evidence:**", finding.get('evidence', ''))
 
-    # Research-Patent Alignment
-    st.subheader("Research & Patent Alignment")
-    alignment = combined_analysis.get("research_patent_alignment", {})
-    st.write(alignment.get("overview", "No alignment analysis available"))
+    # Research-Patent Alignment (only if both components are present)
+    if research_results and patent_results:
+        st.subheader("Research & Patent Alignment")
+        alignment = combined_analysis.get("research_patent_alignment", {})
+        st.write(alignment.get("overview", "No alignment analysis available"))
+
+        col1, col2 = st.columns(2)
+        with col1:
+            st.write("**Gaps:**")
+            for gap in alignment.get("gaps", []):
+                st.markdown(f"• {gap}")
+        with col2:
+            st.write("**Opportunities:**")
+            for opp in alignment.get("opportunities", []):
+                st.markdown(f"• {opp}")
+
+    # Funding Landscape (if funding data is available)
+    funding = combined_analysis.get("funding_landscape")
+    if funding and any(funding.values()):
+        st.subheader("Funding Landscape")
+        st.write("**Available Opportunities:**")
+        for opp in funding.get("available_opportunities", []):
+            st.markdown(f"• {opp}")
+
+        st.write("**Alignment with Research:**")
+        st.write(funding.get("alignment_with_research", "No alignment analysis available"))
+
+        st.write("**Recommendations:**")
+        for rec in funding.get("recommendations", []):
+            st.markdown(f"• {rec}")
+
+    # Collaboration Insights
+    collab = combined_analysis.get("collaboration_insights")
+    if collab and any(collab.values()):
+        st.subheader("Collaboration Network Insights")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.write("**Key Researchers:**")
+            for researcher in collab.get("key_researchers", []):
+                st.markdown(f"• {researcher}")
+        with col2:
+            st.write("**Institution Networks:**")
+            for inst in collab.get("institutional_networks", []):
+                st.markdown(f"• {inst}")
+
+        st.write("**Partnership Opportunities:**")
+        for partner in collab.get("partnership_opportunities", []):
+            st.markdown(f"• {partner}")
+
+    # Innovation Trajectory
+    st.subheader("Innovation Trajectory")
+    trajectory = combined_analysis.get("innovation_trajectory", {})
+    st.write("**Current State:**")
+    st.write(trajectory.get("current_state", "No current state analysis available"))
 
     col1, col2 = st.columns(2)
     with col1:
-        st.write("**Gaps:**")
-        for gap in alignment.get("gaps", []):
-            st.markdown(f"• {gap}")
+        st.write("**Short-term Predictions (6-12 months):**")
+        for pred in trajectory.get("short_term_predictions", []):
+            st.markdown(f"• {pred}")
     with col2:
-        st.write("**Opportunities:**")
-        for opp in alignment.get("opportunities", []):
-            st.markdown(f"• {opp}")
+        st.write("**Long-term Outlook (2-5 years):**")
+        for outlook in trajectory.get("long_term_outlook", []):
+            st.markdown(f"• {outlook}")
+
+    # Market Potential
+    st.subheader("Market Potential")
+    market = combined_analysis.get("market_potential", {})
+    cols = st.columns(3)
+    with cols[0]:
+        st.write("**Immediate Applications:**")
+        for app in market.get("immediate_applications", []):
+            st.markdown(f"• {app}")
+    with cols[1]:
+        st.write("**Development Needs:**")
+        for need in market.get("development_needs", []):
+            st.markdown(f"• {need}")
+    with cols[2]:
+        st.write("**Market Size Estimates:**")
+        for est in market.get("market_size_estimates", []):
+            st.markdown(f"• {est}")
+
+    # Research Gaps
+    st.subheader("Research Gaps")
+    for gap in combined_analysis.get("research_gaps", []):
+        with st.expander(f"🔍 {gap.get('area', 'Research Area')} (Priority: {gap.get('priority', 'N/A')}/10)"):
+            st.write("**Resources Needed:**", gap.get('resources_needed', ''))
 
     # Technology Assessment
     st.subheader("Technology Assessment")
-    tech_assessment = combined_analysis.get("technology_assessment", {})
-    col1, col2 = st.columns(2)
-    with col1:
-        st.metric("Technology Readiness", f"{tech_assessment.get('readiness_score', 0)}/10")
-        st.write("**Maturity Level:**", tech_assessment.get("maturity_level", "Unknown"))
-    with col2:
-        st.write("**Development Stages:**")
-        for stage in tech_assessment.get("development_stages", []):
-            st.markdown(f"• {stage}")
+    tech = combined_analysis.get("technology_assessment", {})
+    maturity = tech.get("maturity_levels", {})
 
-    # Innovation Opportunities
-    st.subheader("Innovation Opportunities")
-    for opp in combined_analysis.get("innovation_opportunities", []):
-        with st.expander(f"💡 {opp.get('opportunity', 'Opportunity')} ({opp.get('potential_impact', 'N/A')} impact)"):
-            st.write(f"**Implementation Timeline:** {opp.get('implementation_timeline', 'N/A')}")
-            st.write(f"**Required Resources:** {opp.get('required_resources', 'N/A')}")
+    if maturity:
+        cols = st.columns(len(maturity))
+        for i, (category, score) in enumerate(maturity.items()):
+            with cols[i]:
+                st.metric(f"{category.title()} Maturity", f"{score}/10")
+
+    st.write("**Development Stages:**")
+    for stage in tech.get("development_stages", []):
+        st.markdown(f"• {stage}")
+
+    st.write("**Commercialization Readiness:**")
+    st.write(tech.get("commercialization_readiness", "No readiness assessment available"))
 
     # Risk Analysis
     st.subheader("Risk Analysis")
     risks = combined_analysis.get("risk_analysis", {})
-    tab1, tab2, tab3 = st.tabs(["Technical Risks", "Market Risks", "Mitigation Strategies"])
+    tabs = st.tabs(["Technical Risks", "Market Risks", "Funding Risks", "Mitigation Strategies"])
 
-    with tab1:
+    with tabs[0]:
         for risk in risks.get("technical_risks", []):
             st.markdown(f"• {risk}")
-    with tab2:
+    with tabs[1]:
         for risk in risks.get("market_risks", []):
             st.markdown(f"• {risk}")
-    with tab3:
+    with tabs[2]:
+        for risk in risks.get("funding_risks", []):
+            st.markdown(f"• {risk}")
+    with tabs[3]:
         for strategy in risks.get("mitigation_strategies", []):
             st.markdown(f"• {strategy}")
 
@@ -657,42 +732,41 @@ def render_combined_results(research_results, patent_results, combined_analysis)
             st.write(f"**Timeframe:** {rec.get('timeframe', 'N/A')}")
             st.write(f"**Required Investment:** {rec.get('required_investment', 'N/A')}")
 
-    # Future Directions
-    st.subheader("Future Directions")
-    for direction in combined_analysis.get("future_directions", []):
-        with st.expander(f"🔮 {direction.get('direction', 'Direction')} (Probability: {direction.get('probability', 'N/A')}/10)"):
-            st.write(f"**Impact:** {direction.get('impact', 'N/A')}")
-            st.write(f"**Timeline:** {direction.get('timeline', 'N/A')}")
+    # Regulatory Compliance
+    compliance = combined_analysis.get("regulatory_compliance", {})
+    if any(compliance.values()):
+        st.subheader("Regulatory Compliance")
+        cols = st.columns(3)
+        with cols[0]:
+            st.write("**Current Requirements:**")
+            for req in compliance.get("current_requirements", []):
+                st.markdown(f"• {req}")
+        with cols[1]:
+            st.write("**Future Changes:**")
+            for change in compliance.get("future_changes", []):
+                st.markdown(f"• {change}")
+        with cols[2]:
+            st.write("**Compliance Strategies:**")
+            for strategy in compliance.get("compliance_strategies", []):
+                st.markdown(f"• {strategy}")
 
-    # Collaboration Opportunities
-    st.subheader("Collaboration Opportunities")
-    for collab in combined_analysis.get("collaboration_opportunities", []):
-        with st.expander(f"🤝 {collab.get('type', 'Collaboration')}"):
-            st.write("**Potential Partners:**")
-            for partner in collab.get("potential_partners", []):
-                st.markdown(f"• {partner}")
-            st.write("**Expected Benefits:**")
-            for benefit in collab.get("expected_benefits", []):
-                st.markdown(f"• {benefit}")
-
-    # Industry Implications
-    st.subheader("Industry Implications")
-    implications = combined_analysis.get("industry_implications", {})
-
-    st.write("**Affected Sectors:**")
-    cols = st.columns(3)
-    sectors = implications.get("affected_sectors", [])
-    for i, sector in enumerate(sectors):
-        cols[i % 3].markdown(f"• {sector}")
-
-    st.write("**Impact Analysis:**")
-    for impact in implications.get("impact_analysis", []):
-        st.markdown(f"• {impact}")
-
-    st.write("**Adaptation Strategies:**")
-    for strategy in implications.get("adaptation_strategies", []):
-        st.markdown(f"• {strategy}")
-
+    # Sustainability Impact
+    sustainability = combined_analysis.get("sustainability_impact", {})
+    if any(sustainability.values()):
+        st.subheader("Sustainability Impact")
+        cols = st.columns(3)
+        with cols[0]:
+            st.write("**Environmental Considerations:**")
+            for env in sustainability.get("environmental_considerations", []):
+                st.markdown(f"• {env}")
+        with cols[1]:
+            st.write("**Social Implications:**")
+            for social in sustainability.get("social_implications", []):
+                st.markdown(f"• {social}")
+        with cols[2]:
+            st.write("**Economic Effects:**")
+            for effect in sustainability.get("economic_effects", []):
+                st.markdown(f"• {effect}")
 
     if st.session_state.get('patent_results'):
         patent_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
