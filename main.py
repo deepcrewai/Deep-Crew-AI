@@ -51,10 +51,10 @@ def main():
         # Main content
         st.markdown("""
             <div class="main-container">
-                <div class="logo-container">
+                <div class="logo-container" style="text-align: center; width: 100%;">
                     <img src="https://deep-crew.ai/wp-content/uploads/2025/03/9128379182739812873.png" 
                          alt="Deep Crew Logo" 
-                         style="max-width: 200px; height: auto; margin: 20px 0;">
+                         style="max-width: 350px; height: auto; margin: 30px auto;">
                 </div>
                 <h1 class="main-header">Research & Innovation Hub</h1>
                 <p class="subtitle">
