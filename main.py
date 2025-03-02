@@ -127,14 +127,24 @@ def main():
                 return
 
             # Create tabs with stage names
+            # Sort stages in the desired order
+            ordered_stages = []
+            preferred_order = ['research', 'patents', 'funding', 'network', 'synthesis', 'compliance']
+
+            # First add stages in preferred order if they are selected
+            for stage in preferred_order:
+                if stage in selected_stages:
+                    ordered_stages.append(stage)
+
+            # Create tabs with the ordered stages
             tabs = st.tabs([stages.get(stage, stage.capitalize()) if stage != 'synthesis' else 'Synthesis'
-                            for stage in selected_stages])
+                            for stage in ordered_stages])
 
             # Process each tab
             for idx, tab in enumerate(tabs):
                 with tab:
                     try:
-                        current_stage = selected_stages[idx]
+                        current_stage = ordered_stages[idx] # Use ordered_stages here
 
                         if current_stage == "research":
                             with st.spinner("🔍 Analyzing Research..."):
