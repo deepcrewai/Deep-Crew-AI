@@ -483,36 +483,8 @@ def render_search_section(results):
 
 def render_patent_results(results, analysis):
     """Render patent search results with export functionality."""
-    # Display results header with export button
-    col1, col2 = st.columns([2, 3])
-    with col1:
-        st.subheader(f"Document Results({len(results)})")
-    with col2:
-        # Right-align the button using a container and custom CSS
-        button_container = st.container()
-        with button_container:
-            st.markdown(
-                """
-                <style>
-                div[data-testid="stDownloadButton"] {
-                    display: flex;
-                    justify-content: flex-end;
-                }
-                </style>
-                """, 
-                unsafe_allow_html=True
-            )
-            if 'patent_pdf_generated' not in st.session_state:
-                st.session_state.patent_pdf_generated = False
-
-            st.download_button(
-                label="📑 Export Results as PDF",
-                data=generate_patent_pdf_report(results, analysis),
-                file_name="patent_report.pdf",
-                mime="application/pdf",
-                key="patent_pdf_download"
-            )
-            st.session_state.patent_pdf_generated = False
+    # Display results header
+    st.subheader(f"Document Results({len(results)})")
 
     # Display patents
     for patent in results:
