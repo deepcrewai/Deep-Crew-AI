@@ -116,145 +116,148 @@ def main():
 
             # Only add Results tab if more than one stage is selected
             if len(selected_stages) > 1:
+                # Create a new list with existing stages plus results
+                display_stages = list(selected_stages) + ["results"]
+
+                # Create tabs
                 tabs = st.tabs([
                     stages.get(stage, "Results" if stage == "results" else stage.capitalize())
-                    for stage in selected_stages
+                    for stage in display_stages
                 ])
 
                 for i, tab in enumerate(tabs):
                     with tab:
                         try:
-                            if i < len(selected_stages):  # Make sure we don't go out of bounds
-                                current_stage = selected_stages[i]
+                            current_stage = display_stages[i]  # Use display_stages instead of selected_stages
 
-                                if current_stage == "research":
-                                    with st.spinner("🔍 Analyzing Research..."):
-                                        openalex_client = OpenAlexClient()
-                                        ai_analyzer = AIAnalyzer()
+                            if current_stage == "research":
+                                with st.spinner("🔍 Analyzing Research..."):
+                                    openalex_client = OpenAlexClient()
+                                    ai_analyzer = AIAnalyzer()
 
-                                        # Only do a new search if:
-                                        # 1. We have a new search query OR
-                                        # 2. We don't have any search results yet
-                                        if (search_query != st.session_state.get('last_query', '') or
-                                            'search_results' not in st.session_state):
-                                            try:
-                                                keywords = ai_analyzer.generate_search_keywords(search_query)
-                                                results = openalex_client.search(query=search_query, keywords=keywords)
+                                    # Only do a new search if:
+                                    # 1. We have a new search query OR
+                                    # 2. We don't have any search results yet
+                                    if (search_query != st.session_state.get('last_query', '') or
+                                        'search_results' not in st.session_state):
+                                        try:
+                                            keywords = ai_analyzer.generate_search_keywords(search_query)
+                                            results = openalex_client.search(query=search_query, keywords=keywords)
 
-                                                if results:
-                                                    st.session_state.search_results = results
-                                                    st.session_state.analysis = ai_analyzer.analyze_results(results)
-                                                    st.session_state.last_query = search_query
-                                                else:
-                                                    st.warning("No results found. Try different terms.")
-                                                    st.session_state.search_results = []
-                                                    st.session_state.analysis = None
-                                            except Exception as e:
-                                                logger.error(f"Error in research search: {str(e)}")
-                                                st.error(f"An error occurred during search: {str(e)}")
+                                            if results:
+                                                st.session_state.search_results = results
+                                                st.session_state.analysis = ai_analyzer.analyze_results(results)
+                                                st.session_state.last_query = search_query
+                                            else:
+                                                st.warning("No results found. Try different terms.")
                                                 st.session_state.search_results = []
                                                 st.session_state.analysis = None
-
-                                        # Create sub-tabs for Documents and AI Analysis
-                                        doc_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
-
-                                        # Show results if we have them
-                                        if st.session_state.get('search_results'):
-                                            with doc_tab:
-                                                render_search_section(st.session_state.search_results)
-                                            with analysis_tab:
-                                                if st.session_state.get('analysis'):
-                                                    render_analysis_section(st.session_state.analysis, section_type="research")
-
-                                elif current_stage == "patents":
-                                    with st.spinner("🔍 Searching patents..."):
-                                        patent_client = PatentSearchClient()
-                                        if search_query != st.session_state.get('last_query', '') or st.session_state.get('patent_results') is None:
-                                            patent_results = patent_client.search_patents(search_query)
-                                            if patent_results:
-                                                st.session_state.patent_results = patent_results
-                                                with st.spinner("🤖 Analyzing patents..."):
-                                                    st.session_state.patent_analysis = patent_client.analyze_patents(patent_results)
-                                            else:
-                                                st.warning("No patent results found.")
-                                                st.session_state.patent_results = None
-                                                st.session_state.patent_analysis = None
-
-                                        # Create sub-tabs for Documents and AI Analysis
-                                        patent_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
-
-                                        with patent_tab:
-                                            if st.session_state.get('patent_results'):
-                                                render_patent_results(
-                                                    st.session_state.patent_results,
-                                                    st.session_state.patent_analysis,
-                                                    context="standalone")
-
-                                        with analysis_tab:
-                                            if st.session_state.get('patent_analysis'):
-                                                render_analysis_section(
-                                                    st.session_state.patent_analysis,
-                                                    section_type="patent_standalone")
-
-                                elif current_stage == "funding":
-                                    if 'funding_data' not in st.session_state:
-                                        from funding import FundingAgent
-                                        funding_agent = FundingAgent()
-                                        st.session_state.funding_data = funding_agent.get_funding_opportunities(search_query)
-                                    render_funding_section(search_query, st.session_state.funding_data)
-
-                                elif current_stage == "network":
-                                    render_network_section(st.session_state.get('search_results', []))
-
-                                elif current_stage == "compliance":
-                                    st.info("✓ Coming Soon")
-
-                                elif current_stage == "results":
-                                    if not st.session_state.get('combined_analysis'):
-                                        ai_analyzer = AIAnalyzer()
-                                        research_data = st.session_state.get('search_results', [])
-                                        patent_data = st.session_state.get('patent_results', [])
-                                        funding_data = st.session_state.get('funding_data', {})
-
-                                        # Extract network data
-                                        network_data = []
-                                        if research_data:
-                                            network_data = [
-                                                {
-                                                    'author': authorship.get('author', {}).get('display_name'),
-                                                    'orcid': authorship.get('author', {}).get('orcid'),
-                                                    'institution': authorship.get('institutions', [{}])[0].get('display_name')
-                                                }
-                                                for paper in research_data
-                                                for authorship in paper.get('authorships', [])
-                                            ]
-
-                                        # Generate combined analysis
-                                        try:
-                                            st.session_state.combined_analysis = ai_analyzer.analyze_combined_results(
-                                                research_data,
-                                                patent_data,
-                                                funding_data,
-                                                network_data
-                                            )
                                         except Exception as e:
-                                            logger.error(f"Error generating combined analysis: {str(e)}")
-                                            st.error("Error generating combined analysis. Please try again.")
-                                            st.session_state.combined_analysis = None
+                                            logger.error(f"Error in research search: {str(e)}")
+                                            st.error(f"An error occurred during search: {str(e)}")
+                                            st.session_state.search_results = []
+                                            st.session_state.analysis = None
 
-                                    # Only render if we have combined analysis
-                                    if st.session_state.get('combined_analysis'):
-                                        render_combined_results(
-                                            st.session_state.get('search_results', []),
-                                            st.session_state.get('patent_results', []),
-                                            st.session_state.combined_analysis
+                                    # Create sub-tabs for Documents and AI Analysis
+                                    doc_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
+
+                                    # Show results if we have them
+                                    if st.session_state.get('search_results'):
+                                        with doc_tab:
+                                            render_search_section(st.session_state.search_results)
+                                        with analysis_tab:
+                                            if st.session_state.get('analysis'):
+                                                render_analysis_section(st.session_state.analysis, section_type="research")
+
+                            elif current_stage == "patents":
+                                with st.spinner("🔍 Searching patents..."):
+                                    patent_client = PatentSearchClient()
+                                    if search_query != st.session_state.get('last_query', '') or st.session_state.get('patent_results') is None:
+                                        patent_results = patent_client.search_patents(search_query)
+                                        if patent_results:
+                                            st.session_state.patent_results = patent_results
+                                            with st.spinner("🤖 Analyzing patents..."):
+                                                st.session_state.patent_analysis = patent_client.analyze_patents(patent_results)
+                                        else:
+                                            st.warning("No patent results found.")
+                                            st.session_state.patent_results = None
+                                            st.session_state.patent_analysis = None
+
+                                    # Create sub-tabs for Documents and AI Analysis
+                                    patent_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
+
+                                    with patent_tab:
+                                        if st.session_state.get('patent_results'):
+                                            render_patent_results(
+                                                st.session_state.patent_results,
+                                                st.session_state.patent_analysis,
+                                                context="standalone")
+
+                                    with analysis_tab:
+                                        if st.session_state.get('patent_analysis'):
+                                            render_analysis_section(
+                                                st.session_state.patent_analysis,
+                                                section_type="patent_standalone")
+
+                            elif current_stage == "funding":
+                                if 'funding_data' not in st.session_state:
+                                    from funding import FundingAgent
+                                    funding_agent = FundingAgent()
+                                    st.session_state.funding_data = funding_agent.get_funding_opportunities(search_query)
+                                render_funding_section(search_query, st.session_state.funding_data)
+
+                            elif current_stage == "network":
+                                render_network_section(st.session_state.get('search_results', []))
+
+                            elif current_stage == "compliance":
+                                st.info("✓ Coming Soon")
+
+                            elif current_stage == "results":
+                                if not st.session_state.get('combined_analysis'):
+                                    ai_analyzer = AIAnalyzer()
+                                    research_data = st.session_state.get('search_results', [])
+                                    patent_data = st.session_state.get('patent_results', [])
+                                    funding_data = st.session_state.get('funding_data', {})
+
+                                    # Extract network data
+                                    network_data = []
+                                    if research_data:
+                                        network_data = [
+                                            {
+                                                'author': authorship.get('author', {}).get('display_name'),
+                                                'orcid': authorship.get('author', {}).get('orcid'),
+                                                'institution': authorship.get('institutions', [{}])[0].get('display_name')
+                                            }
+                                            for paper in research_data
+                                            for authorship in paper.get('authorships', [])
+                                        ]
+
+                                    # Generate combined analysis
+                                    try:
+                                        st.session_state.combined_analysis = ai_analyzer.analyze_combined_results(
+                                            research_data,
+                                            patent_data,
+                                            funding_data,
+                                            network_data
                                         )
-                                    else:
-                                        st.info("Please perform searches in other tabs first to view combined results.")
+                                    except Exception as e:
+                                        logger.error(f"Error generating combined analysis: {str(e)}")
+                                        st.error("Error generating combined analysis. Please try again.")
+                                        st.session_state.combined_analysis = None
+
+                                # Only render if we have combined analysis
+                                if st.session_state.get('combined_analysis'):
+                                    render_combined_results(
+                                        st.session_state.get('search_results', []),
+                                        st.session_state.get('patent_results', []),
+                                        st.session_state.combined_analysis
+                                    )
+                                else:
+                                    st.info("Please perform searches in other tabs first to view combined results.")
 
                         except Exception as e:
-                            logger.error(f"Error in tab {selected_stages[i]}: {str(e)}")
-                            st.error(f"An error occurred in {selected_stages[i]} tab: {str(e)}")
+                            logger.error(f"Error in tab {display_stages[i]}: {str(e)}")
+                            st.error(f"An error occurred in {display_stages[i]} tab: {str(e)}")
 
             else:
                 st.info("Please choose multiple research stages to see combined results.")
