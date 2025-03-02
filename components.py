@@ -486,7 +486,7 @@ def render_patent_results(results, analysis):
     # Display results header with export button
     col1, col2 = st.columns([2, 3])
     with col1:
-        st.subheader("Document Results")
+        st.subheader(f"Document Results({len(results)})")
     with col2:
         # Right-align the button using a container and custom CSS
         button_container = st.container()
