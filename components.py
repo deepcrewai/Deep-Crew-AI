@@ -804,10 +804,15 @@ def render_synthesis_section(research_data, patent_data, funding_data, selected_
             }}
         }}"""
 
+        # Show the game while analysis is running
+        game_placeholder = st.empty()
+        with game_placeholder:
+            render_waiting_game()
+
         # Get AI analysis
         with st.spinner("Generating comprehensive synthesis report..."):
             response = client.chat.completions.create(
-                model="gpt-4o",  # Latest model as of May 13, 2024
+                model="gpt-4o",
                 messages=[{
                     "role": "system",
                     "content": analysis_prompt
@@ -820,6 +825,9 @@ def render_synthesis_section(research_data, patent_data, funding_data, selected_
             )
 
             analysis = json.loads(response.choices[0].message.content)
+
+        # Clear the game after analysis is complete
+        game_placeholder.empty()
 
         # Display Analysis Results
         st.header("Funding Analysis")
@@ -907,3 +915,357 @@ def render_synthesis_section(research_data, patent_data, funding_data, selected_
 
     except Exception as e:
         st.error(f"An error occurred during synthesis: {str(e)}")
+
+def render_waiting_game():
+    """Render the game while waiting for analysis."""
+    game_html = """
+    <div class="init">
+        <div class="center1">
+            <h1>WE NEED YOU!</h1>
+            <p>Click on each square to clean sea. You must hurry or 
+the sea will be polluted.</p>
+            <p class="floating bold">START GAME</p>
+        </div>
+    </div>
+    <div class="won">
+        <div class="center">
+            <h1>YOU WON!</h1>
+            <p class="floating replay bold">save the World again</p>
+        </div>
+    </div>
+    <div class="init hidden"><h1 class="center">INCREASED VELOCITY!</h1></div>
+    <div class="container">
+        <div class="game"></div>
+    </div>
+    """
+
+    game_css = """
+    /* {
+        border: 1px solid #888;
+    }*/
+
+    @import url('https://fonts.googleapis.com/css?family=Roboto');
+
+    :root {
+        --green:  	#0067a5;
+        --red: #ff9292;
+        --dim: 62px;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        background-color: #007aa5;
+    }
+
+    h1, h2 {
+        font-family: 'Roboto', sans-serif;
+        font-weight: bold;
+        color: #333;
+        margin: 10px;
+    }
+
+    h1 {
+        font-size: 60px;
+    }
+
+    h2 {
+        font-size: 37px;
+    }
+
+    p {
+        font-family: 'Roboto', sans-serif;
+        font-size: 23px;
+        font-weight: 100;
+        color: #333; 
+        margin: 10px;
+    }
+
+    .bold {
+      font-weight: 900;
+    }
+
+    .center {
+        position: relative;
+        top: 20%;
+        margin: 0;
+    }
+
+    .center1 {
+        position: relative;
+        margin: 30px;
+    }
+
+    .container {
+        height: 100%;
+        position: relative;
+    }
+
+    .game {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        width: 540px;
+        height: 650px;
+        border-radius: 9px;
+        background-color: #333;
+        padding: 5px;
+    }
+
+    .box {
+        height: 100px;
+        width: 100px;
+        float: left;
+        margin: 0;
+        padding: 0px;
+        text-align: center;
+        border-radius: 9px;
+        border: 4px solid #333;
+        background-color: #b4cadf;
+        background-position: center;
+        background-size: 70%;
+        background-repeat: no-repeat;
+    }
+
+    .green {
+        background-color: var(--green);
+        animation-name: getIn;
+        animation-duration: .3s;
+        animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .tree {
+        background-image: url('https://img.icons8.com/?size=100&id=On7Klul3EITI&format=png');
+    }
+
+    .red {
+        background-color: var(--red);
+        animation-name: getIn1;
+        animation-duration: .3s;
+        animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .factory {
+        background-image: url('https://img.icons8.com/?size=100&id=Gfo2-kRuGKUt&format=png');
+    }
+
+    .won, .init {
+        z-index: 999;
+        position: fixed;
+        left: 0;
+        right: 0;
+        margin: auto;
+        text-align: center;
+        border: 8px solid #333;
+        border-radius: 7px;
+    }
+
+    .won {
+        background-color: var(--green);
+        top: 100%;
+        width: 600px;
+        height: 300px;
+    }
+
+    .init {
+        background-color: var(--red);
+        top: 30%;
+        width: 600px;
+        height: 300px;
+    }
+
+    .floating {
+        position: relative;
+        animation-name: floating;
+        animation-iteration-count: infinite;
+        animation-duration: 1.5s;
+        animation-timing-function: ease-in-out;
+        cursor: pointer;
+        text-decoration: underline;
+        text-decoration-color: #333;
+        margin-top: 30px;
+    }
+
+    .levelUp {
+      animation: levelUp 2.5s ease-in-out;
+      animation-delay: 2s;
+    }
+
+    .hidden {
+      visibility: hidden;
+    }
+
+    @keyframes won {
+        from {top: 100%; transform: rotate(180deg);}
+        to   {top: 30%; transform: rotate(0deg);}    
+    }
+
+    @keyframes start {
+        from   {top: 30%; transform: rotate(0deg);}    
+        to {top: 100%; transform: rotate(180deg);}
+    }
+
+    @keyframes floating {
+        0% {top: 0px; transform: rotate(0deg);}
+        25% {top: 5px; transform: rotate(3deg);}
+        50% {top: -5px; transform: rotate(-3deg);}
+        100%   {top: 0px; transform: rotate(0deg);}  
+    }
+
+    @keyframes getIn {
+        from {background-size: 0%;}
+        to   {background-size: 70%;}
+    }
+
+    @keyframes getIn1 {
+        from {background-size: 0%;}
+        to   {background-size: 70%;}
+    }
+
+    @keyframes levelUp {
+        0% {opacity: 0; visibility: visible;}
+        50% {opacity: 1;}
+        100%   {opacity: 0; visibility: hidden;}  
+    }
+
+    @media (max-width: 500px) {
+        h1 {
+            font-size: 37px;
+        }
+
+        .game {
+            width: 331px;
+            height: 396px;
+        }
+
+        .box {
+            width: var(--dim);
+            height: var(--dim);
+            border: 2.1px solid #333;
+        }
+
+        .won, .init {
+            width: 300px;
+            height: 400px;
+        }
+
+        .init {
+            top: 10%;
+        }
+    }
+    """
+
+    game_js = """
+    <script>
+    const game = document.querySelector('.game');
+    var arrFactory = [];
+    var arrTree = [];
+    var newFactory;
+    var interval = 800;
+
+    function createGame() {
+        for (let i = 0; i < 30; i++) {
+            let a = document.querySelector('.game');
+            let b = document.createElement('div');
+            b.classList.add('box');
+            b.setAttribute('data-value', i);
+            a.appendChild(b);   
+        }
+    }
+
+    function replay() {
+        var replay = document.querySelector('.replay');
+        replay.addEventListener('click', function() {
+            box.forEach(function(box) {
+                box.classList.remove('green');
+                box.classList.remove('tree');
+            });
+            document.querySelector('.hidden').classList.add('levelUp')
+            let bang = document.querySelector('.won');
+            newFactory = setInterval(randomFactory, 600);
+            bang.style.animation = 'start .6s ease-in-out';
+            bang.style.top = '100%';
+        });
+    }
+
+    function addTree(e) {
+        let c = e.target;
+
+        if(arrTree.indexOf(c.dataset.value) == -1) {
+            arrTree.push(c.dataset.value);
+            if(arrTree.length == 30) {
+                clearInterval(newFactory);
+
+                document.querySelector('.hidden').classList.remove('levelUp');
+                let bang = document.querySelector('.won');
+                bang.style.animation = 'won .6s ease-in-out';
+                bang.style.top = '30%';
+                replay();
+            }
+        } 
+
+        if(arrFactory.indexOf(c.dataset.value) != -1) {
+            arrFactory.splice(arrFactory.indexOf(c.dataset.value) ,1);
+        }
+        c.classList.remove('red');
+        c.classList.remove('factory');
+        c.classList.add('green');
+        c.classList.add('tree');
+    }
+
+    function randomFactory() {
+        let e = Math.random() * 30;
+        let g = Math.floor(e);
+
+        if(arrFactory.indexOf(box[g].dataset.value) == -1) {
+            arrFactory.push(box[g].dataset.value);
+            box[g].classList.add('red');
+            box[g].classList.remove('green');
+            box[g].classList.add('factory');
+            if(arrFactory.length == 30) {
+                clearInterval(newFactory);
+            }
+        } 
+
+        if(arrTree.indexOf(box[g].dataset.value) != -1) {
+            arrTree.splice(arrTree.indexOf(box[g].dataset.value), 1);
+        }
+    }
+
+    // Initialize game when document is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        createGame();
+        var box = document.querySelectorAll('.box');
+        var start = document.querySelector('.floating');
+
+        start.addEventListener('click', function() {
+            let init = document.querySelector('.init');
+            init.style.animation = 'start .5s ease-in';
+            init.style.top = '100%';
+            newFactory = setInterval(randomFactory, interval);
+        });
+
+        box.forEach(function(box) {
+            box.addEventListener('click', addTree);
+        });
+    });
+    </script>
+    """
+
+    # Combine HTML, CSS and JavaScript in a container div
+    st.markdown(
+        f"""
+        <style>
+        {game_css}
+        </style>
+        <div id="game-container" style="height: 100vh;">
+        {game_html}
+        {game_js}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
