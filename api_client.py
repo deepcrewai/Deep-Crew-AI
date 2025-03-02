@@ -6,9 +6,40 @@ from difflib import SequenceMatcher
 class OpenAlexClient:
     def __init__(self):
         self.base_url = "https://api.openalex.org"
-        self.email = "researcher@example.org"  # Updated email for better rate limits
+        self.email = "researcher@example.org"
         self.last_request_time = 0
-        self.min_request_interval = 1.0  # 1 second between requests
+        self.min_request_interval = 1.0
+
+    def get_author_details(self, author_id: str) -> Dict:
+        """Get detailed information about an author from OpenAlex."""
+        try:
+            endpoint = f"authors/{author_id}"
+            response = self._make_request(endpoint, {})
+
+            if not response:
+                return {}
+
+            # Extract relevant information
+            return {
+                'name': response.get('display_name'),
+                'orcid': response.get('orcid'),
+                'institution': response.get('last_known_institution', {}).get('display_name', 'Unknown'),
+                'works_count': response.get('works_count', 0),
+                'cited_by_count': response.get('cited_by_count', 0),
+                'h_index': response.get('summary_stats', {}).get('h_index', 0),
+                'concepts': [
+                    {
+                        'name': c.get('display_name'),
+                        'level': c.get('level'),
+                        'score': c.get('score')
+                    }
+                    for c in response.get('x_concepts', [])[:5]  # Top 5 research concepts
+                ],
+                'counts_by_year': response.get('counts_by_year', [])
+            }
+        except Exception as e:
+            print(f"Error fetching author details: {str(e)}")
+            return {}
 
     def _make_request(self, endpoint: str, params: Dict) -> Dict:
         """Make a request to OpenAlex API with improved rate limiting and error handling."""

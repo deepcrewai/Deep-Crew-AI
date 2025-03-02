@@ -6,6 +6,11 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from datetime import datetime
 from reportlab.lib.utils import ImageReader
+import pandas as pd # Added for the edited code
+
+# Assuming OpenAlexClient is defined elsewhere, or you'll need to add its definition here.
+# For example: from openalex import OpenAlexClient 
+
 
 def generate_pdf_report(results, analysis):
     """Generate a PDF report of AI analysis."""
@@ -716,17 +721,24 @@ def render_combined_results(research_results, patent_results, combined_analysis)
 
 
 def render_network_section(research_results):
-    """Render network section showing author ORCID links."""
+    """Render network section showing detailed author information."""
     if not research_results:
         st.info("Önce Literature sekmesinde bir arama yapın.")
         return
 
     st.header("Author Network")
-    st.write("Literature araştırmanızdaki yazarların ORCID profilleri:")
+    st.write("Literature araştırmanızdaki yazarların detaylı profilleri:")
 
-    # Add custom HTML/CSS for links
+    # Add custom HTML/CSS for better styling
     st.markdown("""
         <style>
+        .author-card {
+            padding: 1rem;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin: 1rem 0;
+        }
         .orcid-link {
             color: #1a73e8;
             text-decoration: none;
@@ -740,42 +752,92 @@ def render_network_section(research_results):
         .orcid-link:hover {
             background: #e8f0fe;
         }
+        .metric-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .concept-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #e8f0fe;
+            border-radius: 12px;
+            margin: 2px;
+            font-size: 0.9em;
+        }
         </style>
     """, unsafe_allow_html=True)
 
-    # Tüm yazarları topla
+    # Initialize OpenAlex client
+    openalex_client = OpenAlexClient()
+
+    # Collect and process author information
     authors = {}
     for paper in research_results:
         for authorship in paper.get('authorships', []):
             author = authorship.get('author', {})
+            author_id = author.get('id')
             author_name = author.get('display_name')
-            if author_name and author_name not in authors:
+
+            if author_name and author_name not in authors and author_id:
+                # Get detailed author information
+                author_details = openalex_client.get_author_details(author_id)
                 authors[author_name] = {
-                    'orcid': author.get('orcid'),
-                    'papers': []
+                    'details': author_details,
+                    'papers': [],
+                    'orcid': author.get('orcid')
                 }
             if author_name:
                 authors[author_name]['papers'].append(paper.get('title'))
 
-    # Yazarları göster
+    # Display authors with detailed information
     for author_name, data in authors.items():
         with st.expander(f"👤 {author_name}"):
+            details = data['details']
+
+            # ORCID link
             if data['orcid']:
                 orcid_url = f"https://orcid.org/{data['orcid']}"
-                # Use custom HTML for the link
                 st.markdown(
                     f'<a href="{orcid_url}" class="orcid-link" target="_blank" rel="noopener noreferrer">'
                     f'🔗 ORCID: {data["orcid"]}</a>',
-                    unsafe_allow_html=True
+                    unsafe_allowhtml=True
                 )
-            else:
-                st.write("🚫 ORCID ID bulunamadı")
 
-            st.write("📚 Makaleler:")
+            # Institution and metrics
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric("Toplam Yayın", details.get('works_count', 0))
+            with col2:
+                st.metric("Toplam Atıf", details.get('cited_by_count', 0))
+            with col3:
+                st.metric("H-index", details.get('h_index', 0))
+
+            # Institution
+            st.write(f"🏛️ **Kurum:** {details.get('institution', 'Bilinmiyor')}")
+
+            # Research concepts
+            if details.get('concepts'):
+                st.write("🔬 **Araştırma Alanları:**")
+                concepts_html = "".join([
+                    f'<span class="concept-tag">{c["name"]} ({c["score"]:.2f})</span>'
+                    for c in details['concepts']
+                ])
+                st.markdown(concepts_html, unsafe_allow_html=True)
+
+            # Publications
+            st.write("📚 **Bu Araştırmadaki Makaleler:**")
             for paper in data['papers']:
                 st.write(f"- {paper}")
 
-    # İstatistikler
+            # Citation trends
+            if details.get('counts_by_year'):
+                st.write("📈 **Atıf Trendi**")
+                df = pd.DataFrame(details['counts_by_year'])
+                fig = px.line(df, x='year', y='cited_by_count', 
+                            title='Yıllara Göre Atıf Sayısı')
+                st.plotly_chart(fig, use_container_width=True)
+
+    # Overall statistics
     st.subheader("İstatistikler")
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -784,5 +846,138 @@ def render_network_section(research_results):
         orcid_count = sum(1 for data in authors.values() if data['orcid'])
         st.metric("ORCID'li Yazarlar", orcid_count)
     with col3:
-        avg_papers = sum(len(data['papers']) for data in authors.values()) / len(authors) if authors else 0
-        st.metric("Ortalama Makale/Yazar", f"{avg_papers:.1f}")
+        total_citations = sum(data['details'].get('cited_by_count', 0) for data in authors.values())
+        st.metric("Toplam Atıf", total_citations)
+
+def handle_pdf_export(results, analysis):
+    """This function is now deprecated as the export functionality has been moved to render_search_section"""
+    pass
+
+def render_combined_results(research_results, patent_results, combined_analysis):
+    """Render enhanced combined analysis of research and patent results."""
+    st.header("Comprehensive Analysis")
+
+    # Summary
+    st.subheader("Overview")
+    st.write(combined_analysis.get("comprehensive_summary", "No summary available"))
+
+    # Key Findings with Impact Scores
+    st.subheader("Key Findings")
+    findings = combined_analysis.get("key_findings", [])
+    for finding in findings:
+        with st.expander(f"🔍 Finding (Impact Score: {finding.get('impact_score', 'N/A')}/10)"):
+            st.write(finding.get('finding', ''))
+            st.write("**Evidence:**", finding.get('evidence', ''))
+
+    # Research-Patent Alignment
+    st.subheader("Research & Patent Alignment")
+    alignment = combined_analysis.get("research_patent_alignment", {})
+    st.write(alignment.get("overview", "No alignment analysis available"))
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.write("**Gaps:**")
+        for gap in alignment.get("gaps", []):
+            st.markdown(f"• {gap}")
+    with col2:
+        st.write("**Opportunities:**")
+        for opp in alignment.get("opportunities", []):
+            st.markdown(f"• {opp}")
+
+    # Technology Assessment
+    st.subheader("Technology Assessment")
+    tech_assessment = combined_analysis.get("technology_assessment", {})
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("Technology Readiness", f"{tech_assessment.get('readiness_score', 0)}/10")
+        st.write("**Maturity Level:**", tech_assessment.get("maturity_level", "Unknown"))
+    with col2:
+        st.write("**Development Stages:**")
+        for stage in tech_assessment.get("development_stages", []):
+            st.markdown(f"• {stage}")
+
+    # Innovation Opportunities
+    st.subheader("Innovation Opportunities")
+    for opp in combined_analysis.get("innovation_opportunities", []):
+        with st.expander(f"💡 {opp.get('opportunity', 'Opportunity')} ({opp.get('potential_impact', 'N/A')} impact)"):
+            st.write(f"**Implementation Timeline:** {opp.get('implementation_timeline', 'N/A')}")
+            st.write(f"**Required Resources:** {opp.get('required_resources', 'N/A')}")
+
+    # Risk Analysis
+    st.subheader("Risk Analysis")
+    risks = combined_analysis.get("risk_analysis", {})
+    tab1, tab2, tab3 = st.tabs(["Technical Risks", "Market Risks", "Mitigation Strategies"])
+
+    with tab1:
+        for risk in risks.get("technical_risks", []):
+            st.markdown(f"• {risk}")
+    with tab2:
+        for risk in risks.get("market_risks", []):
+            st.markdown(f"• {risk}")
+    with tab3:
+        for strategy in risks.get("mitigation_strategies", []):
+            st.markdown(f"• {strategy}")
+
+    # Investment Recommendations
+    st.subheader("Investment Recommendations")
+    for rec in combined_analysis.get("investment_recommendations", []):
+        with st.expander(f"💰 {rec.get('area', 'Investment Area')} (ROI: {rec.get('potential_roi', 'N/A')})"):
+            st.write(f"**Timeframe:** {rec.get('timeframe', 'N/A')}")
+            st.write(f"**Required Investment:** {rec.get('required_investment', 'N/A')}")
+
+    # Future Directions
+    st.subheader("Future Directions")
+    for direction in combined_analysis.get("future_directions", []):
+        with st.expander(f"🔮 {direction.get('direction', 'Direction')} (Probability: {direction.get('probability', 'N/A')}/10)"):
+            st.write(f"**Impact:** {direction.get('impact', 'N/A')}")
+            st.write(f"**Timeline:** {direction.get('timeline', 'N/A')}")
+
+    # Collaboration Opportunities
+    st.subheader("Collaboration Opportunities")
+    for collab in combined_analysis.get("collaboration_opportunities", []):
+        with st.expander(f"🤝 {collab.get('type', 'Collaboration')}"):
+            st.write("**Potential Partners:**")
+            for partner in collab.get("potential_partners", []):
+                st.markdown(f"• {partner}")
+            st.write("**Expected Benefits:**")
+            for benefit in collab.get("expected_benefits", []):
+                st.markdown(f"• {benefit}")
+
+    # Industry Implications
+    st.subheader("Industry Implications")
+    implications = combined_analysis.get("industry_implications", {})
+
+    st.write("**Affected Sectors:**")
+    cols = st.columns(3)
+    sectors = implications.get("affected_sectors", [])
+    for i, sector in enumerate(sectors):
+        cols[i % 3].markdown(f"• {sector}")
+
+    st.write("**Impact Analysis:**")
+    for impact in implications.get("impact_analysis", []):
+        st.markdown(f"• {impact}")
+
+    st.write("**Adaptation Strategies:**")
+    for strategy in implications.get("adaptation_strategies", []):
+        st.markdown(f"• {strategy}")
+
+    # Statistics
+    st.subheader("Document Statistics")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Research Papers", len(research_results))
+    with col2:
+        st.metric("Documents", len(patent_results))
+    with col3:
+        total_documents = len(research_results) + len(patent_results)
+        st.metric("Total Documents", total_documents)
+
+    if st.session_state.get('patent_results'):
+        patent_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
+
+        with patent_tab:
+            render_patent_results(st.session_state.patent_results, st.session_state.patent_analysis)
+
+        with analysis_tab:
+            if st.session_state.get('patent_analysis'):
+                render_analysis_section(st.session_state.patent_analysis)
