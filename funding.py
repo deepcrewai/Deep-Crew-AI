@@ -103,7 +103,7 @@ def render_funding_section(research_query: str):
 
     st.markdown("""
         <div class='results-container'>
-            <h2>💰 Funding Analysis</h2>
+            <h2>Funding Analysis</h2>
     """, unsafe_allow_html=True)
 
     # Region selection
