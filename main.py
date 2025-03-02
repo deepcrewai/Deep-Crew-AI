@@ -51,7 +51,11 @@ def main():
         # Main content
         st.markdown("""
             <div class="main-container">
-                <div class="logo-title">DEEP CREW</div>
+                <div class="logo-container">
+                    <img src="https://deep-crew.ai/wp-content/uploads/2025/03/9128379182739812873.png" 
+                         alt="Deep Crew Logo" 
+                         style="max-width: 200px; height: auto; margin: 20px 0;">
+                </div>
                 <h1 class="main-header">Research & Innovation Hub</h1>
                 <p class="subtitle">
                     Discover insights, analyze patents, and explore funding opportunities with AI-powered research tools
@@ -144,7 +148,7 @@ def main():
             for idx, tab in enumerate(tabs):
                 with tab:
                     try:
-                        current_stage = ordered_stages[idx] # Use ordered_stages here
+                        current_stage = ordered_stages[idx]  # Use ordered_stages here
 
                         if current_stage == "research":
                             with st.spinner("🔍 Analyzing Research..."):
