@@ -483,11 +483,29 @@ def render_search_section(results):
 
 def render_patent_results(results, analysis):
     """Render patent search results with export functionality."""
-    # Display results header
-    st.subheader(f"Document Results({len(results)})")
+    # Create columns for the header and sort dropdown
+    col1, col2 = st.columns([3, 1])
+
+    with col1:
+        st.subheader(f"Document Results({len(results)})")
+
+    with col2:
+        sort_option = st.selectbox(
+            "Sort By",
+            options=["Date (Newest)", "Date (Oldest)"],
+            key="patent_sort_option",
+            label_visibility="collapsed"
+        )
+
+    # Sort results based on selection
+    sorted_results = list(results)  # Create a copy to avoid modifying original
+    if sort_option == "Date (Newest)":
+        sorted_results.sort(key=lambda x: x.get('filing_date', ''), reverse=True)
+    elif sort_option == "Date (Oldest)":
+        sorted_results.sort(key=lambda x: x.get('filing_date', ''))
 
     # Display patents
-    for patent in results:
+    for patent in sorted_results:
         with st.expander(f"📄 {patent.get('title', 'Untitled Patent')}"):
             st.write("**ID:**")
             st.code(patent.get('patent_id', 'N/A'), language='text')  # This makes the ID easily selectable and adds a copy button
