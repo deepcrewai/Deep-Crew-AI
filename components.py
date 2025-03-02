@@ -529,7 +529,7 @@ def render_patent_results(results, analysis):
             {f"[View Details]({patent['url']})" if patent.get('url') else ''}
             """)
 
-def render_analysis_section(analysis):
+def render_analysis_section(analysis, section_type="research"):
     """Render the AI analysis section."""
     # Header with export button
     col1, col2 = st.columns([2, 1])
@@ -539,9 +539,9 @@ def render_analysis_section(analysis):
         st.download_button(
             label="📑 Export Analysis as PDF",
             data=generate_pdf_report([], analysis),
-            file_name="research_analysis.pdf",
+            file_name=f"{section_type}_analysis.pdf",
             mime="application/pdf",
-            key="research_pdf_download"  # Unique key for research section
+            key=f"{section_type}_analysis_pdf_download"  # Make key unique based on section type
         )
 
     # Summary
@@ -786,7 +786,7 @@ def render_combined_results(research_results, patent_results, combined_analysis)
 
         with analysis_tab:
             if st.session_state.get('patent_analysis'):
-                render_analysis_section(st.session_state.patent_analysis)
+                render_analysis_section(st.session_state.patent_analysis, section_type="patent")
 
 def render_network_section(research_results):
     """Render network section showing author ORCID links."""

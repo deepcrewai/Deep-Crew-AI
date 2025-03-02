@@ -163,7 +163,7 @@ def main():
                                             st.session_state.search_results)
                                     with analysis_tab:
                                         render_analysis_section(
-                                            st.session_state.analysis)
+                                            st.session_state.analysis, section_type="research")
 
                         elif current_stage == "patents":
                             with st.spinner("🔍 Searching patents..."):
@@ -199,7 +199,7 @@ def main():
                                         if st.session_state.get(
                                                 'patent_analysis'):
                                             render_analysis_section(
-                                                st.session_state.patent_analysis)
+                                                st.session_state.patent_analysis, section_type="patent")
 
                         elif current_stage == "funding":
                             if 'funding_data' not in st.session_state:
