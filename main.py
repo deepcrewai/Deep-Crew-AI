@@ -23,6 +23,7 @@ def init_session_state():
     """Initialize session state variables"""
     if 'initialized' not in st.session_state:
         st.session_state.initialized = True
+        st.session_state.warning_message = "Choose Your Agent"
         logger.info("Session state initialized")
 
 
@@ -80,11 +81,11 @@ def main():
         with col_button:
             search_clicked = st.button("Search", help="Start searching with selected stages", use_container_width=True)
 
-        # Move info message here, after search and before buttons
-        st.info("Choose Your Agent")
-
         if 'selected_stages' not in st.session_state:
             st.session_state.selected_stages = set()
+
+        # Display dynamic warning/info message
+        st.info(st.session_state.warning_message)
 
         # Create stage buttons using columns for horizontal layout
         col1, col2, col3, col4, col5 = st.columns(5)
@@ -130,8 +131,7 @@ def main():
         # Create tabs for selected stages if we have a search query
         if search_query or search_clicked:  # Added search_clicked condition
             if not selected_stages:
-                st.warning(
-                    "Please select at least one research stage to proceed.")
+                st.session_state.warning_message = "Please select at least one research stage to proceed."
                 return
 
             # Sort stages in the desired order
@@ -158,7 +158,6 @@ def main():
                                 openalex_client = OpenAlexClient()
                                 ai_analyzer = AIAnalyzer()
 
-                                # Only do a new search if needed
                                 if (search_query != st.session_state.get('last_query', '') or
                                         'search_results' not in st.session_state):
                                     try:
@@ -170,12 +169,12 @@ def main():
                                             st.session_state.analysis = ai_analyzer.analyze_results(results)
                                             st.session_state.last_query = search_query
                                         else:
-                                            st.warning("No results found. Try different terms.")
+                                            st.session_state.warning_message = "No results found. Try different terms."
                                             st.session_state.search_results = []
                                             st.session_state.analysis = None
                                     except Exception as e:
                                         logger.error(f"Error in research search: {str(e)}")
-                                        st.error(f"An error occurred during search: {str(e)}")
+                                        st.session_state.warning_message = f"An error occurred during search: {str(e)}"
                                         st.session_state.search_results = []
                                         st.session_state.analysis = None
 
@@ -202,7 +201,7 @@ def main():
                                             st.session_state.patent_analysis = patent_client.analyze_patents(
                                                 patent_results)
                                     else:
-                                        st.warning("No patent results found.")
+                                        st.session_state.warning_message = "No patent results found."
                                         st.session_state.patent_results = None
                                         st.session_state.patent_analysis = None
 
@@ -233,7 +232,6 @@ def main():
                             render_network_section(st.session_state.get('search_results', []))
 
                         elif current_stage == "synthesis":
-                            # En az 2 modül seçili olmalı kontrolü kaldırıldı çünkü otomatik seçim yapılıyor
                             with st.spinner("🔄 Synthesizing insights..."):
                                 render_synthesis_section(
                                     research_data=st.session_state.get('search_results', []),
@@ -247,10 +245,10 @@ def main():
 
                     except Exception as e:
                         logger.error(f"Error in tab {current_stage}: {str(e)}")
-                        st.error(f"An error occurred in {current_stage} tab: {str(e)}")
+                        st.session_state.warning_message = f"An error occurred in {current_stage} tab: {str(e)}"
 
         else:
-            pass  # Remove the info message from here since we moved it above
+            pass
 
         logger.info("Main content rendered successfully")
 
