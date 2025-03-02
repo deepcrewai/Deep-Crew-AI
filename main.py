@@ -8,7 +8,7 @@ from ai_analyzer import AIAnalyzer
 from patent_client import PatentSearchClient
 from components import (render_search_section, render_analysis_section,
                         render_patent_results, render_network_section,
-                        render_synthesis_section)  # Yeni eklenen
+                        render_synthesis_section)
 from funding import render_funding_section
 
 # Configure logging
@@ -49,7 +49,7 @@ def main():
         # Setup page configuration
         setup_page()
 
-        # Main content
+        # Main content at the top
         st.markdown("""
             <style>
             div.stAlert {
@@ -59,14 +59,13 @@ def main():
             }
             </style>
             <div class="main-container">
-                <div class="logo-container" style="text-align: center; width: 100%;">
-                    <img src="https://deep-crew.ai/wp-content/uploads/2025/03/9128379182739812873.png" 
-                         alt="Deep Crew Logo" 
+                <div style="text-align: center; width: 100%; position: relative; cursor: pointer;" onclick="window.open('/static/game/game.html', 'Game', 'width=800,height=600')">
+                    <img src="https://deep-crew.ai/wp-content/uploads/2025/03/animation-submarine-062119.gif" 
+                         alt="Deep Crew Submarine" 
                          style="max-width: 350px; height: auto; margin: 30px auto;">
                 </div>
             </div>
-        """,
-                    unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
 
         # Add search section
         col_search, col_button = st.columns([6, 1])
