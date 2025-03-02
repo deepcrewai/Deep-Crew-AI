@@ -59,10 +59,17 @@ def main():
             }
             </style>
             <div class="main-container">
-                <div style="text-align: center; width: 100%; position: relative; cursor: pointer;" onclick="window.open('/static/game/game.html', 'Game', 'width=800,height=600')">
-                    <img src="https://deep-crew.ai/wp-content/uploads/2025/03/animation-submarine-062119.gif" 
-                         alt="Deep Crew Submarine" 
+                <div class="logo-container" style="text-align: center; width: 100%;">
+                    <img src="https://deep-crew.ai/wp-content/uploads/2025/03/9128379182739812873.png" 
+                         alt="Deep Crew Logo" 
                          style="max-width: 350px; height: auto; margin: 30px auto;">
+                </div>
+                <div style="text-align: center; margin: 20px auto; cursor: pointer;">
+                    <a href="#" onclick="window.open('/static/game/game.html', 'Clean The Sea Game', 'width=800,height=800,top=50,left=50')">
+                        <img src="https://deep-crew.ai/wp-content/uploads/2025/03/animation-submarine-062119.gif" 
+                             alt="Play Clean The Sea Game" 
+                             style="max-width: 200px; height: auto;">
+                    </a>
                 </div>
             </div>
         """, unsafe_allow_html=True)
