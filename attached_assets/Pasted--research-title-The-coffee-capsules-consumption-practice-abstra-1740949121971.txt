@@ -1,0 +1,1111 @@
+{
+  "research": [
+    {
+      "title": "The coffee capsules consumption practice",
+      "abstract": "Changes in consumer behavior and his constant search for convenience and practicality in products and services stimulated the demand for coffee capsules, a fast growing market in Brazil. However, little is known about consumer behavior and preferences regarding this product, motivating this study. Our aim was to understand the coffee capsules consumption through the lens of the Theory of Practice, in order to analyze the specificities that structure this market and guide the behavior of its consumers. Through a qualitative and descriptive study, supported by the conduction of semi-structured interviews and participant observation in virtual groups of these product’s consumers, we found that the consumption of encapsulated coffees is conditioned to the disposition of time and company of the interviewees and that the product’s quality perception is still low. In addition, there is great resistance to the acquisition and consumption of generic capsules.",
+      "year": 2018,
+      "authors": [
+        "Rodrigo Marçal Gandia",
+        "Cassiano de Andrade Ferreira",
+        "Elisa Reis Guimarães",
+        "Joel Yutaka Sugano",
+        "Daniel Carvalho de Rezende"
+      ]
+    },
+    {
+      "title": "Variety and shelf-life of coffee packaged in capsules",
+      "abstract": "No abstract is available for this publication. You can access more information about this research by clicking the 'View Paper' link below.",
+      "year": 2019,
+      "authors": [
+        "Fabrizio Cincotta",
+        "Gianluca Tripodi",
+        "Maria Merlino",
+        "Antonella Verzera",
+        "Concetta Condurso"
+      ]
+    },
+    {
+      "title": "Laser sealing of PLA-based compostable coffee capsules",
+      "abstract": "No abstract is available for this publication. You can access more information about this research by clicking the 'View Paper' link below.",
+      "year": 2020,
+      "authors": [
+        "M. Barletta",
+        "Annamaria Gisario"
+      ]
+    },
+    {
+      "title": "An overview on coffee capsule and its safety analysis",
+      "abstract": "Coffee capsule,a new type of single coffee system with unique flavor,long-lasting quality and convenience of brew-up,is becoming popular in the world.In this paper,the origin and development of coffee capsule were briefly introduced.The potential hazards from ground coffee and packaging materials,such as aluminium and plasticizer were discussed,and the developing directions in research and improvement of the product were proposed.",
+      "year": 2013,
+      "authors": [
+        "Tang Xiao"
+      ]
+    },
+    {
+      "title": "Caffeine decreases exhaled nitric oxide",
+      "abstract": "Background: Caffeine is known to inhibit phosphodiesterases, to mobilise intracellular calcium, and to act as an antagonist at adenosine receptors, all of which can potentially alter nitric oxide (NO) production. It was therefore hypothesised that caffeine may alter exhaled NO (eNO) levels. Methods: In a randomised, single blind, crossover manner, 12 normal subjects consumed either (1) coffee and a placebo capsule, (2) decaffeinated coffee and a capsule of 200 mg caffeine, or (3) decaffeinated coffee and a placebo capsule. Serum caffeine levels were measured at baseline and 1 hour later. Exhaled NO levels were also measured at baseline and each hour for 4 hours. Results: A significant percentage fall in mean (SE) eNO from baseline was seen 1 hour after either caffeinated coffee or a caffeine capsule when compared with placebo (13.5 (4.0)%, p=0.009 and 19.0 (3.8)%, p=0.001, respectively). Conclusion: Caffeine causes a significant decrease in eNO which will need to be considered when designing trials to measure eNO levels. The mechanism may be via adenosine receptor antagonism or by altering levels of cGMP.",
+      "year": 2002,
+      "authors": [
+        "C. Bruce"
+      ]
+    },
+    {
+      "title": "REINFORCING EFFECTS OF CAFFEINE IN COFFEE AND CAPSULES",
+      "abstract": "In a residential research ward the reinforcing and subjective effects of caffeine were studied under double‐blind conditions in volunteer subjects with histories of heavy coffee drinking. In Experiment 1, 6 subjects had 13 opportunities each day to self‐administer either a caffeine (100 mg) or a placebo capsule for periods of 14 to 61 days. All subjects developed a clear preference for caffeine, with intake of caffeine becoming relatively stable after preference had been attained. Preference for caffeine was demonstrated whether or not preference testing was preceded by a period of 10 to 37 days of caffeine abstinence, suggesting that a recent history of heavy caffeine intake (tolerance/dependence) was not a necessary condition for caffeine to function as a reinforcer. In Experiment 2, 6 subjects had 10 opportunities each day to self‐administer a cup of coffee or (on different days) a capsule, dependent upon completing a work requirement that progressively increased and then decreased over days. Each day, one of four conditions was studied: caffeinated coffee (100 mg/cup), decaffeinated coffee, caffeine capsules (100 mg/capsule), or placebo capsules. Caffeinated coffee maintained the most self‐administration, significantly higher than decaffeinated coffee and placebo capsules but not different from caffeine capsules. Both decaffeinated coffee and caffeine capsules were significantly higher than placebo capsules but not different from each other. In both experiments, subject ratings of “liking” of coffee or capsules covaried with the self‐administration measures. These experiments provide the clearest demonstrations to date of the reinforcing effects of caffeine in capsules and in coffee.",
+      "year": 1989,
+      "authors": [
+        "R. R. Griffiths",
+        "George E. Bigelow",
+        "Ira A. Liebson"
+      ]
+    },
+    {
+      "title": "An Assessment of Recyclability of Used Aluminium Coffee Capsules",
+      "abstract": "No abstract is available for this publication. You can access more information about this research by clicking the 'View Paper' link below.",
+      "year": 2020,
+      "authors": [
+        "Mertol Gökelma",
+        "Fabian Diaz",
+        "İlayda Elif Öner",
+        "Bernd Friedrich",
+        "Gabriella Tranell"
+      ]
+    },
+    {
+      "title": "How Coffee Capsules Affect the Volatilome in Espresso Coffee",
+      "abstract": "Coffee capsules have become one of the most used methods to have a coffee in the last few years. In this work, coffee was prepared using a professional espresso coffee machine. We investigated the volatilome of four different polypropylene coffee capsule typologies (Biologico, Dolce, Deciso, Guatemala) with and without capsules in order to reveal the possible differences in the VOCs spectra. The volatilome of each one was singularly studied through an analysis by gas chromatography and mass spectrometry (GC–MS), checking the abundance of different VOCs in coffee extracted with and without a capsule protection and compared to its related sample. Furthermore, ANOVA and Tukey tests were applied to statistically identify and individuate the possible differences. As a result, it was found that coffee capsules, offer advantages of protecting coffee from oxidation or rancidity and, consequently extended shelf life as well as did not cause a reduction of volatile compounds intensity. Therefore, it is possible to conclude that the aroma of polypropylene coffee capsule extraction is not damaged compared to a traditional espresso.",
+      "year": 2021,
+      "authors": [
+        "Giuseppe Greco",
+        "Estefanía Núñez-Carmona",
+        "Marco Abbatangelo",
+        "Patrizia Fava",
+        "Veronica Sberveglieri"
+      ]
+    },
+    {
+      "title": "Sustainability assessment of different types of coffee capsules",
+      "abstract": "Aim and background of the studyThe aim of this study is to compare different types of coffee capsules in terms of sustainability.The market for single-serve coffee products has expanded largely in last decades.One of the most successful products is the Nespresso-style coffee capsule.The use of these capsules in a dedicated coffee brewing machine provides a high level of convenience for consumers, enabling them to prepare a relatively high quality coffee product in a short period of time, with minimal water and energy use.Nowadays, multiple coffee companies offer various coffee products in the Nespresso format capsule, using not only aluminium as main material, but also polypropylene (PP), high-density polyethylene (HDPE), polylactic acid (PLA), polyhydroxyalkanoate (PHA) and poly(butylene adipate-co-terephthalate) (PBAT) based compostable compounds.The main research question in this study is: \"What are the environmental impacts and sustainability profiles of the different types of coffee capsules when they are subjected to various end-of-life scenarios?\".Reusable and refillable capsules are excluded from the scope, as these systems are not applied on large scale.This report has been written by WFBR in the context of the project \"Increase circularity by the use of",
+      "year": 2023,
+      "authors": [
+        "E.U. Thoden van Velzen",
+        "B. Goyal",
+        "Despoina Barouta",
+        "M.T. Brouwer",
+        "I.W. Smeding"
+      ]
+    },
+    {
+      "title": "Supply China Coffee Capsule Filling Machine Suppliers - Maxwell",
+      "abstract": "Objective  OEM China Filling Machine Aerosol Suppliers - Maxwell(PBF)Supply China Filling Machine Aerosol OEM/ODM Quotes - Maxwell(VFI) on the prevalence of hypertension and prehypertension,Supply China Coffee Capsule Filling Machine Exporter - Maxwell.  Methods  A general population-based sample of men (n = 5297) and women (n = 6232), aged 35-64 years, was studied.Supply China Auger Filler Powder Filling Machine Suppliers - Maxwell(BP) levels, normotensive, prehypertensive, and hypertensive study participants were identified.Wholesale China Disinfectant Cleaner Bottling Machine Suppliers - Maxwell.  Results  In the normotensive, prehypertensive, and hypertensive participants, the mean (standard deviation) PBF was 27.83 (6.85), 28.91 (6.65), and 30.2 (6.73), respectively, whereas VFI was 6.97 (3.78), 8.89 (4.35), and 10.75 (5.05), respectively. After adjusting for age, smoking, alcohol consumption, education, regions (north or south), areas (urban or rural), diabetes, and family history, PBF and VFI (OEM China Filling Machine Aerosol Wholesaler - Maxwell)Wholesale China Anti-Corrosive Liquid Filling Machine Wholesaler - Maxwell(P   Conclusion  Supply China Semiautomatic Capsule Filling Machine Suppliers - Maxwell, measurements of VFI or VFI/PBF ratio,OEM China Semiautomatic Capsule Filling Machine Factory - Maxwell,Supply China Semiautomatic Capsule Filling Machine Wholesaler - Maxwell-OEM China Coffee Capsule Filling Machine Factory - Maxwell.",
+      "year": 2015,
+      "authors": [
+        "Zengwu Wang",
+        "Xianbin Zeng",
+        "Zuo Chen",
+        "Xin Wang",
+        "Linfeng Zhang",
+        "Manlu Zhu",
+        "Danhui Yi"
+      ]
+    },
+    {
+      "title": "Disposable coffee capsules as a source of recycled polypropylene",
+      "abstract": "In this paper was investigated the chemical, physical, thermal, mechanical and morphological characteristics of the recyclable materials obtained of the NESCAFÉ® DOLCE GUSTO® branded beverage capsules, characterizing different resulting compositions. The characterization was made by following techniques: Fourier-transform infrared spectroscopy (FTIR), X-ray Diffraction (XRD), Differential Scanning Calorimetry (DSC), Thermogravimetric Analysis (TGA), Scanning Electron Microscopy (SEM), Water Absorption and techniques for the analysis of mechanical properties (tensile and impact test). The results showed that the body of the capsule and the inner filter, both made of polypropylene, are the most interesting materials to be reused, having good properties, while the materials resulting from the mixtures of all the constituents in the beverage capsules presented decreased mechanical properties.",
+      "year": 2020,
+      "authors": [
+        "Michel Lincoln Bueno Domingues",
+        "Jean Rodrigo Bocca",
+        "Sílvia Luciana Fávaro",
+        "Eduardo Radovanovic"
+      ]
+    },
+    {
+      "title": "Coffee capsule impacts and recovery techniques: A literature review",
+      "abstract": "Abstract The recently developing coffee market has been characterized by profound changes caused by new solutions and technologies for coffee preparation. The polylaminate materials that compose most popular capsules make them a type of waste that is difficult to manage and recycle. This paper analyses the scientific references that deal with studying and improving the management processes of waste coffee capsules, as well as the studies that have analysed their environmental impact. Through a bibliographic review, some encouraging aspects emerged in the recovery of materials that can be adequately recycled (plastics and metals), as well as their possible use for the production of biogas and energy recovery. The need to manually separate the components that make up the capsule still represents one of the main challenges. Many efforts are still needed to favour the environmental sustainability of this waste from a strategic, technological and consumer empowerment point of view.",
+      "year": 2021,
+      "authors": [
+        "Samuele Marinello",
+        "Elia Balugani",
+        "Rita Gamberini"
+      ]
+    },
+    {
+      "title": "Absorption and Subjective Effects of Caffeine from Coffee, Cola and Capsules",
+      "abstract": "No abstract is available for this publication. You can access more information about this research by clicking the 'View Paper' link below.",
+      "year": 1997,
+      "authors": [
+        "Anthony Liguori"
+      ]
+    },
+    {
+      "title": "Plasticizer residues by HRGC–MS in espresso coffees from capsules, pods and moka pots",
+      "abstract": "No abstract is available for this publication. You can access more information about this research by clicking the 'View Paper' link below.",
+      "year": 2014,
+      "authors": [
+        "Giuseppa Di Bella",
+        "Angela Giorgia Potortí",
+        "Vincenzo Lo Turco",
+        "Marcello Saitta",
+        "Giacomo Dugo"
+      ]
+    },
+    {
+      "title": "Patenting Coffee—IP Protection and Its Impact on Innovation in the Coffee-Capsule Market",
+      "abstract": "No abstract is available for this publication. You can access more information about this research by clicking the 'View Paper' link below.",
+      "year": 2014,
+      "authors": [
+        "Reto M. Hilty",
+        "Peter R. Slowinski"
+      ]
+    },
+    {
+      "title": "Phytochemical and microbiological stability of spent espresso coffee grounds in capsules",
+      "abstract": "No abstract is available for this publication. You can access more information about this research by clicking the 'View Paper' link below.",
+      "year": 2014,
+      "authors": [
+        "Simona Belviso",
+        "Daniela Ghirardello",
+        "Kalliopi Rantsiou",
+        "Manuela Giordano",
+        "Marta Bertolino",
+        "Denise Borgogna",
+        "Maria Chiara Cavallero",
+        "Barbara Dal Bello",
+        "Clara Cena",
+        "Luca Rollè",
+        "Giuseppe Zeppa",
+        "Vincenzo Gerbi"
+      ]
+    },
+    {
+      "title": "Contents of diterpenes in espresso coffee brews prepared from commercial capsules",
+      "abstract": "The objective of this work was to quantify kahweol and cafestol diterpenes in coffee brews prepared from commercial capsules for espresso in the Brazilian market.   Four types of brews, with five preparation replications, were evaluated.   The capsules had differences in the amount and type of roasted and ground coffees used (blends of arabica and robusta coffee or 100% arabica coffee), and in the conditions of time and volume of extraction (dose) recommended by the manufacturer.   The coffee brews presented 1.42 and 4.88 g of solids/100 mL. Concentration of solids decreased with the increase in time/volume extraction.   Contents of 0.47 to 1.04 mg of kahweol and 0.38 to 0.92 mg of cafestol by dose (ranging from 35 to 120 mL) were observed. These contents corresponded to a range of 0.40 to 2.96 mg of kahweol/100 mL   and 0.32 to 2.62 mg of cafestol/100 mL. The fraction of diterpenes extracted varied from 1.85 to 4.27 % for kahweol and 1.87 to 4.16 % for cafestol.   Considering the contents of cafestol, there is no indication of a hypercholesterolemic effect due to a moderate consumption of coffee brews prepared from these commercial capsules.",
+      "year": 2016,
+      "authors": [
+        "Karla Leticia Wuerges",
+        "Ana Carolina Forgati dos Santos",
+        "André Luiz Buzzo Mori",
+        "Marta de Toledo Benassi"
+      ]
+    },
+    {
+      "title": "Use of Coffee Capsules as Support Material in Upflow Anaerobic Fixed Bed Reactors",
+      "abstract": "The aim of this work is to evaluate the performance of upflow anaerobic fixed bed reactors filled with espresso coffee capsules to treat sanitary sewage. Three reactors (R1, R2 and R3) were constructed in blue PVC pipes measuring 30 cm height and 150 mm diameter and filled with coffee capsules made of aluminum and plastic. The sewage from the pre-treatment phase of the wastewater treatment plant of the Federal University of Lavras fed the system. Temperature, pH, alkalinity and volatile acids concentration, COD, TS, TVS and TSS of the influent and effluent were analyzed to evaluate the reactors performances. Statistics tests were run in the software Statistica 10. Changes occurred in the organic loading rates caused two different operating phases, one at an OLR of 2.1 kg COD m-3d-1 and another at 4.0 kg COD m-3d-1. The average temperature during the monitoring period was 18°C. In spite of the operating conditions variations, the reactors showed satisfactory performances, presenting COD efficiency removals up to 80% in both phases. The capsules characteristics were similar to other materials used as support. Hence, it is possible to utilize coffee capsules as support material in anaerobic reactors, providing satisfactory pollutants removal efficiencies.",
+      "year": 2019,
+      "authors": [
+        "Gabriela Rezende de Souza",
+        "Luiz Fernando Coutinho de Oliveira",
+        "Italoema Pinheiro Bello",
+        "Luciene Alves Batista Siniscalchi",
+        "Ronaldo Fia",
+        "Rômulo Marçal Gandia"
+      ]
+    },
+    {
+      "title": "An alternative approach to control the oxygen permeation across single-dose coffee capsules",
+      "abstract": "No abstract is available for this publication. You can access more information about this research by clicking the 'View Paper' link below.",
+      "year": 2015,
+      "authors": [
+        "Carlo A. Cozzolino",
+        "S. Pozzoli",
+        "S. La Vecchia",
+        "Luciano Piergiovanni",
+        "Stefano Farris"
+      ]
+    },
+    {
+      "title": "Coffee Enema for Preparation for Small Bowel Video Capsule Endoscopy: A Pilot Study",
+      "abstract": "Coffee enemas are believed to cause dilatation of bile ducts and excretion of bile through the colon wall. Proponents of coffee enemas claim that the cafestol palmitate in coffee enhances the activity of glutathione S-transferase, an enzyme that stimulates bile excretion. During video capsule endoscopy (VCE), excreted bile is one of the causes of poor preparation of the small bowel. This study aimed to evaluate the feasibility and effect of coffee enema for preparation of the small bowel during VCE. In this pilot study, 17 of 34 patients were assigned to the coffee enema plus polyethylene glycol (PEG) 2 L ingestion group, whereas the 17 remaining control patients received 2 L of PEG only. The quality of bowel preparation was evaluated in the two patient groups. Bowel preparations in the proximal segments of small bowel were not differ between two groups. In the mid and distal segments of the small intestine, bowel preparations tend to be better in patients who received coffee enemas plus PEG than in patients who received PEG only. The coffee enema group did not experience any complications or side effects. Coffee enemas may be a feasible option, and there were no clinically significant adverse events related to coffee enemas. More prospective randomized studies are warranted to improve small bowel preparation for VCE.",
+      "year": 2014,
+      "authors": [
+        "Eun Sun Kim",
+        "Hoon Jai Chun",
+        "Bora Keum",
+        "Yeon Seok Seo",
+        "Yoon Tae Jeen",
+        "Hong Sik Lee",
+        "Soon Ho Um",
+        "Chang Duck Kim",
+        "Ho Sang Ryu"
+      ]
+    },
+    {
+      "title": "Comparative Life Cycle Assessment of different packaging systems for coffee capsules",
+      "abstract": "\"The aim of this work is to compare the environmental impact of three different packaging systems for coffee capsules, which can be used in the same coffee machine. A comparative Life Cycle Assessment has been performed considering the following three types of coffee capsules: 1. Compostable coffee capsules packaged into a multichamber PET tray. 2. Capsules made of aluminium and packaged into cardboard boxes. 3. Capsules made of polypropylene with an aluminium top lid, singularly packaged in modified atmosphere into a bag made of multilayer film of aluminium and polypropylene. The functional unit considered is a coffee capsule. To evaluate the environmental impact, the EPD (Environmental Product Declaration) method is used. This work shows that it is possible to reduce the environmental impact of compostable capsules packaged in PET tray by two ways: by using a less polluting starch polymer and by producing biogas instead of compost from the organic waste. With these improvements, the compostable coffee capsule in PET tray results the less damaging packaging system for all categories except than for the ozone layer depletion and the fossil fuels depletion.\"",
+      "year": 2018,
+      "authors": [
+        "Annachiara Tonelli",
+        "David Mosna",
+        "Giuseppe Vignali"
+      ]
+    },
+    {
+      "title": "Estrogenic activity of capsule coffee using the VM7Luc4E2 assay",
+      "abstract": "Coffee brewed from capsule machines may contain estrogenic chemicals migrated from plastic, but the estrogenic activity of capsule coffee has not been evaluated. This study evaluated the estrogenic activity of capsule coffee using the VM7Luc4E2 estrogen receptor transcriptional activation assay. Estrogenic potentials of six capsule coffee samples were calculated using relative maximum amplitude response of E2 (>15%RME2 indicative of estrogenic activity) and estradiol equivalent factor (EEF). Estrogenic chemical content was determined using ultra-performance liquid chromatography with tandem mass spectrometry. All capsule coffee samples possessed estrogenic activity (48-56%RME2). EEFs were 6-7 orders of magnitude lower than that of E2, (1.2 × 10-7-1.7 × 10-6), indicating substantially weaker estrogenic potencies. Bisphenol A, bisphenol F, benzophenone, 4-nonylphenol, dibutyl phthalate, and dimethyl terephthalate were detected in capsule coffee. Capsule coffee exhibited estrogenic activity in vitro, and its estrogenic chemical content is likely driving its estrogenicity, warranting further investigations to fully understand the degree to which they are related and to predict the estrogenic potential based on the concentration of estrogenic chemicals.",
+      "year": 2021,
+      "authors": [
+        "Junichi Sakaki",
+        "Melissa M. Melough",
+        "Cathy Z. Yang",
+        "Anthony A. Provatas",
+        "Chris Perkins",
+        "Ock K. Chun"
+      ]
+    },
+    {
+      "title": "Coffee capsules: implications in antioxidant activity, bioactive compounds, and aluminum content",
+      "abstract": "No abstract is available for this publication. You can access more information about this research by clicking the 'View Paper' link below.",
+      "year": 2020,
+      "authors": [
+        "Luis Isac-Torrente",
+        "Beatriz Fernández-Gómez",
+        "Marta Miguel"
+      ]
+    },
+    {
+      "title": "Effects of capsule parameters on coffee extraction in single-serve brewer",
+      "abstract": "No abstract is available for this publication. You can access more information about this research by clicking the 'View Paper' link below.",
+      "year": 2016,
+      "authors": [
+        "Xiuju Wang",
+        "J Blanford William",
+        "Yucheng Fu",
+        "Loong‐Tak Lim"
+      ]
+    },
+    {
+      "title": "Antifungal Activity of Spent Coffee Ground Extracts",
+      "abstract": "Coffee is one of the most popular and consumed products in the world, generating tons of solid waste known as spent coffee grounds (SCG), containing several bioactive compounds. Here, the antifungal activity of ethanolic SCG extract from caffeinated and decaffeinated coffee capsules was evaluated against yeasts and filamentous fungi. These extracts had antifungal activity against Candida krusei, Candida parapsilosis, Trichophyton mentagrophytes, and Trichophyton rubrum, all skin fungal agents. Moreover, SCG had fungicidal activity against T. mentagrophytes and T. rubrum. To understand the underlying mechanisms of the antifungal activity, fungal cell membrane and cell wall components were quantified. SCG caused a significant reduction of the ergosterol, chitin, and β-(1,3)-glucan content of C. parapsilosis, revealing the synthesis of this membrane component and cell wall components as possible targets of these extracts. These extracts were cytotoxic for the tumoral cell lines tested but not for the non-tumoral PLP2 cell line. The analysis of the phenolic compounds of these extracts revealed the presence of caffeoylquinic acid, feruloylquinic acid, and caffeoylshikimic acid derivatives. Overall, this confirmed the antifungal activity of spent coffee grounds, presenting a potential increase in the sustainability of the life cycle of coffee grounds, as a source for the development of novel antifungal formulations, especially for skin or mucosal fungal infections.",
+      "year": 2023,
+      "authors": [
+        "Daniela Calheiros",
+        "María Inês Días",
+        "Ricardo C. Calhelha",
+        "Lillian Barros",
+        "Isabel C.F.R. Ferreira",
+        "Chantal Fernandes",
+        "Teresa Gonçalves"
+      ]
+    },
+    {
+      "title": "THERMAL PROPERTIES STUDY OF RECYCLED ESPRESSO COFFEE CAPSULES FOR BIOCOMPOSITE APPLICATION",
+      "abstract": "Solid plastic waste has been an environment problem with a lot of discussions in literature.The humanity needs to think about the future and be aware about its residues because only with this thinking will be possible to decrease environmental impacts and conserve natural resources.Espresso coffee capsules waste have grown in the last years because espresso machines provide an easily and quickly way to have a coffee time.This residue is difficult to recycling because it is composed of various materials.However the needs to decrease the impact caused by this waste influenced the thinking of researchers about applied this recycled polymer as matrix in polymeric biocomposites.In this context, the present work has the main objective of to separate the polypropylene (PP) that is the main component of the capsules, and carried out the mechanical recycling of this material to use it as a matrix of a biocomposites reinforced with natural fibers.In order to understand thermal degradation, melting point and crystallization point, the recycled material was characterized before and after recycling process by thermogravimetric (TGA) and differential scanning calorimetry (DSC) analysis and compared with a virgin PP.TGA shows no significant thermal stability loss with PP thermal degradation beginning at 280 ºC for virgin PP and 275 ºC for capsules and recycled material.DSC shows melting point and crystallization point respectively at 163 ºC and 114 ºC for virgin PP, 163 ºC and 116 ºC for capsules and 163 ºC and 114 ºC for recycled material.These results demonstrate the viability of mechanical recycling of plastic capsules for future reuse in new products. 1.",
+      "year": 2018,
+      "authors": [
+        "Anne Shayene Campos de Bomfim",
+        "Herman Jacobus Cornelis Voorwald",
+        "Maria Odila Hilário Cioffi",
+        "Kelly Cristina Coelho de Carvalho Benini"
+      ]
+    },
+    {
+      "title": "CFD Analysis of Coffee Packaging in Capsules using Gas Flushing Modified Atmosphere Packaging",
+      "abstract": "Abstract The aim of this work is to analyze, by means of CFD (Computational Fluid Dynamics), the gas flow in a packaging machine used to fill polymeric capsules with coffee. The final goal is to optimize the geometric shape of some mechanical components in the machine’s sealing station in order to reduce the inert gas consumption achieving an O 2 residual which is constantly equal or below 1 % by mass in the center of the capsule. The fluid domain has been obtained starting from the 3D CAD model of the sealing station of the packaging machine. The CAD software SolidWorks has been used to design the system, while Ansys CFX 14.5 software has been used for the CFD analysis. The CFD model has been validated by comparing its results with those obtained by experimental tests. The modified solution allows reducing the average O 2 residual from about 3 % to less than 1 %.",
+      "year": 2016,
+      "authors": [
+        "Simone Spanu",
+        "David Mosna",
+        "Giuseppe Vignali"
+      ]
+    },
+    {
+      "title": "Thermal evaluation of composites from coffee capsules residue with sugarcane bagasse by TG/DTA and DMA",
+      "abstract": "No abstract is available for this publication. You can access more information about this research by clicking the 'View Paper' link below.",
+      "year": 2020,
+      "authors": [
+        "Ana Paula S. Soares",
+        "Jaqueline Souza de Freitas",
+        "Michelle G. Mothé",
+        "Cheila Gonçalves Mothé"
+      ]
+    },
+    {
+      "title": "Sustainable coffee capsule consumption: Understanding Italian consumers' purchasing drivers",
+      "abstract": "Introduction Coffee is among the most appreciated beverages by consumers globally. Single serve coffee market expands and is highly profitable, but coffee in capsules (CIC) raises a major issue of environmental sustainability. The coffee industry aims to expand the CIC sales and to reduce capsule environmental impact and waste. To better define a sustainability-oriented strategy, the coffee industry needs to understand how to approach different socio-economic consumer groups. Thus, this study aims to explore consumers' perception and awareness of sustainable CIC, with specific attention on consumers' socio-economic characteristics. Methods The study interviewed a sample of 261 Italian consumers. Data elaboration includes four main steps: a cluster analysis leading to three socio-economic groups, a factor and structural equation modeling to confirm the factors and the relation between CIC sustainability and quality factors, and a multinomial logistic regression to examine the factors that drive the likeliness of consumers' willingness to purchase sustainable CIC. Results Results support that all groups of consumers value sustainability attribute as main CIC purchasing decision driver. The sustainability factor does not show any significance on the explanation of the CIC quality factor. Consumer perception of the CIC sustainability is not affected by age, income, level of education, and gender. Conclusion This study provides preliminary insights for sustainable CIC production and consumption.",
+      "year": 2023,
+      "authors": [
+        "Antonella Samoggia",
+        "Riccardo Busi"
+      ]
+    },
+    {
+      "title": "Repair index of energy-related products: Application to capsule coffee machines",
+      "abstract": "In recent years, the European regulatory framework related to sustainable products has evolved to promote the circular economy, with a special emphasis on repair strategies to reduce raw material consumption and e-waste generation. In this context, the present study aims to assess the repairability level of small electrical and electronic appliances, specifically focusing on capsule coffee machines, taking the EN 45554 standard (General methods for the assessment of the ability to repair, reuse, and upgrade energy-related products) as a reference. To achieve this objective, an interpretation of the standard is made with the aim of developing a repair matrix to facilitate the calculation of the repair index. The repair matrix is customised to the case study of capsule coffee machines. Following its application with four existing capsule coffee machines and having obtained their corresponding repair indexes, design requirements to improve the repairability of this product category are identified and applied in the design of a new capsule coffee machine with a higher (better) repair index. After this process, various improvement options for the repair matrix that enhance the accuracy of the EN 45554 requirements are discussed and applied, and finally compared with the Repairability assessment methodology (AsMeR).",
+      "year": 2024,
+      "authors": [
+        "Eduardo Blanco-Espeleta",
+        "Victoria Pérez‐Belis",
+        "Marı́a D. Bovea"
+      ]
+    },
+    {
+      "title": "Effect of different degradation types on properties of plastic waste obtained from espresso coffee capsules",
+      "abstract": "No abstract is available for this publication. You can access more information about this research by clicking the 'View Paper' link below.",
+      "year": 2018,
+      "authors": [
+        "Anne Shayene Campos de Bomfim",
+        "Maísa Milanez Ávila Dias Maciel",
+        "Herman Jacobus Cornelis Voorwald",
+        "Kelly Cristina Coelho de Carvalho Benini",
+        "Daniel Magalhães de Oliveira",
+        "Maria Odila Hilário Cioffi"
+      ]
+    },
+    {
+      "title": "Carbohydrate content, dietary fibre and melanoidins: Composition of espresso from single-dose coffee capsules",
+      "abstract": "No abstract is available for this publication. You can access more information about this research by clicking the 'View Paper' link below.",
+      "year": 2016,
+      "authors": [
+        "Guido R. Lopes",
+        "Andreia S. Ferreira",
+        "Mariana Oliveira Pinto",
+        "Cláudia P. Passos",
+        "Elisabete Coelho",
+        "Carla Rodrigues",
+        "Cláudia Figueira",
+        "Sı́lvia M. Rocha",
+        "Fernando M. Nunes",
+        "Manuel A. Coimbra"
+      ]
+    },
+    {
+      "title": "Determination of phthalic acid esters and di(2-ethylhexyl) adipate in coffee obtained from capsules",
+      "abstract": "In this work, the ammonium formate version of the QuEChERS method has been applied for the first time to the extraction of a group of nine phthalic acid esters and one adipate from three types of coffee (maximum intensity, intermediate intensity and decaffeinated) prepared from coffee capsules, using gas chromatography coupled to mass spectrometry for analytes separation and determination. Matrix-matched calibration showed good linearity with determination coefficients (R2) higher than 0.9983 for all analytes and matrices. In general, matrix effect assessment revealed a medium effect of signal suppression, while mean relative recovery values were in the range 70-120% with relative standard deviation values ≤19% for most analytes. Several samples of each type of coffee obtained from capsules made of different materials were also analysed, finding concentrations of DBP, DEHA and DEHP in the range 29.3-734 ng/capsule, below the tolerable daily intake established for some of them.",
+      "year": 2022,
+      "authors": [
+        "Cristopher Domínguez-Hernández",
+        "Cecilia Ortega-Zamora",
+        "Javier González‐Sálamo",
+        "Javier Hernández‐Borges"
+      ]
+    },
+    {
+      "title": "The administration of<scp>l</scp>-thyroxine as soft gel capsule or liquid solution",
+      "abstract": "Introduction: Levothyroxine (l-T4) is the mainstay of treating hypothyroidism. The tablet is the traditional formulation of l-T4. Tablet l-T4 malabsorption results from either hindered gastric dissolution of the tablet or binding of l-T4 by sequestrants in the intestinal lumen.Areas covered: This review provides an overview of the pharmacokinetics of l-T4 formulations available in the market: the tablet, the soft gel capsule and the oral solution. We review literature on the new formulations and anticipate the areas of future research.Expert opinion: Failure of l-T4 treatment to reach target serum thyroid-stimulating hormone levels generally prompts the physicians to increase l-T4 daily dose. In vitro studies have shown that the soft gel capsule releases the active ingredient more consistently at varying pH than the tablet. In addition, in vivo studies have confirmed the in vitro data and have demonstrated that both the soft gel capsule and the liquid formulation are capable to solve tablet l-T4 malabsorption caused by certain drugs, bariatric surgery or coffee. These new formulations may be attractive also for patients who cannot/do not want to change their (improper) habits of l-T4 ingestion. Finally, the oral solution l-T4 could be suitable for patients who cannot swallow the solid formulations.",
+      "year": 2014,
+      "authors": [
+        "Roberto Vita",
+        "Poupak Fallahi",
+        "Alessandro Antonelli",
+        "Salvatore Benvenga"
+      ]
+    },
+    {
+      "title": "CIRCULAR VALUE PROPOSITION FOR THE COFFEE CAPSULE CHAIN FROM A SUSTAINABLE PSS SOLUTION DESIGN METHOD",
+      "abstract": "Abstract Product-service systems (PSS) are one of the business models that can promote circular economy and sustainability; however, to design this kind of solution, holistic approaches must be used, integrating different areas of knowledge. Thus, this study proposes a conceptual solution based on the PSS business model to the problem of reverse logistics of coffee capsules, through the application of the Requirements Engineering method for Sustainable PSS design, with a focus on the initial phase. With an emphasis on the business model and value proposition, a conceptual solution was developed to promote the circularity of the capsule chain based on the analysis of the main stakeholders' needs. The value proposition of the PSS solution for the issue of coffee capsules was described as the “cocreation of sustainable value to stakeholders to foster the circularity of the chain”, considering consumer involvement through education and rewards in product disposal processes. The results reinforce the need to integrate critical stakeholders to add the desired value in creating a sustainable PSS solution and the need to pivot the business model during the solution development process.",
+      "year": 2023,
+      "authors": [
+        "Maria Auxiliadora Cannarozzo Tinoco",
+        "Nicole Cecchele Lago",
+        "Márcia Elisa Soares Echeveste",
+        "Ítalo Rodeghiero Neto",
+        "Carla Schwengber ten Caten"
+      ]
+    },
+    {
+      "title": "Coffee in capsules consumers’ behaviour: a quantitative study on attributes, consequences and values",
+      "abstract": "Purpose Coffee in capsules consumers’ behaviour depends not only on the products’ attributes, but also the consequences perceived by them and the alignment with their values. This paper aims to investigate the impacts of the Attributes of coffees in capsules on the consequences perceived by consumers concerning their consumption and the effects of these Consequences on consumers’ Values. Design/methodology/approach This study developed a scale for assessing the perception of consumers of coffee in capsules about Attributes, Consequences and Values (A-C-V) regarding its consumption. A link to this survey’s electronic questionnaire was posted on the social networks Facebook and Peabirus. This research sample is for convenience and accessibility and has 213 consumers of coffee in capsules. Structural Equation Modelling (SEM) was the statistical method used for data analysis. Findings Attributes have two sub-dimensions (Own attributes and Functional attributes), while Consequences have three sub-dimensions (Handling Benefits, Rational Benefits, Convenience Benefits) and Values have just one dimension. Also, SEM has shown a statistically significant positive relationship between A-C-V perceived by consumers of coffee in capsules. These results confirm the hypotheses developed based on the Means-End Chain Theory (MEC). Originality/value As academic contributions, this paper develops a structural model that quantitatively demonstrates the impacts of Attributes perceived by consumers of coffee in capsules on the Consequences of consumption and its effects on their Values. The present survey is the first in the literature that uses structural models contemplating A-C-V. As managerial contributions, this survey provides relevant information to the decision-making of several stakeholders of the chain of coffee in capsules.",
+      "year": 2020,
+      "authors": [
+        "Alessandro Silva de Oliveira",
+        "Gustavo Quiroga Souki",
+        "Rodrigo Marçal Gandia",
+        "Luiz Henrique de Barros Vilas Boas"
+      ]
+    },
+    {
+      "title": "Analysis of PBT and PET cyclic oligomers in extracts of coffee capsules and food simulants by a HPLC-UV/FLD method",
+      "abstract": "A HPLC-UV/FLD method was validated for the quantification of six polyethylene terephthalate (PET) and four polybutylene terephthalate (PBT) oligomers. PBT oligomers are EU regulated, while the PET ones are considered non-intentionally added substances (NIAS). LOQs were higher than 0.4 and 3.5 μg kg",
+      "year": 2020,
+      "authors": [
+        "Joao Alberto Lopes",
+        "Emmanouil Tsochatzis",
+        "Karasek Lubomir",
+        "Eddo J. Hoekstra",
+        "Hendrik Emons"
+      ]
+    },
+    {
+      "title": "CAFFEINE REMOVAL BY ACTIVATED CARBON FROM COFFEE GROUNDS WITH ALTERNATIVE ACTIVATION IN ALUMINUM CAPSULES",
+      "abstract": "Activated carbon is used like adsorbent in removing gaseous and liquid pollutants besides purification and chemical recovery. However, its production has a high cost and has sought alternative precursors materials such as coffee grounds. The objective of this study was to determine the removal of caffeine in aqueous solution using activated carbon produced from coffee grounds by adsorption. The coffee grounds was impregnated with ZnCl2 and activated in aluminum capsules where it was used alcohol cotton and put fire to consume the oxygen inside. The adsorption test was performed with concentration of caffeine of 25 mg/L, 0.5 g of activated carbon in 100 mL samples, leaving the suspension under stirring for 120 minutes, in acid, neutral and basic pH. The pH range which obtained better removal was the neutral, removing 99.04% caffeine in 40 minutes. The kinetic test was performed in 20 minutes with the intraparticle model being the best fit.",
+      "year": 2019,
+      "authors": [
+        "Endrew Henrique de Sousa Carvalho",
+        "Renata Medici Frayne Cuba",
+        "Francisco Javier Cuba Terán"
+      ]
+    },
+    {
+      "title": "Using HPLC with In-Column Derivatization to Authenticate Coffee Samples",
+      "abstract": "Coffee is one of the world’s most popular beverages, with the global coffee capsule market worth over USD 4 billion and growing. The incidence of coffee fraud is estimated to be up to one in five coffees being contaminated with cheaper blends of coffee. Given the worsening extent of climate change, coffee crop yields are harder to maintain, while demand is increasing. The 2021 Brazil frost delaying or destroying many coffee crops is an example. Hence, the incidence of coffee fraud is expected to increase, and as the market becomes more complex, there needs to be faster, easier, and more robust means of real-time coffee authentication. In this study, we propose the use of novel approaches to postcolumn derivatization (termed herein as in-column derivatization) to visualize the antioxidant profiles of coffee samples, to be later used as indicators for authentication purposes. We propose three simple mathematical similarity metrics for the real-time identification of unknown coffee samples from a sample library. Using the CUPRAC assay, and these metrics, we demonstrate the capabilities of the technique to identify unknown coffee samples from within our library of thirty.",
+      "year": 2023,
+      "authors": [
+        "Corey W. Manwaring",
+        "Jake A. Cravino",
+        "Margi Patel",
+        "Jonathan G. H. Stathakis",
+        "Arianne Soliven",
+        "Thirada Suktham",
+        "R. Andrew Shalliker"
+      ]
+    },
+    {
+      "title": "Life cycle assessment of spray dried soluble coffee and comparison with alternatives (drip filter and capsule espresso)",
+      "abstract": "No abstract is available for this publication. You can access more information about this research by clicking the 'View Paper' link below.",
+      "year": 2009,
+      "authors": [
+        "Sébastien Humbert",
+        "Yves Loerincik",
+        "Vincent Rossi",
+        "Manuele Margni",
+        "Olivier Jolliet"
+      ]
+    },
+    {
+      "title": "Comparative Life Cycle Assessment of Coffee Capsule Recycling Process and Its Composites Reinforced with Natural Fibers",
+      "abstract": "No abstract is available for this publication. You can access more information about this research by clicking the 'View Paper' link below.",
+      "year": 2021,
+      "authors": [
+        "Ana Paula S. Soares",
+        "Cheila Gonçalves Mothé",
+        "Michelle G. Mothé"
+      ]
+    },
+    {
+      "title": "(Soft) capsules of wisdom: preventing myo-inositol malabsorption caused by coffee",
+      "abstract": "Development of new drugs or alternative formulations of a pre-existing drug face a number of issues that impact on the efficacy and success of the novel product or novel formulation. One of the maj...",
+      "year": 2012,
+      "authors": [
+        "Salvatore Benvenga"
+      ]
+    },
+    {
+      "title": "Sustainable application of recycled espresso coffee capsules: Natural composite development for a home composter product",
+      "abstract": "No abstract is available for this publication. You can access more information about this research by clicking the 'View Paper' link below.",
+      "year": 2021,
+      "authors": [
+        "Anne Shayene Campos de Bomfim",
+        "Herman Jacobus Cornelis Voorwald",
+        "Kelly Cristina Coelho de Carvalho Benini",
+        "Daniel Magalhães de Oliveira",
+        "Martin Ferreira Fernandes",
+        "Maria Odila Hilário Cioffi"
+      ]
+    },
+    {
+      "title": "The Lipidic and Volatile Components of Coffee Pods and Capsules Packaged in an Alternative Multilayer Film",
+      "abstract": "Coffee pods and capsules require packaging that guarantees the optimal coffee preservation. The chemical composition of coffee can undergo quality decay phenomena during storage, especially in terms of lipidic and volatile components. Amongst coffee packaging, aluminum multilayer materials are particularly widely diffused. However, aluminum is a negative component because it is not recoverable in a mixed plastic structure and its specific weight gives significant weight to packaging. In this study, a multilayer film with a reduced content of aluminum was used to package coffe pods and capsules and compared to a standard film with an aluminum layer. Their influence on the peroxides and volatile organic compounds of two coffee blends, 100% Coffea arabica L., 50% Coffea arabica L., and 50% Coffea canephora var. robusta L., were studied during their 180-day shelf life. The predominant volatile organic compounds detected belonged to the class of furans and pyrazines. Both packaging materials used for both coffee blends in the pods and capsules showed no significant differences during storage. Thus, the alternative packaging with less aluminum had the same performance as the standard with the advantage of being more sustainable, reducing the packaging weight, with benefits for transportation, and preserving the coffee aroma during the shelf life.",
+      "year": 2024,
+      "authors": [
+        "G. Basile",
+        "Lucia De Luca",
+        "Martina Calabrese",
+        "Gianfranco Lambiase",
+        "Fabiana Pizzolongo",
+        "Raffaele Romano"
+      ]
+    },
+    {
+      "title": "ATR-FTIR FOR DISCRIMINATION OF ESPRESSO AND AMERICANO COFFEE PODS",
+      "abstract": "Roasted and ground coffee for encapsulation in single-serve capsules compatible with keurig® and coffee powder obtained from Nespresso® commercial capsules were analyzed for pH value, titratable acidity, moisture content, water activity and color (lightness); a data matrix that contains the physicochemical properties and the absorbance measurements using a baseline of 1600 to 1800 cm–1 by FTIR-ATR technique, was evaluated through the combined methods of principal component analysis (PCA) and cluster analysis in order to discriminate between the types of capsules. In the PCA biplot two distinct groups can be identified and in the cluster analysis two groups are that correspond to the two types of capsules. The results showed that FTIR-ATR based methods seem to be a promising alternative for the discrimination of coffee samples for the pods industry or for the type of consumption.",
+      "year": 2018,
+      "authors": [
+        "Nelson Gutiérrez-Gúzman",
+        "Andrés F. Bahamón-Monje",
+        "Lina Ximena Parrado Muñoz"
+      ]
+    },
+    {
+      "title": "Foam Characteristics and Sensory Analysis of Arabica Coffee, Extracted by Espresso Capsule and Moka Methods",
+      "abstract": "The coffee extraction methods modify the structure of the foam (when it is present) and the sensory profile of the beverage. In this research, three ways of extracting and two varieties of 100% Arabica were compared. Nineteen bars and fifteen bars were applied to the coffee thanks to the use of compatible capsules and machines. The method with the moka was considered, which acts at low pressures and does not allow the formation of foam (crema). In addition, the Brazil and Guatemala Arabica varieties were considered to understand the extent to which Arabica coffee can respond in structural and sensorial terms to the extraction techniques applied. The results show that 19-bar espresso coffees have a very stable crema with very small bubbles, which give a uniform and fine structure to the coffee crema. On the contrary, the pressure at 15 bars generates more unstable foams and bubbles that tend to be disproportionate, with more marked effects in the Brazil variety. The sensory profiles of the coffees respond to the extraction techniques applied. While the coffee extracted with the moka has sensory descriptors with rather low values, those obtained at 19 and 15 bars have much wider profiles. In conclusion, different pressure intensities to the coffee extraction affect the quality of crema and the solubilization of organoleptically active compounds.",
+      "year": 2022,
+      "authors": [
+        "Giovanna Lomolino",
+        "Valentina Dal Zotto",
+        "Stefania Zannoni",
+        "Alberto De Iseppi"
+      ]
+    },
+    {
+      "title": "Can coffee or chewing gum decrease transit times in Colon capsule endoscopy? A randomized controlled trial",
+      "abstract": "A high rate of complete colon capsule endoscopy (CCE) investigations is required for a more widespread use of CCE. The objective of this study was to assess if coffee or chewing gum can increase excretion of the colon capsule within battery life time (excretion rate). One hundred eighty six screening participants with a positive immunochemical fecal occult blood test were included in this single-centre randomized controlled trial with blinding of the investigators to the randomization. Participants received instant coffee, chewing gum or nothing in addition to the standard bowel preparation. The intention was to include 57 participants in the coffee group, 61 in the chewing gum group and 60 in the control group, on 8 participants data were missing. A total of 165 participants were included in a per protocol analysis. Exclusion was due to not receiving the allocated intervention (8 coffee, 4 chewing gum) and technical failure of the capsule (1 coffee). The excretion rate was 58% in the coffee group (n = 48), 63% in the chewing gum group (n = 57) and 55% in the control group (n = 60, p > 0.2). Transit times were similar in all groups. The excretion rate was low in participants who had transit times over 10 h (14%). A strong correlation was found between adequate cleansing and excretion of the capsule. There were no serious adverse events related to the interventions or CCE investigations. Chewing gum and coffee did not improve excretion rate in this study. An effect of chewing gum could not be proven, possibly due to sample size. Since chewing gum might improve excretion rates, is cheap and has no known side effects, it needs to be considered in future bowel preparation trials for CCE. NCT02303756 , registered on December 1st 2014.",
+      "year": 2018,
+      "authors": [
+        "Maria Magdalena Buijs",
+        "Morten Kobæk-Larsen",
+        "Lasse Kaalby",
+        "Gunnar Baatrup"
+      ]
+    },
+    {
+      "title": "Metabolic and exercise endurance effects of coffee and caffeine ingestion",
+      "abstract": "Caffeine (Caf) ingestion increases plasma epinephrine (Epi) and exercise endurance; these results are frequently transferred to coffee (Cof) consumption. We examined the impact of ingestion of the same dose of Caf in Cof or in water. Nine healthy, fit, young adults performed five trials after ingesting (double blind) either a capsule (Caf or placebo) with water or Cof (decaffeinated Cof, decaffeinated with Caf added, or regular Cof). In all three Caf trials, the Caf dose was 4.45 mg/kg body wt and the volume of liquid was 7.15 ml/kg. After 1 h of rest, the subject ran at 85% of maximal O 2 consumption until voluntary exhaustion (∼32 min in the placebo and decaffeinated Cof tests). In the three Caf trials, the plasma Caf and paraxanthine concentrations were very similar. After 1 h of rest, the plasma Epi was increased ( P < 0.05) by Caf ingestion, but the increase was greater ( P < 0.05) with Caf capsules than with Cof. During the exercise there were no differences in Epi among the three Caf trials, and the Epi values were all greater ( P < 0.05) than in the other tests. Endurance was only increased ( P < 0.05) in the Caf capsule trial; there were no differences among the other four tests. One cannot extrapolate the effects of Caf to Cof; there must be a component(s) of Cof that moderates the actions of Caf.",
+      "year": 1998,
+      "authors": [
+        "Terry E. Graham",
+        "Emily Hibbert",
+        "P. Sathasivam"
+      ]
+    },
+    {
+      "title": "Chemical Composition and Antioxidant Properties of Instant Coffee and Coffee Capsules: Comparative Analysis",
+      "abstract": "Coffee is one of the most popular drinks in the world due to its unique sensory properties, i.e. aroma and taste. Coffee consumption increases from year to year, which makes its functional property a relevant issue. The present research featured the antioxidant component in freeze-dried coffee and coffee capsules obtained from a commercial network. The main objective was to identify the most advantageous types of coffee to serve as a raw material for extract production. Coffee is known to prevent diseases caused by the oxidative action of free radicals. The paper presents a review of multiple scientific sources on the beneficial properties of coffee. It also features some results of the study in the chemical composition of coffee, i.e. dry matter content, phenols, flavonoids, etc. The anti-radical activity was described with the help of the DPPH method, while the FRAP method was employed to study the antioxidant properties of several coffee samples. The samples of instant coffee and coffee capsules were obtained from a distribution network (Samara, Russia) and included such brands as Coffea Premium, Coffesso, Nescafe Dolche Gusto, Jacobs Milicano, Bushido, Egoiste, and Fresco. Coffea Premium and Coffesso showed the best results in all the tests and can be additional sources of antioxidant substances. These two varieties of coffee capsules are produced for capsule coffee machines and are roasted ground coffee beans. Coffea Premium demonstrated the best results in phenolic substances, flavonoids, and anti-radical activity with 1338 mg of gallic acid and 854 mg of catechin per 100g of the original substance and 0.84 mg per cm3. Nescafe Dolche Gusto coffee capsules and such varieties of instant coffee as Jacobs Millicano, and Fresco showed similar but average results according to all the phenolic analyzes. Bushido and Egoiste were found lacking in phenols, flavonoids, and dry substances. These samples demonstrated low values of antiradiation and regenerating ability, which indicates a worse quality than that of coffee capsules. This may be due to some processing peculiarities: instant coffee undergoes thermal treatment when coffee granules are formed, while solvents are used to obtain coffee extract. Thus, the research revealed that Coffea Premium and Coffesso are the best sources of antioxidants.",
+      "year": 2019,
+      "authors": [
+        "Александра Пугачева",
+        "Александра Пугачева",
+        "Н. В. Макарова",
+        "Н. В. Макарова",
+        "D. F. Ignatova",
+        "D. F. Ignatova"
+      ]
+    },
+    {
+      "title": "Environmental impacts of different methods of coffee preparation",
+      "abstract": "Abstract The environmental impacts of coffee consumption inter alia depend on the preparation method used by consumers. Preparation methods such as filter drip, pod machines and fully automatic coffee machines are the most common ones in Germany: 62% of the consumers use a filter drip machine to brew their coffee, 23% use filter pad machines and 15% use espresso machines such as fully automatic coffee machines or capsule systems. The aim of the different studies presented in this paper was to identify the critical environmental issues along the life cycle of coffee and to compare the different preparation methods of coffee regarding their influence on the environmental impacts. Within the Product Carbon Footprint (PCF) Pilot Project Germany, the PCF of one cup of a special type of coffee was analysed on behalf of Tchibo GmbH (Überseering, Hamburg, Germany). As the results show, the preparation by the consumer is one crucial part of the entire life cycle of coffee, making up a share of 30% of the overall emissions. Another hot spot is the cultivation of coffee beans with 55%. Concerning the use phase, research shows that environmental impacts vary significantly depending on the preparation method used by the consumer. Main drivers are differences in power consumption of the respective technologies. Furthermore, different packagings of the coffee play a decisive role. Comparing the analysed appliances and defined usage scenarios in this study, the French press and filter drip machine performed best, followed by the filter pad machine. In contrast, the environmental impacts of the analysed fully automatic coffee machine and the capsule machine were highest. The reason for this was the high power consumption, especially in the machines' sleep and standby mode. Additionally, capsule machines contribute to the environmental impacts because of the aluminium and/or plastic packaging of the capsules, automatic coffee machines because of their cleaning and rinsing programmes. The detailed results indicate a significant savings potential in the use phase. The impacts not only depend on the specific energy efficiency of the chosen appliance but also on the usage behaviour.",
+      "year": 2011,
+      "authors": [
+        "Eva Brommer",
+        "Britta Stratmann",
+        "Dietlinde Quack"
+      ]
+    }
+  ],
+  "patents": [
+    {
+      "title": "Coffee capsule and system for producing a coffee extract with such capsule",
+      "abstract": "A single-use coffee capsule is disclosed that has a cup-shaped body and an extraction foil member for the preparation of a liquid coffee extract in a coffee preparation apparatus. Also disclosed is a system that includes the capsule and the coffee preparation apparatus. Further disclosed are methods of making and using the capsule and system.",
+      "filing_date": "2019-12-31",
+      "inventors": "GARCIN, Karine, Pelletier, Sébastien, GERBAULET, ARNAUD, FLICK, JEAN-MARC, ABEGGLEN, DANIEL, REBELO, Viviane"
+    },
+    {
+      "title": "Capsule and method for making coffee",
+      "abstract": "The invention relates to a capsule (1) comprising an water capsule (2) configured to contain water, a coffee capsule (3) configured to contain coffee, and a water hole (5) disposed on the water capsule (2), whereby the water capsule (2) holds a quantity of water, the coffee capsule (3) housed within the water capsule (2) holds a quantity of coffee, and the water hole (5) disposed on the water capsule (2) is configured to release the water within the water capsule (2) into a coffee machine (6). The invention further relates to a respective method for making coffee.",
+      "filing_date": "2020-10-15",
+      "inventors": "GIOCHAIS, Leon"
+    },
+    {
+      "title": "Coffee capsule for preparing turkish coffee",
+      "abstract": "The present invention relates to a capsule for preparation of a specific coffee beverage and in particular a Turkish coffee.",
+      "filing_date": "2019-07-25",
+      "inventors": "DOGAN, NIHAN, BILLOT, Baptiste"
+    },
+    {
+      "title": "A coffee machine and a capsule suitable to be used in coffee machines",
+      "abstract": "The present invention relates to a capsule (1) that is suitable to be used in coffee machines and that comprises a body (2) wherein the coffee to be brewed is stored, an opening (3) that is arranged on the lower surface of the body (2), a folio (4) that provides the covering of the opening (3), and a cutting apparatus (5) that is disposed inside the body (2) concentrically, that has at least one cutter thread (6) arranged along its lower side and that cuts the folio (4) so that the coffee is poured from the body (2) into the coffee machine to be brewed.",
+      "filing_date": "2016-06-09",
+      "inventors": "AYAROGLU, Emre, GUNDUZ, NIHAT, KAYISDAG, Varol, COBAN, Ömer Burak"
+    },
+    {
+      "title": "Capsules for preparing drinks",
+      "abstract": "The present invention relates to a capsule (1) for preparing a drink such as coffee, said capsule comprising a space intended to contain a concentrated dose, for example ground coffee, an inlet and an outlet, Both outlets communicate with the space.",
+      "filing_date": "2016-03-10",
+      "inventors": ""
+    },
+    {
+      "title": "Filled coffee capsule and coffee machine for brewing the filled coffee capsule",
+      "abstract": "Filled coffee capsule (1) for use in a coffee machine (100) with the following features:  - A capsule base (4) and a circumferential capsule wall (5) are provided, the circumferential capsule wall (5) extending from the capsule base (4) and delimiting a coffee receiving space (6);  - A coffee powder molding (20) is provided, which is arranged in the coffee receiving space (6);  - A capsule lid arrangement (10) is provided, by means of which the coffee receiving space (6) is closed;  - The coffee powder molding (20) comprises at least n pressing segments (21  1  , ..., 21  n  ), with n 2 or n 3 or n 4 or n 5;  - Each of the n pressing segments (21  1  , ..., 21  n  ) comprises coffee powder pressed in the form;  - The n press segments (21  1  , ..., 21  n  ) are arranged stacked on top of one another in the direction of a longitudinal axis (22) of the coffee powder molding (20).",
+      "filing_date": "2020-09-18",
+      "inventors": ""
+    },
+    {
+      "title": "PORTION Capsules for the preparation of non-foamed coffee beverage",
+      "abstract": "The invention relates to a serving capsule for the preparation of a coffee beverage. The capsule has the main body of the capsule, which houses the textile substrate and the substance of the drink. The substance of the drink is provided for storage in a portion capsule and for extraction in a portion capsule through a textile substrate by means of pressurized hot water. The substance of the drink is made essentially in the form of a powder, contains roasted, ground coffee. The textile substrate has a density of at least 100 g / m2.",
+      "filing_date": "2017-09-25",
+      "inventors": "EMPL, GUNTER, EPPLER, WOLFGANG, THROM, Andre"
+    },
+    {
+      "title": "single dose capsule for the preparation of cream and non-cream coffee drinks",
+      "abstract": "patent summary: "single dose capsule for the preparation of cream and non-cream coffee drinks". The present invention relates to an individual dose capsule for the preparation of a coffee beverage, wherein the individual dose capsule has a capsule base body, in which a textile fabric structure and a substance for the preparation are arranged. beverage preparation substance, wherein the beverage preparation substance is intended for storage in the single-dose capsule and for extraction in the individual-dose capsule through the textile fabric structure by pressurized hot water, wherein the substance for The beverage preparation is essentially in powder form and comprises ground roasted coffee, where roasted coffee has a colorimetric value in the range of 50 to 150 ° C.",
+      "filing_date": "2017-07-11",
+      "inventors": "ANDRE THROM, GÜNTER EMPL, WOLFGANG EPPLER"
+    },
+    {
+      "title": "Single serve capsule for producing coffee beverages with and without crema",
+      "abstract": "The invention relates to a single serve capsule for producing a coffee beverage. The single serve capsule has a capsule base body, in which a textile fabric and a beverage substance are arranged, said beverage substance being provided in the single serve capsule in order to be stored and to be extracted from said capsule through the textile fabric by means of pressurised hot water. The beverage substance is substantially in powder form and comprises roasted, ground coffee, the roasted coffee having a colour value from 50 to 150",
+      "filing_date": "2016-10-03",
+      "inventors": "EMPL, Günter, EPPLER, WOLFGANG, THROM, Andre"
+    },
+    {
+      "title": "Capsules for preparing coffee-based drinks",
+      "abstract": "The present invention provides a capsule for brewing a filter coffee type beverage that has a simple structure, is inexpensive and reliable.  The structure of the capsule (1) comprises a body (3) in which a small chamber (2) is molded and has a peripheral wall (4), a top (5) and a bottom (6). Inside the capsule body 3, a beverage precursor is provided, including soluble coffee and roasted ground coffee. At least 51 wt% of the precursor is roasted ground coffee (GC) with a particle size represented by Soluble coffee (SC) with a particle size expressed as x50. A first layer of GC is pressed inside the capsule body and a second layer of SC is present inside the capsule body which is substantially unpressed.  [Selection diagram] Figure 4",
+      "filing_date": "2023-11-21",
+      "inventors": ""
+    },
+    {
+      "title": "Main part for a single-serve beverage capsule",
+      "abstract": "The invention relates to a main part of a single-serve capsule for accommodating at least one ingredient for producing a beverage by passing brewing water through it, in particular coffee capsule, the main part being a baked product. The invention further relates to a single-serve capsule that comprises the main part according to the invention, and to a method for producing the main part according to the invention.",
+      "filing_date": "2020-01-23",
+      "inventors": "HAAS, JOSEF"
+    },
+    {
+      "title": "Coffee capsule",
+      "abstract": "The present invention provides a coffee capsule capable of brewing regular coffee by a simple procedure similar to instant coffee. A coffee server that can easily put regular coffee powder in a coffee capsule and regular coffee that is as simple and economical as when instant coffee is made by using the coffee capsule and powder server as a set. How to drown. [Selection] Figure 4",
+      "filing_date": "2019-01-17",
+      "inventors": "TAKESHITA SEISUKE"
+    },
+    {
+      "title": "portion capsule for a coffee maker, coffee maker and method for producing a capsule",
+      "abstract": "portion capsule for a coffee machine, coffee maker and method for producing a capsule the present invention relates to a capsule (1) for forming a closed interior filled with an extractable or extractable product which may be perforated manner known as perforation elements (3) of an injection device or a discharge device to introduce an extraction liquid and discharge an extraction product produced within the capsule following an extraction process. The invention is characterized by the fact that the capsule has a cuboid or cubic shape.",
+      "filing_date": "2019-11-05",
+      "inventors": "LOUIS DEUBER"
+    },
+    {
+      "title": "single dose capsule for preparing a cream free coffee drink",
+      "abstract": "patent summary: “single serving capsule for the preparation of a coffee drink without cream”. The present invention relates to a single-serving capsule for the preparation of a coffee beverage, wherein the single-serving capsule has a capsule base body, in which a textile fabric structure and a substance for the preparation are arranged. beverage preparation, wherein the beverage preparation substance is intended for storage in the single-serving capsule and for extraction in the single-serving capsule through the textile fabric structure by means of hot pressurized water, wherein the substance for the beverage preparation is essentially in powder form, comprises ground roasted coffee and in which the textile fabric structure has a weight of at least 100 g/m 2 .",
+      "filing_date": "2017-07-11",
+      "inventors": "ANDRE THROM, GÜNTER EMPL, WOLFGANG EPPLER"
+    },
+    {
+      "title": "Capsule containing capsule elements and powdered coffee ingredients",
+      "abstract": "A capsule element for a capsule comprising a ground coffee raw material, wherein the capsule element (21) comprises a rim (26) for hermetic engagement with a second capsule element, at least one side wall (22); A bottom wall (23), wherein the at least one side wall (22) and the bottom wall (23) define an internal chamber (24) having an opening (25), the opening being planar (P The rim (26) extends outward from the side wall (22), surrounds the opening (25), the rim is bent in the direction of the bottom wall (23), And an opening plane (P) forming an angle (A) of at least about 10 °. The invention also relates to a capsule comprising a capsule element and a membrane hermetically sealed thereon.   [Selection] Figure 3C",
+      "filing_date": "2017-03-23",
+      "inventors": ""
+    },
+    {
+      "title": "Caplet Nutritional Supplement",
+      "abstract": "This new creation relates to a capsule-type nutritional supplement, which includes a capsule body. The capsule body includes a shell with an open surface. The open surface is covered with a sealing film, and the shell and the sealing film define a container. chamber, and the chamber is provided with nutritional materials. By filling the nutritional material in the capsule and adding the sealing film, it can become a capsule-type nutritional supplement as described in the title, and the specification of the capsule-type nutritional supplement can be selected to adapt to the existing The capsule coffee machine can further dilute and brew with heated water for the user to drink.",
+      "filing_date": "2023-05-11",
+      "inventors": "LIN, WEI-LUN"
+    },
+    {
+      "title": "Capsule elements and capsules containing ground coffee ingredients",
+      "abstract": "A capsule element for a capsule containing ground coffee ingredients, wherein said capsule element (21) comprises a rim (26) for sealing engagement with a second capsule element, at least one side wall (22) and a bottom wall (23), wherein said at least one side wall (22) and said bottom wall (23) define a cavity (24) having an opening (25) spanning a plane (P), and wherein said edge (26) extends from The side wall (22) extends outwards and surrounds the opening (25), the edge is bent towards the bottom wall (23), the edge and the plane (P) of the opening form at least Angle (A) of about 10°. The invention also relates to a capsule comprising said capsule element and a membrane hermetically sealed on said capsule element.",
+      "filing_date": "2016-08-17",
+      "inventors": "MATHIAS PATRICIA ANN, DJAMER ABDENOUR, VILLAIN OLIVIER, GUENAT CHRISTIAN, SARRAZIN-HORISBERGER CELINE, MESTDAGH FREDERIC, EICHLER PAUL, KESSLER ULRICH, CLOSSET ETIENNE"
+    },
+    {
+      "title": "capsule of a second type for preparing a coffee percolation, system, and, use of a system.",
+      "abstract": "It is a capsule (4b), a system (1) and a use of the double beverage preparation system, such as a double espresso, a double lungo and a double ristretto. the capsule (4b) has a shape and configuration that is easily accessible to the average user while the sealing that is obtainable with the capsule meets high quality standards. the capsule (4b) has a frusto-conical capsule body (6b) with a radial flange (14b) at one end, a foil cap (12b) that closes the body (6b) and connects to the flange (14b) , and a coffee bed which is accommodated in the inner space (16b) bounded by the capsule body (6b) and the foil lid (12b) and which has a weight of 9 to 13 g and a ratio (height) / (width) maximum) within the range of 0.9 to 1.2.",
+      "filing_date": "2019-05-14",
+      "inventors": "GERBRAND KRISTIAAN DE GRAAFF, JOHN RICHARD MELROSE, PAUL JAMES HARPLEY, RICHARD JOHN ANDREWS"
+    },
+    {
+      "title": "A kind of portable capsule coffee machine using specific coffee capsule",
+      "abstract": "The utility model discloses a kind of portable capsule coffee machines using specific coffee capsule, including hot-water cavity, pump pressure cavity, beverage making cavity and drink chamber, pump pressure cavity is connected below the hot-water cavity, beverage making cavity is connected below pump pressure cavity, it is connected with below beverage making cavity and drinks chamber, coffee capsule is equipped in the beverage making cavity.Coffee capsule is mounted in extraction chamber, and the upper recess of coffee capsule match connection with the convex block of extraction chamber lid, and coffee capsule is stably fixed at and extracts intracavitary, coffee capsule upper and lower ends hollow out is convenient for the hot water of pump pressure cavity offer to pass through coffee capsule.The design structure is compact, simple and practical, and coffee capsule installation and removal are convenient, can exchange with coffee powder box.",
+      "filing_date": "2019-12-03",
+      "inventors": "HUANG YUANXIONG, LI CHUANYI"
+    },
+    {
+      "title": "A capsule suitable to be used in coffee machines",
+      "abstract": "The present invention relates to a capsule (1) suitable to be used in coffee machines, comprising a housing (2) wherein the coffee is stored, an opening (3) arranged on the lower surface of the housing (2), a folio (4) enabling the opening (3) to be covered and a cutting apparatus (5) that is disposed inside the housing (2) concentrically, that moves downwards inside the housing (2) when pressure is exerted by the housing (2) ceiling and that enables the folio (4) to be detached from the housing (2) by cutting the folio (4) partially or completely.",
+      "filing_date": "2016-06-09",
+      "inventors": "GERZELI, Ismail, CENGIZ, OSMAN, GUNDUZ, NIHAT"
+    },
+    {
+      "title": "SINGLE DOSE CAPSULE FOR THE PREPARATION OF CREAM-FREE COFFEE DRINK.",
+      "abstract": "The present invention relates to a single-dose capsule for the preparation of a coffee beverage, the single-dose capsule having a base body of the capsule in which a flat textile structure and a beverage substance are arranged, the beverage substance being provided for its storage in the single-dose capsule and for extraction in the single-dose capsule through the flat textile structure by means of hot water under pressure, the beverage substance being essentially in powder form and comprising roasted and ground coffee, and presenting the flat structure textile a weight per unit area of at least 100 g / m2.",
+      "filing_date": "2019-12-16",
+      "inventors": "GÜNTER EMPL, WOLFGANG EPPLER, ANDRE THROM"
+    },
+    {
+      "title": "Capsule, system and use of system for preparing double beverages such as double espresso, double lungo and double ristretto",
+      "abstract": "FIELD: preparation of coffee. \n     SUBSTANCE: group of inventions relates to a capsule for preparing double espresso, double ristretto, or double lungo, to a system containing a first capsule and a second capsule, to a system containing an apparatus for brewing coffee and the capsule, to an application of the system containing a first capsule and a second capsule, to an application of the system containing the apparatus for brewing coffee and the capsule, as well as to a method for preparing double espresso, double ristretto, or double lungo. Capsule for preparing double espresso, double ristretto, or double lungo includes a capsule body made in the form of a truncated cone. The capsule body comprises a peripheral side wall located around the central axis of a bowl-shaped body, a lower wall connected with the first end of the side wall to cover the first end of the capsule body, and a flange extending radially outward from the second end of the peripheral side wall. The capsule additionally includes a lid made of foil and connected with the flange, a coffee layer from ground coffee, placed in the internal space limited by the capsule body and the lid. The coffee layer has a maximum diameter of the coffee layer, corresponding to the inner diameter of the bowl-shaped body by the second end of the peripheral wall. The internal space has a height defined by the maximum distance between the lower part and the plane wherein the second end of the peripheral side wall extends. The weight of the coffee layer is in the range from 9 to 13 g, wherein the height/maximum diameter of the coffee layer ratio is in the range from 0.9 to 1.2. \n     EFFECT: increase in the weight of coffee for capsules of a larger volume for the possibility of preparing double beverages. \n     42 cl, 50 dwg",
+      "filing_date": "2022-04-21",
+      "inventors": "MELROSE, John Richard, ANDREWS, Richard John, HARPLEY, PAUL JAMES, DE GRAAFF, GERBRAND KRISTIAAN"
+    },
+    {
+      "title": "CAPSULES FOR THE RELEASE OF AROMA.",
+      "abstract": "The present invention relates to a process for producing capsules comprising a composition comprising coffee oil. The invention also relates to the capsules that can be obtained by said process. Furthermore, the invention relates to compositions, food ingredients and food products comprising said capsules.",
+      "filing_date": "2018-09-07",
+      "inventors": "ANA LUIZA BRAGA, JOESKA HUSNY, DANIEL ANDRÉ PRETRE, ELODIE SOUSSAN, ZEYNEL DENIZ GUNES"
+    },
+    {
+      "title": "Coffee capsules for the preparation of Turkish coffee",
+      "abstract": "The present invention relates to capsules for the preparation of certain coffee beverages, in particular Turkish coffee.",
+      "filing_date": "2019-04-26",
+      "inventors": "DOGAN NIHAN, BILLOT BAPTISTE"
+    },
+    {
+      "title": "Aroma release capsules",
+      "abstract": "The present invention relates to a process for producing capsules comprising a composition comprising coffee oil. The invention also relates to capsules obtainable by such process. In addition the invention relates to compositions, food ingredients and food products comprising such capsules.",
+      "filing_date": "2020-02-04",
+      "inventors": "BRAGA, Ana Luiza, Gunes, Zeynel Deniz, HUSNY, Joeska, PRETRE, DANIEL ANDRE, SOUSSAN, Elodie"
+    },
+    {
+      "title": "CAPSULE, SYSTEM AND SYSTEM UTILIZATION FOR PREPARING DOUBLE BEVERAGES SUCH AS DOUBLE EXPRESSO, DOUBLE COFFEE AND SHORT DOUBLE COFFEE",
+      "abstract": "The invention relates to a capsule (4B), a system (1) and a use of the system for preparing dual drinks such as double espresso, double elongated coffee and double short coffee. The capsule (4B) has a shape and configuration that is easily acceptable to the average user while the infusion that can be obtained with the capsule meets high quality standards. The capsule (4B) has a frustoconical capsule body (6B) with a radial flange (14B) at one end, a sheet lid (12B) closing the body (6B) and connected to the flange (14B) and a bed of coffee which is housed in the internal space (16B) delimited by the capsule body (6B) and the sheet lid (12B) and which has a weight of 9 to 13 g and a ratio (height) / (maximum width) in the range of 0.9 to 1.2.",
+      "filing_date": "2019-02-28",
+      "inventors": "MELROSE, John Richard, ANDREWS, Richard John, HARPLEY, PAUL JAMES, DE GRAAFF, GERBRAND KRISTIAAN"
+    },
+    {
+      "title": "COFFEE OIL CAPSULES.",
+      "abstract": "The present invention relates to a process for producing capsules comprising a composition comprising coffee oil. The invention also relates to capsules that can be obtained by such process. In addition, the invention relates to compositions, food ingredients and food products comprising such capsules.",
+      "filing_date": "2019-03-29",
+      "inventors": "ZEYNEL DENIZ GUNES, ANA LUIZA BRAGA, JOESKA HUSNY, DANIEL ANDRÉ PRETRE, ELODIE SOUSSAN"
+    },
+    {
+      "title": "Coffe capsule with spiral structure",
+      "abstract": "The present invention relates to a coffee capsule, and more particularly, to a coffee capsule in the form of a cartridge capable of extracting espresso from ground coffee beans using a coffee capsule machine.",
+      "filing_date": "2023-06-07",
+      "inventors": "KIM, BYUNG KYU, KIM, BYUNG SUN"
+    },
+    {
+      "title": "CAPSULE TO PREPARE DRINKS.",
+      "abstract": "A capsule (1) for preparing beverages, in particular coffee, is described, comprising at least one container body (3) having at least one base (5) and at least one opening (6) opposite the base ( 5) and adapted to close by at least one cover, the container body (3) internally defines at least one internal volume (VI), and the capsule (1) comprises means for reducing the internal volume (VI), adapted to define , within the container body (3), at least a reduced internal volume (VINF) adapted to contain at least one substance from which an infusion will be obtained or that will be solubilized, where VINF <VI.",
+      "filing_date": "2016-04-06",
+      "inventors": "STEFANO BISIO"
+    },
+    {
+      "title": "exchangeable capsule for preparing a coffee brew and method for brewing said coffee",
+      "abstract": "exchangeable capsule for preparing a coffee brew and method for brewing said coffee. It is a capsule (100) suitable for containing a ground coffee powder (mc) for preparing a coffee brew. the capsule (100) comprises a container (101) closed by a lid (102). the container (101) is provided with a coffee / hot water infusion filter (ft). The capsule (100) is characterized by the fact that the ground coffee mass (mc) is located in an annular space (sf) surrounding a central chimney (180). The infusion water, during at least one of its intermediate steps, converges from the annular space (sp) towards the central chimney (180) first through a vertical filter (ft).",
+      "filing_date": "2016-12-06",
+      "inventors": "RAFFAELE RONDELLI"
+    },
+    {
+      "title": "CAPSULE TO PREPARE BEVERAGES.",
+      "abstract": "A capsule (1) for preparing beverages, in particular coffee, is described, comprising at least one container body (3) having at least one base (5) and at least one opening (6) opposite the base ( 5) and adapted to be closed by at least one cover, the container body (3) internally defines at least one internal volume (VI), and the capsule (1) comprises means for reducing the internal volume (VI), adapted to define , within the container body (3), at least a reduced internal volume (VINF) adapted to contain at least one substance from which an infusion will be obtained or which will be solubilized, where VINF <VI.",
+      "filing_date": "2019-09-11",
+      "inventors": "STEFANO BISIO"
+    },
+    {
+      "title": "Element for dispensing food supplements.",
+      "abstract": "1. Element for dispensing food supplements, characterized in that it consists of a container (1) in the form of a capsule suitable for treatment in a coffee machine for capsules that incorporates at least one food supplement (2) combined with coffee (3) to obtain an infusion with said type of coffee maker.",
+      "filing_date": "2016-08-25",
+      "inventors": "Garriga i Rodo, Joan"
+    },
+    {
+      "title": "BIODEGRADABLE CAPSULE",
+      "abstract": "The invention relates to a capsule containing coffee, tea or other preparations or mixtures (2), said capsule being defined by a hollow body (3) whose free top is closed by a lid (4) and being made of a material similar to wood, preferably of the leaf and / or trunk and / or palm bark type. The fixing of the lid (4) to the hollow body (3) is performed by a natural food glue (5) based on corn or flour or soy starch.",
+      "filing_date": "2019-01-03",
+      "inventors": "PASCUCCI, MARIO"
+    },
+    {
+      "title": "Coffee capsules for a coffee machine",
+      "abstract": "The present invention relates to a coffee capsule for a coffee machine, and more specifically, the coffee that is put into a beverage extracting device (coffee machine) and accommodated in the capsule is discharged in the form of liquid coffee by hot water supplied at high pressure (manufacturing ) To a coffee capsule for a coffee machine.",
+      "filing_date": "2020-11-24",
+      "inventors": "YOON, HYUN SIG"
+    },
+    {
+      "title": "Coffee oil capsule",
+      "abstract": "The present invention relates to a process for preparing capsules comprising a composition comprising coffee oil. The invention also relates to a capsule obtainable by said method. The invention further relates to compositions, food ingredients and food products comprising said capsules.",
+      "filing_date": "2020-04-03",
+      "inventors": ""
+    },
+    {
+      "title": "Fragrance releasing capsule",
+      "abstract": "The present invention relates to a process for preparing capsules comprising a composition comprising coffee oil. The invention also relates to a capsule obtainable by this method. In addition, the invention relates to compositions, food ingredients and food products comprising the capsules.",
+      "filing_date": "2020-01-07",
+      "inventors": ""
+    },
+    {
+      "title": "Use of capsules, systems and systems for the preparation of double-serve beverages",
+      "abstract": "The present invention provides a capsule (4B), a system (1 ) and the use of said system for the preparation of double-serve beverages such as double-serve espresso, double-long coffee and double espresso. The capsule (4B) has a shape and configuration that is easily acceptable to the average user, while the brew obtainable with the capsule meets high quality standards. Said capsule (4B) has a frustoconical capsule body (6B) with a radial flange (14B) at one end, a foil lid (6B) closing said body (6B) and connected to said flange (14B) 12B), and a coffee bed contained in the interior space (16B) defined by the capsule body (6B) and the foil cover (12B), and having a weight of 9g to 13g and a range of 0.9 to 1.2 g The (height)/(max-width) ratio in the range.",
+      "filing_date": "2022-08-05",
+      "inventors": ""
+    },
+    {
+      "title": "Coffee extraction device",
+      "abstract": "The present invention includes a coffee extraction housing having an open entrance; A capsule holder that can be withdrawn and withdrawn through the entrance and exit and is selectively fixed to the coffee extraction housing; A coffee extraction device is provided in the capsule holder, on which the capsule is seated, and extracts coffee generated inside the capsule.",
+      "filing_date": "2023-11-17",
+      "inventors": ""
+    },
+    {
+      "title": "aroma release sac",
+      "abstract": "The present invention relates to a method of preparing a capsule comprising a composition comprising coffee oil. The invention also relates to capsules obtainable by this method. In addition, the invention relates to compositions, food ingredients and food products comprising the capsule.",
+      "filing_date": "2016-01-06",
+      "inventors": "BRAGA ANA LUIZA, GUNES ZEYNEL DENIZ, HUSNY JOESKA, PRETRE DANIEL ANDRE, SOUSSAN ELODIE"
+    },
+    {
+      "title": "Capsules for containing coffee or another substance from which a beverage can be extracted using hot water",
+      "abstract": "A capsule (10) is disclosed for use in a coffee extraction machine. The capsule (10) has a frusto-conical side wall, a transverse base (14) closing one end of the side wall, an open mouth at the end remote from the base and a peripheral flange (16) encircling the open mouth. A section of the side wall of the capsule (10) close to the flange (16) is thicker than the remainder of the side wall.",
+      "filing_date": "2018-04-11",
+      "inventors": "KAY, ANTHONY"
+    },
+    {
+      "title": "Double and single coffee capsule for professional coffee machines",
+      "abstract": "Said invention relates to the manufacture of two capsules intended for use in professional, and not domestic, coffee machines. Said two capsules are filled with ground coffee having a different dose. A capsule comprising between 8 grams and 10 grams of ground coffee is referred to as a single coffee and provides a single cup of espresso coffee and serves one person. In contrast, the second capsule contains between 16 grams and 20 grams of ground coffee and is referred to as a double coffee, and provides two cups of espresso coffee at a time. The invention relates to the manufacture of two customisable capsules merely positioned on the strainer, which is, in turn, supported by a filter holder of the professional coffee machine in two different places.",
+      "filing_date": "2022-06-30",
+      "inventors": "BOULADJERAF, Smaine, BOULADJERAF, Boufeldja, BOULADJERAF, Younes"
+    },
+    {
+      "title": "Capsule and method for preparing a drink",
+      "abstract": "The invention relates to a capsule which is provided for receiving a substance for preparing a beverage, for example for receiving a coffee and / or espresso powder. Furthermore, the invention relates to a method.",
+      "filing_date": "2019-07-18",
+      "inventors": "FLEISCH, BETTINA"
+    },
+    {
+      "title": "Capsule with arch shape between capsule wall and capsule bottom",
+      "abstract": "The invention relates to a capsule (12) for a portion coffee machine (2) having a cup - shaped base body (42) in which a capsule interior (46) surrounded by a capsule wall (44) is provided with a capsule opening (48) for receiving an infusion means (13) the capsule interior (46) is formed, wherein the capsule wall (44) of a cutting elements (30) of the portion coffee machine (2) for admitting hot water from the portion coffee machine (2) in the capsule interior (46) pierceable capsule bottom (50) and a capsule shell ( 52) extending between the capsule bottom (50) and the capsule opening (48). According to the capsule bottom (50) and the capsule shell (52) arcuately (58) connected in a sectional plane through the capsule bottom (50) and the capsule shell (52), the capsule wall (44) in its wall thickness (62) in the arcuate Region (58) coming from the capsule shell (52) coming from the capsule bottom (50) towards at least partially (62 ') is increasingly formed.",
+      "filing_date": "2018-03-15",
+      "inventors": "HUBER, CHRISTOPH"
+    },
+    {
+      "title": "Capsule coffee console device for vehicle",
+      "abstract": "The present invention relates to a capsule coffee console device for vehicles.",
+      "filing_date": "2023-12-18",
+      "inventors": "LEE, GWANG SU"
+    },
+    {
+      "title": "Closed cartridge for the manufacture of a soft drink, intended for recovery under pressure",
+      "abstract": "The invention of a capsule (or cartridge), prepared to be extracted under pressure with water injection, contains a material for the preparation of a beverage selected from hot and ripe coffee, tea, coffee +, coffee, milk powder, or any other dehydrated edible substance.",
+      "filing_date": "2016-05-31",
+      "inventors": "IRAQI MAMOUN"
+    },
+    {
+      "title": "A coffee machine used with a capsule",
+      "abstract": "The present invention relates to a coffee machine (1 ), comprising a body (2); a capsule housing (3) wherein the preferably single use capsule (K) is placed and that is disposed at the upper portion of the body (2); a brewing chamber (4) wherein the brewing process is performed by the coffee and the water being added, that is disposed in the body (2) so as to stay under the capsule housing (3) and that can be taken out of the body (2); a compartment (5) wherein the brewing chamber (4) is placed and that is disposed in the body (2); a heater (6) that enables the brewing chamber (4) to be heated, and a residue container (7) wherein the liquid that drips from the brewing chamber (4) is accumulated.",
+      "filing_date": "2017-05-11",
+      "inventors": "KARAAGAC, Emre, GUNDUZ, NIHAT, ALPTEKIN, AHMET, KARTAL, Resul, GENCER OZEL, Asli"
+    },
+    {
+      "title": "1 cup extract capsule to produce a coffee drink with or without crema",
+      "abstract": "The present invention relates to a capsule for extracting a cup for producing a coffee beverage. The capsule for single cup extraction has a capsule base body in which the woven fabric and the beverage substance are arranged, the beverage substance being stored in the capsule for single cup extraction and pressurized hot water To be extracted from the capsule through the woven fabric. The beverage material is substantially in powder form and includes roasted ground bean coffee powder, the color value of roasted coffee being 50-150.",
+      "filing_date": "2016-02-25",
+      "inventors": ""
+    },
+    {
+      "title": "CAPSULE FOR THE PREPARATION OF COFFEE-BASED DRINKS.",
+      "abstract": "A capsule for extracting a beverage of the filter coffee type has a capsule body (2), made of a water-impermeable material, defining a chamber (3), present within which is a beverage precursor, comprising soluble and roasted coffee and ground coffee. At least 51% by weight of the precursor is roasted and ground coffee having a grain size expressed in x50 between 350 and 800 µm, and the complement for 100% by weight of the precursor is soluble coffee having a grain size expressed in x50 between 1000 and 5000 µm. The roasted and ground coffee is placed to form a first layer (GC) at the bottom of the capsule body (3) and the soluble coffee (SC) is placed to form a second layer (SC) at the top of the capsule body. capsule, that is to say, in a position that corresponds to the inlet wall (5) and/or on the first layer (GC). The first layer of roast and ground coffee (GC) is pressed into the capsule body (3), and the second layer of soluble coffee (SC) is present within the capsule body (3) substantially unpressed.",
+      "filing_date": "2021-04-28",
+      "inventors": "CABILLI ALBERTO, TOTTONE FABIO, BUGNANO LUCA, CUGNETTO EMILIO, BORELLO LUISA, BARUS SILVIA"
+    },
+    {
+      "title": "Capsule for making dutch coffee",
+      "abstract": "Disclosure of the Invention The present invention relates to a capsule for producing a Dutch coffee. The disclosed invention relates to a coffee machine comprising: a capsule body portion in which a receiving portion for receiving powdered coffee is formed; An injection unit provided at one side of the capsule body to communicate with the storage unit and connected to a water supply container for supplying water; And an extracting portion provided to communicate with the receiving portion on the other side of the capsule body portion and connected to a server container containing the extracted coffee liquid. The capsule body portion can be folded into a storage state and can be unfolded into an extraction state And the volume of the receiving portion is expanded when it is unfolded in the extraction state.",
+      "filing_date": "2016-09-13",
+      "inventors": "LEE, SUN IN"
+    },
+    {
+      "title": "A capsule suitable for use in a coffee maker and coffee machines.",
+      "abstract": "The present invention consists of a body (2) suitable for use in coffee machines, in which the coffee to be cooked is stored, an opening (3) located on the lower surface of the body (2), a foil (4) that allows the opening (3) to be covered, and the body (2). It relates to a capsule (1) comprising a cutting apparatus (5) which has at least one incisor (6) lined along its lower edge placed centrally, cutting the foil (4) and allowing the coffee to be poured from the body (2) to the coffee machine to be cooked.",
+      "filing_date": "2016-06-21",
+      "inventors": "VAROL, KAYIŞDAĞ, EMRE, AYAROĞLU, NIHAT, GUNDUZ, ÖMER BURAK, ÇOBAN"
+    },
+    {
+      "title": "Inexpensive universal compatible airtight capsule",
+      "abstract": "The capsule that is the object of this invention is, because of its configuration with an outlet opening for the product exposed beyond the bottom and because of the way it is made with a specific non-woven fabric filter with special characteristics, a capsule that adapts well to coffee, soluble products and leaf products, and which is also compatible with numerous dispensing machines.",
+      "filing_date": "2016-03-16",
+      "inventors": "SCAPUCCIN, MICHELE"
+    },
+    {
+      "title": "Coffee brewing device",
+      "abstract": "The embodiment of the utility model provides a coffee brewing device, which comprises a machine body and a water supply system arranged in the machine body, wherein a coffee powder brewing assembly and a capsule brewing assembly are arranged on the machine body; the coffee powder brewing assembly is connected with a water supply system, the coffee powder brewing assembly is provided with a first brewing cavity for filling coffee powder, and the coffee powder brewing assembly is used for pressing and brewing the coffee powder filled in the first brewing cavity; the capsule brewing assembly comprises a capsule brewing cavity body and a brewing cavity cover, wherein the capsule brewing cavity body is internally provided with a second brewing cavity with an open top end, and the brewing cavity cover is used for covering the second brewing cavity; the bottom of the capsule brewing cavity is provided with a first liquid outlet channel, and the bottom of the second brewing cavity is provided with a first puncture needle communicated with the first liquid outlet channel; the brewing cavity cover is provided with a water inlet channel, the water inlet channel is connected with a water supply system, and the inner side of the brewing cavity cover is provided with a second puncture needle communicated with the water inlet channel. The coffee brewing device can brew coffee by using coffee powder and coffee capsules.",
+      "filing_date": "2021-08-17",
+      "inventors": "GUO JIANGANG, XU ZENGLONG, ZHANG ZHICHENG"
+    },
+    {
+      "title": "Single-serve capsules and methods for making single-serve capsules",
+      "abstract": "The present invention relates to the field of preparing a beverage, in particular coffee, by using a single-dose capsule, wherein the single-dose capsule (1) having a base element (11) for receiving an extract material, and the single-dose capsule (1) are manufactured. It's about how to do it. The single serving capsule 1 comprises a bottom region 16 and a peripheral side wall 12, the bottom region and the peripheral side wall forming an interior space. At least the peripheral side wall 12 comprises a cellulose-based sheet 2 and is formed by complete winding of the cellulose-based sheet 2 about the base element axis 15 .",
+      "filing_date": "2023-03-16",
+      "inventors": "BROECKEL JENS"
+    },
+    {
+      "title": "Capsule seal with double centering function",
+      "abstract": "The invention relates to a capsule (12) for a portion coffee machine (2) comprising a rotationally symmetrical (41) base body (42) receivable in a capsule cage (20) of the portion coffee machine (2) with a capsule interior (46) bounded by a circumferential capsule wall (44). , which is open at the end end via a capsule opening (48), wherein directed to the capsule wall (44) at the capsule opening (48) directed radially outwardly a flange (54) with an axially away from the base body (42) bearing side (58) and one of the support side (58) opposite pressing side (60) connects to the axially of a two press lips (28, 29) formed pressing edge (27) of the capsule cage (20) can be placed, wherein the capsule cage (20) radially between the two press lips (28, 29) extends an axially extending gap (62), and wherein on the pressing side (60) of the capsule flange (54) axially projecting a sealing lip (64) is formed, which in the intermediate space (62) between the two pressing lips (28, 29) of the pressing edge (27) of the capsule cage (20) is insertable.",
+      "filing_date": "2018-04-12",
+      "inventors": "HUBER, CHRISTOPH"
+    },
+    {
+      "title": "Basic body for a beverage portion capsule",
+      "abstract": "The invention relates to a base body of a portion capsule for holding at least one ingredient for producing a beverage by passing brewing water through it, in particular coffee capsule, the base body being a baked product. The invention further relates to a portion capsule which comprises the base body according to the invention and a method for producing a base body according to the invention.",
+      "filing_date": "2020-02-15",
+      "inventors": ""
+    },
+    {
+      "title": "Portable capsule coffee machine using specific coffee capsules",
+      "abstract": "The utility model discloses an use portable capsule coffee machine of specific coffee capsule, include hot water chamber, pump pressure chamber, dash bubble chamber and drink the chamber, the pump pressure chamber is connected to hot water chamber below, and pump pressure chamber below is connected and is steeped the chamber, dashes bubble chamber below and is connected with and drinks the chamber, it is equipped with the coffee capsule to dash the bubble intracavity. The hot water cavity heats cold water and then enters the pumping pressure cavity, the pumping pressure cavity provides water required by making tea and coffee for the making cavity, and the making cavity is connected with the pumping pressure cavity through a support. The coffee capsule is arranged in the cavity of the extraction cavity, the extraction cavity cover and the extraction cavity form a closed space, the extraction cavity is fixed by the extraction cavity base, and the round cake-shaped coffee capsule occupies a smaller volume and is more fully contacted with water. The pressure valve opens when the pressure reaches the desired value and the coffee liquid flows out of the outlet opening. The coffee capsule has the advantages of compact design structure, simplicity, practicability, convenience in installation and disassembly of the coffee capsule, and capability of being exchanged with the coffee powder bag.",
+      "filing_date": "2020-03-31",
+      "inventors": "HUANG YUANXIONG, LI CHUANYI"
+    },
+    {
+      "title": "coffee encapsulation apparatus",
+      "abstract": "apparatus for encapsulating coffee. this utility model patent falls within the area of packaging for preparing coffee, intended for domestic use, and refers to a manual and portable device for encapsulating ground coffee in specific capsules for use in espresso machines, enabling the loading and reloading of the capsules. the device can be manufactured with different encapsulation capacities at a time, as well as its working principle applied to different capsule models.",
+      "filing_date": "2021-03-02",
+      "inventors": "RENATO CLAUDIO COSTA PEREIRA"
+    },
+    {
+      "title": "A used coffee machine with capsules",
+      "abstract": "SUMMARY OF THE INVENTION The present invention provides a body (2), a capsule holder (3) located on the upper part of the body (2), and preferably a disposable capsule (K), coffee and water are added and cooking is carried out and the capsule holder (2) is inserted in the body (2). (3), a removable cooking chamber (4) located outside of the body (2), a compartment (5) inside the body (2), in which the cooking chamber (4) is placed, heating the cooking chamber (4). and a coffee machine (1) comprising a waste water reservoir (7) in which the liquid dripping from the cooking chamber (4) is collected.",
+      "filing_date": "2017-05-22",
+      "inventors": "ASLI GENCER, ÖZEL, NIHAT, GUNDUZ, EMRE, KARAAĞAÇ, RESUL, KARTAL, AHMET, ALPTEKİN"
+    },
+    {
+      "title": "A kind of coffee capsule storehouse and the coffee machine using the capsule storehouse",
+      "abstract": "It the utility model is related to coffee machine technical field, more specifically, it is related to a kind of coffee capsule storehouse and the coffee machine using the capsule storehouse, the coffee capsule storehouse includes being used for the capsule storehouse cavity for accommodating coffee capsule, the top and bottom of capsule storehouse cavity are equipped with opening, the coffee capsule storehouse also includes the puncture knife at the top of the cavity of capsule storehouse, the top pierced through knife and be used to pierce through coffee capsule；The cross section of capsule storehouse cavity is circle, and capsule storehouse cavity gradually increases from top to the diameter of the cross section of bottom.A kind of coffee capsule chamber structure of the utility model is simple, by being equipped with opening at the top of capsule storehouse cavity and bottom, and set at the top of capsule storehouse cavity and pierce through knife, after user is put into coffee capsule from the opening of capsule storehouse cavity bottom, the top of coffee capsule can smoothly be pierced through by piercing through knife so that opening position that can be pierced at the top of coffee capsule from the water with certain pressure of water pump outflow is flowed into coffee capsule.",
+      "filing_date": "2018-01-05",
+      "inventors": "SU HUIZHEN"
+    },
+    {
+      "title": "Extraction capsule, filled with soluble coffee powder and green coffee containing chlorogenic acid, for the production of a tasty coffee beverage for weight loss.",
+      "abstract": "Extraction capsules suitable for coffee machines, characterized by the fact that they are / are filled with lyophilized, soluble arabica and robusta coffee powder extract or with soluble cocoa or chocolate powder or with tea fruit tea and medicinal teas or other ingredients, and finely ground green coffee containing chlorogenic acid, for the production of a tasty coffee drink or other drinks for weight loss, and that thanks to the catalysis of serotonin and dopamine, the general mood and well-being by means of extracted chlorogenic acid and caffeine from Green Highland coffee in people consumption can be improved. The content of the capsules consists in a preferred application of 50% lyophilized, soluble coffee powder, made from roasted Arabica and Robusta coffee beans or with soluble cocoa or chocolate powder or with tea, fruit tea and medicinal teas or other ingredients, and from finely ground green coffee containing 50% chlorogenic acid.",
+      "filing_date": "2020-07-15",
+      "inventors": "HANSPETER STEFFEN"
+    },
+    {
+      "title": "Capsule, system and use of the system for the preparation of double beverages such as double espresso, double long coffee and double espresso",
+      "abstract": "The present invention provides a capsule (4B), a system (1) and the use of said system for preparing a double-serve beverage, such as a double-serve espresso, double-long coffee and double espresso. The capsule (4B) has a shape and configuration that is easily acceptable to the average user, while the brew obtainable with the capsule meets high quality standards. Said capsule (4B) has a frustoconical capsule body (6B) with a radial flange (14B) at one end, a foil lid (6B) closing said body (6B) and connected to said flange (14B) 12B), and a coffee bed contained in the interior space (16B) defined by the capsule body (6B) and the foil cover (12B), and having a weight of 9g to 13g and a range of 0.9 to 1.2 g The (height)/(max-width) ratio in the range.",
+      "filing_date": "2019-04-05",
+      "inventors": "MELROSE JOHN RICHARD, ANDREWS RICHARD JOHN, HARPLEY PAUL JAMES, DE GRAAFF GERBRAND KRISTIAAN"
+    },
+    {
+      "title": "Beverage capsule",
+      "abstract": "A capsule for use in a coffee machine having a generally frusto-conical form with a main body 2 and an upper end 3, an annular flange 7 being provided at the end of the main body remote from the upper end. The capsule is provided with a plurality of flutes 11 extending from the vicinity of the boundary between the upper end and main body to a point beyond the mid point between the upper end the flange. The provision of the flutes 11 surprisingly strengthens the capsule.",
+      "filing_date": "2020-11-25",
+      "inventors": "GORT-BARTEN, LESLIE ALEXANDER"
+    },
+    {
+      "title": "Single-serving coffee pod and single-serving beverage brewer system",
+      "abstract": "A single-serving coffee pod includes: a hollow capsule having an opening at a first end thereof and at least one smaller opening in a second end thereof opposite the first end; a filter disposed within the capsule; a plurality of whole coffee beans located within the capsule; and a removable covering disposed over the opening of the capsule.",
+      "filing_date": "2023-09-14",
+      "inventors": "XU, QILIANG, ZHOU, RUI"
+    },
+    {
+      "title": "Aroma release capsule",
+      "abstract": "The present invention relates to a method for producing a capsule comprising a composition comprising coffee oil. The invention also relates to capsules obtainable by such a method. The invention further relates to compositions, food ingredients and food products comprising such capsules.   [Selection] Figure 1",
+      "filing_date": "2016-07-21",
+      "inventors": ""
+    },
+    {
+      "title": "Capsule for the preparation of a coffee-based beverage",
+      "abstract": "A capsule for extraction of a beverage of the filter-coffee type has a capsule body ( 2 ), made of water-impermeable material, which defines a chamber ( 3 ), present inside which is a precursor of the beverage, comprising soluble coffee and roast and ground coffee. At least 51 wt % of the precursor is roast and ground coffee having a grain size expressed in x50 comprised between 350 and 800 μm, and the complement to 100 wt % of the precursor is soluble coffee having a grain size expressed in x50 comprised between 1000 and 5000 μm. The roast and ground coffee is laid out to form a first layer (GC) in the lower part of the capsule body ( 3 ), and the soluble coffee (SC) is laid out to form a second layer (SC) in the upper part of the capsule body, i.e., in a position corresponding to the inlet wall ( 5 ) and/or above the first layer (GC). The first layer of roast and ground coffee (GC) is pressed inside the capsule body ( 3 ), and the second layer of soluble coffee (SC) is present inside the capsule body ( 3 ) substantially unpressed.",
+      "filing_date": "2021-08-19",
+      "inventors": "TOTTONE, Fabio, BUGNANO, Luca, CUGNETTO, Emilio, BORELLO, LUISA, Barus, Silvia, CABILLI, ALBERTO"
+    },
+    {
+      "title": "Potion capsule with identifier",
+      "abstract": "A potion capsule is used in spite of being unsuitable for that coffee maker and prevents the coffee maker from being damaged, which alone provides a potion capsule suitable for a particular coffee maker.   A basic element 2 having a cavity 3 and comprising a beverage ingredient, a flange 2.4 extending horizontally from the basic element 2, and a membrane 4 attached to the upper side of the flange so as to close the cavity, respectively An identifier that makes the portion capsule 1 distinguishable, and the identifier is a bar code provided on the bottom side of the flange and extends over the entire circumference of the flange. A portion capsule for producing a beverage characterized by being on the opposite side of the upper side.   [Selection] Figure 1",
+      "filing_date": "2019-09-12",
+      "inventors": "KRUEGER MARC"
+    },
+    {
+      "title": "Capsule for preparing beverages",
+      "abstract": "A capsule (1) is described for preparing beverages, in particular coffee, comprising at least one containing body (3) having at least one base (5) and at least one opening (6) opposite to such base (5) and adapted to be closed by at least one cover, the containing body (3) internally defining at least one internal volume (VI), such capsule (1) comprising means for reducing the internal volume (VI) adapted to define inside the containing body (3) at least one reduced internal volume (VINF) adapted to contain at least one substance to be infused or to be solubilized, where VINF <VI",
+      "filing_date": "2016-05-25",
+      "inventors": "BISIO, STEFANO"
+    },
+    {
+      "title": "Capsule and system for preparing a crema-free coffee beverage",
+      "abstract": "A capsule for preparing a crema-free coffee beverage comprises a substantially rigid capsule body with a circumferential wall and a base wall that border an inner space filed with a beverage ingredient. An open filling side of the capsule at an end of the circumferential wall opposite the base wall is covered with a lid of fluid tight material. The lid is provided with a preformed outlet opening suitable for draining the prepared beverage from the inner space when the capsule is used in a beverage preparation device. The outlet opening is fluid tightly closed by a removable cover element extending over at least part of the lid.",
+      "filing_date": "2019-01-16",
+      "inventors": "RICHARD JOHN ANDREWS, GERBRAND KRISTIAAN DE GRAAFF, PAUL ALDERSON, CHRISTIAN SOLANO BERMEJO"
+    },
+    {
+      "title": "CAPSULE, SYSTEM AND USE OF THE SYSTEM TO PREPARE DOUBLE DRINKS AS DOUBLE EXPRESS, DOUBLE LUNGO AND DOUBLE RISTRETTO.",
+      "abstract": "A capsule (4B), a system (1) and a use of the system for preparing double beverages such as a double espresso, a double lungo and a double ristretto are provided. The capsule (4B) has a shape and configuration that is easily acceptable by the average user while the preparation obtained with the capsule meets high quality standards. The capsule (4B) has a frustoconical capsule body (6B) with a radial flange (14B) at one end, an aluminum foil lid (12B) that closes the body (6B) and connects to the flange (14B) , and a bed of coffee that is housed in the internal space (16B) limited by the capsule body (6B) and the aluminum foil cover (12B) and having a weight of 9-13 g and a ratio (height) / (maximum width) in the range of 0.9-1.2.",
+      "filing_date": "2019-05-30",
+      "inventors": "JOHN RICHARD MELROSE, RICHARD JOHN ANDREWS, PAUL JAMES HARPLEY, GERBRAND KRISTIAAN DE GRAAFF"
+    },
+    {
+      "title": "capsule for a soluble and non-soluble product, such as coffee and its derivatives, tea and herbal teas and beverages",
+      "abstract": "capsule (10) for soluble and non-soluble products, such as coffee and its derivatives, tea and herbal teas and drinks, provided with a tray-shaped body (11) made of plastic material and a film (12) that closes the tray , characterized by the fact that it comprises, incorporated in the plastic material of the tray (11), a substance that can be detected by a sensor (13).",
+      "filing_date": "2020-09-24",
+      "inventors": "CARLO ALBERTO PARISE"
+    },
+    {
+      "title": "Coffee machine with a multi-cellular capsule seat",
+      "abstract": "A coffee machine with a multi-cellular capsule seat having a base, a lower body and an upper body; a multi-cellular capsule seat is provided inside the upper body; at least two coffee capsules are placed side by side inside the multi-cellular capsule seat; a front inner cover is provided on the multi-cellular capsule seat; a right side of the front inner cover is provided with a front inner cover water inlet; the front inner cover water inlet is in communication with a second inlet provided at a middle part of a surface of the second coffee capsule; the second inlet is provided with a second upper piercing pin; a second piercing position seal ring is provided on the second upper piercing pin. The present invention has a simple structure and can double the working capacity, thereby increasing working efficiency.",
+      "filing_date": "2017-10-26",
+      "inventors": "SHI ZHONGYU, LIU SHUKUO"
+    },
+    {
+      "title": "A single-serve coffee container with added supplement",
+      "abstract": "A single-serve coffee container has coffee therein which is supplemented with one or \nmore supplements. The present supplements may be specifically chosen to be \nsuitable for use with a coffee container in being water soluble, being soluble in a \nmaximum of approximately 25ml of water (which is typically injected into coffee \ncapsules by coffee machines), having a melting point greater than 100°C, compatible \nwith caffeine, having negligible influence on flavour, having dual \napplication/classification (i.e. can be used in food and therapeutics) and not being \nprohibited or unscheduled substances.  \n6",
+      "filing_date": "2021-11-18",
+      "inventors": "Yacoub, Antoine"
+    },
+    {
+      "title": "Capsule or cartridge and infusion assembly for the preparation of a beverage, in particular coffee",
+      "abstract": "A capsule or cartridge ( 1 ) including a cup-shaped body ( 2 ) with a bottom wall ( 3 ), a lateral wall ( 4 ) and a flange-like top formation ( 5 ) which is essentially planar and extends transversely towards the outside, and a cover ( 6 ) fixed to the flange-like formation ( 5 ) of the body ( 2 ), such as to define a chamber ( 7 ) containing the material for the preparation of the beverage, in particular ground roasted coffee. The lateral wall ( 4 ) of the body ( 2 ) has a plurality of projections ( 8 ) and recesses ( 9 ) which as a whole define at least an identification of the capsule ( 1 ). The projections ( 8 ) and recesses ( 9 ) are aligned in an essentially rectilinear direction, belonging to a plane essentially parallel to the flange-like formation ( 5 ) of the body ( 2 ) of the capsule ( 1 ).",
+      "filing_date": "2020-08-18",
+      "inventors": "BUGNANO, Luca, CABILLI, ALBERTO, ROTTA, Denis, BOLOGNESE, Danilo"
+    },
+    {
+      "title": "Capsule for preparing a beverage",
+      "abstract": "Capsule (1) for the preparation of a beverage, eg coffee, comprising a hollow member for containing a dose, eg ground coffee, said hollow member comprising a side wall (2), an upper face, a lower face comprising an extraction membrane and a rim (3) in the form of a collar, the latter being oriented in a plane which intersects said lateral wall (2); capsule (1) characterized in that the rim (3) consists of a material which softens when it is brought into contact with a liquid.",
+      "filing_date": "2016-07-27",
+      "inventors": "MARILLER, ALAIN"
+    },
+    {
+      "title": "1 cup extract capsule to produce a coffee drink without crema",
+      "abstract": "The present invention relates to a capsule for extracting a cup for producing a coffee beverage. The single cup capsule has a capsule base body in which the textile dough and the beverage substance are arranged, the drink substance being stored in the single cup capsule and pressurized It is installed to be extracted from the capsule through the woven fabric by the heated hot water. Beverage materials are in powder form, include roasted ground beans of coffee powder, the mass per unit area of the textile fabric is at least 100 g / m  2.",
+      "filing_date": "2016-02-12",
+      "inventors": ""
+    },
+    {
+      "title": "MULTI FUNCTION PORTABLE COFFEE MAKER",
+      "abstract": "Multi-function portable coffee maker, characterized in that it is formed by a casing (1), by a digital screen (2), by a control (3), by a removable capsule charger (4), by capsules (4.1), by a system (5) liquid supply, by a second tank (6) of optional additives, by a coffee grinder (7), and by a pressure gauge (8).",
+      "filing_date": "2022-03-25",
+      "inventors": "Gonzalez Carcelen, Anaïs, Santana Canela, Oscar"
+    },
+    {
+      "title": "INTERCHANGEABLE CAPSULE FOR THE PREPARATION OF A COFFEE INFUSION, AND METHOD FOR OBTAINING A COFFEE INFUSION.",
+      "abstract": "A capsule (100) suitable for containing in its interior a mass of ground coffee (MC) for the preparation of a coffee infusion. The capsule (100) comprises a container (101) closed by a lid (102) The container (101) is provided with a filter (FT) for coffee / hot water infusion. The capsule (100) is characterized in that the ground coffee powder (MC) is located in an annular space (SP) surrounding a central chimney (180). The infusion water, during at least one of its intermediate steps, converges from the annular space (SP) to the central chimney (180) by first passing through a vertical filter (FT).",
+      "filing_date": "2016-01-27",
+      "inventors": "RONDELLI, RAFFAELE"
+    },
+    {
+      "title": "Coffee machine equipment with multi-compartment capsule holder",
+      "abstract": "The invention relates to the technical field of coffee machine equipment, in particular to a coffee machine equipment with a multi-capsule holder, which comprises a base, a lower body is arranged on the base, an upper body is arranged on the lower body, and a front of the upper body The upper body is hinged with a front cover, the front cover button is arranged in the middle of the outer end edge of the front cover, and the rear cover is installed on the rear of the upper body; the upper body is provided with a multi-capsule capsule seat, and the multi-capsule capsule seats are arranged side by side. There are at least two coffee capsules, the two coffee capsules are coffee capsule A and coffee capsule B, the multi-silo capsule seat is provided with a front inner cover; the right side of the front inner cover is provided with a water inlet of the front inner cover, The water inlet of the front inner cover communicates with the inlet B in the middle of the surface of the coffee capsule B, the inlet B is provided with an upper puncturing needle B, and a puncturing sealing ring B is arranged on the upper puncturing needle B; it is used in A multi-capsule capsule seat is installed in the upper body of the coffee machine, which has a simple structure, can increase the workload, and greatly improves the work efficiency.",
+      "filing_date": "2019-01-29",
+      "inventors": ""
+    },
+    {
+      "title": "Automobile handle inertia locking structure",
+      "abstract": "The present invention relates to a coffee capsule, the body portion is filled with coffee powder; An edge portion extending from an upper end portion of the body portion and supported by a capsule accommodation portion of one coffee machine: a lid portion in close contact with the edge portion and sealing the body portion; An extension forming portion extending from one side of the edge portion; And a preliminary cutting line provided at a boundary between the edge portion and the extension forming portion, wherein the extension forming portion can be bent or cut when a user applies force. Characterized in that configured to include. Due to this configuration, it is possible to obtain the effect that it can be used for all kinds of capsule coffee machine having different sized inlet.",
+      "filing_date": "2020-02-10",
+      "inventors": "Hu wei fei"
+    },
+    {
+      "title": "COMPOSITION FOR THE PREPARATION OF COFFEE, CAPSULE THAT COMPRISES IT AND ITS OBTAINING PROCESS",
+      "abstract": "Composition for the preparation of coffee, capsule that includes it and its process of obtaining. The object of the invention is a composition for the preparation of coffee that comprises, in percentage by weight: between 10 and 30% of coffee powder; between 10 and 30% of a dehydrated vegetable matrix; between 10 and 30% of at least one vegetable fat; between 10 and 30% of at least one thickener; between 10 and 30% of at least one sugar or sweetener and between 0.1 and 20% of at least one acidity regulator. It is likewise the object of the invention its manufacturing process, as well as its use to manufacture coffee capsules and the coffee capsules that comprise it.",
+      "filing_date": "2022-08-18",
+      "inventors": "LARRAURI GARCIA, JOSE ALBERTO"
+    },
+    {
+      "title": "CAPSULE SET COMPRISING A CAPSULE OF A FIRST TYPE AND A CAPSULE OF A SECOND TYPE, CAPSULE OF A SECOND TYPE FOR PREPARING A COFFEE BREAKE, SYSTEM, AND USE OF A SYSTEM",
+      "abstract": "It is a capsule (4B), a system (1) and a system for preparing double drinks, such as a double espresso, a double lungo and a double ristretto. The capsule (4B) has a shape and configuration that are easily accessible to the average user while the strain that is obtainable with the capsule meets high quality standards. The capsule (4B) has a frusto-conical capsule body (6B) with a radial flange (14B) at one end, a sheet metal cap (12B) that closes the body (6B) and connects to the flange (14B) , and a coffee bed that is accommodated in the internal space (16B) delimited by the capsule body (6B) and the metallic foil cover (12B) and that has a weight of 9 to 13 g and a ratio (height)/(width maximum) within the range of 0.9 to 1.2.",
+      "filing_date": "2023-04-11",
+      "inventors": "JOHN RICHARD MELROSE, RICHARD JOHN ANDREWS, PAUL JAMES HARPLEY, GERBRAND KRISTIAAN DE GRAAFF"
+    },
+    {
+      "title": "Interchangeable capsule for preparing an infusion of coffee, and method for obtaining an infusion of said coffee",
+      "abstract": "A capsule suited to contain in its inside a mass of powdered coffee for preparing an infusion of coffee. The capsule comprises a container closed by a lid. The container is provided with a filter of the coffee/hot water infusion. The capsule is characterized in that the mass of powdered coffee is located in an annular space surrounding a central chimney. The infusion water, during at least one of its intermediate steps/converges from the annular space towards the central chimney passing first through a vertical filter.",
+      "filing_date": "2017-02-15",
+      "inventors": ""
+    }
+  ],
+  "funding": [
+    {
+      "title": "Global Coffee Innovation Grant",
+      "funder": "International Coffee Organization",
+      "funder_url": "https://www.ico.org/",
+      "amount": "$1,000,000",
+      "deadline": "2025-06-15",
+      "eligibility": "Open to all researchers and companies globally working on innovative coffee capsule solutions",
+      "region": "Global",
+      "success_rate": "25%",
+      "priority_level": "High match"
+    },
+    {
+      "title": "Sustainable Coffee Packaging Initiative",
+      "funder": "World Coffee Research",
+      "funder_url": "https://worldcoffeeresearch.org/",
+      "amount": "$500,000",
+      "deadline": "2026-03-30",
+      "eligibility": "Applicants must demonstrate sustainable practices in coffee capsule production",
+      "region": "Global",
+      "success_rate": "18%",
+      "priority_level": "Medium match"
+    },
+    {
+      "title": "Innovative Packaging Solutions for Coffee Products",
+      "funder": "Global Environment Facility",
+      "funder_url": "https://www.thegef.org/",
+      "amount": "$750,000",
+      "deadline": "2027-11-10",
+      "eligibility": "Open to academic institutions and startups with a focus on environmental impact reduction",
+      "region": "Global",
+      "success_rate": "20%",
+      "priority_level": "High match"
+    }
+  ],
+  "selected_modules": [
+    "collaboration",
+    "funding",
+    "patents",
+    "synthesis",
+    "research"
+  ]
+}

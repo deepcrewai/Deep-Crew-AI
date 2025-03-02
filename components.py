@@ -764,9 +764,6 @@ def render_synthesis_section(research_data, patent_data, funding_data, selected_
         synthesis_data["funding"] = funding_data
 
     try:
-        # Log synthesis data for debugging
-        st.write("Debug - Synthesis Data:", synthesis_data)
-
         # Create analysis prompt
         analysis_prompt = f"""You are an expert research analyst. Based on the provided data, generate a comprehensive synthesis report 
         analyzing {', '.join(selected_stages)} information.
@@ -823,9 +820,6 @@ def render_synthesis_section(research_data, patent_data, funding_data, selected_
             )
 
             analysis = json.loads(response.choices[0].message.content)
-
-            # Log analysis response for debugging
-            st.write("Debug - API Response:", analysis)
 
         # Display Analysis Results
         st.header("💰 Funding Analysis")
