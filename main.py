@@ -81,7 +81,7 @@ def main():
             search_clicked = st.button("Search", help="Start searching with selected stages", use_container_width=True)
 
         # Move info message here, after search and before buttons
-        st.info("Please choose below your agents.")
+        st.info("Choose Your Agent")
 
         if 'selected_stages' not in st.session_state:
             st.session_state.selected_stages = set()
