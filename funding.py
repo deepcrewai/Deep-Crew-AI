@@ -26,14 +26,15 @@ class FundingAgent:
             prompt = {
                 "research_area": research_area,
                 "region": region if region else "global",
-                "request": "Find relevant funding opportunities"
+                "request": "Find current and upcoming funding opportunities"
             }
 
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[{
                     "role": "system",
-                    "content": """As a funding expert, analyze the research area and region to identify relevant funding opportunities. 
+                    "content": """As a funding expert, analyze the research area and region to identify relevant CURRENT and UPCOMING funding opportunities. 
+                    All deadlines should be in the future, starting from today's date.
                     Return a JSON array of opportunities with the following structure:
                     {
                         "opportunities": [
@@ -41,9 +42,8 @@ class FundingAgent:
                                 "title": "Grant name",
                                 "funder": "Organization name",
                                 "amount": "Funding amount",
-                                "deadline": "Application deadline",
+                                "deadline": "Application deadline (must be a future date)",
                                 "eligibility": "Eligibility criteria",
-                                "link": "Application link",
                                 "region": "Geographical region",
                                 "success_rate": "Estimated success rate",
                                 "priority_level": "High/Medium/Low match"
@@ -425,8 +425,7 @@ def render_funding_section(research_query: str):
                             **Deadline:** {opp['deadline']}  
                             **Eligibility:** {opp['eligibility']}  
                             **Success Rate:** {opp['success_rate']}  
-                            **Priority Level:** {opp['priority_level']}  
-                            **[Apply Now]({opp['link']})**
+                            **Priority Level:** {opp['priority_level']}
                         """)
 
     # Funding Trends Tab
