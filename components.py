@@ -113,31 +113,6 @@ def generate_pdf_report(results, analysis):
         y -= 15
     y -= 20
 
-    # Complexity Assessment
-    if y < 200:
-        add_page_footer()
-        c.showPage()
-        y = page_height - 50
-
-    c.setFont("Helvetica-Bold", 12)
-    c.drawString(50, y, "Complexity Assessment")
-    y -= 20
-
-    c.setFont("Helvetica", 10)
-    complexity = analysis.get("complexity", {})
-    score = complexity.get("complexity_score", 0)
-    c.drawString(50, y, f"Complexity Score: {score}/10")
-    y -= 15
-
-    explanation = complexity.get("explanation", "No explanation available")
-    explanation_lines = [explanation[i:i+80] for i in range(0, len(explanation), 80)]
-    for line in explanation_lines:
-        if y < 100:
-            add_page_footer()
-            c.showPage()
-            y = page_height - 50
-        c.drawString(50, y, line)
-        y -= 15
 
     # Add footer to the last page
     add_page_footer()
@@ -585,15 +560,6 @@ def render_analysis_section(analysis, section_type="research"):
             for i, keyword in enumerate(keywords):
                 cols[i % 3].write(f"• {keyword}")
 
-    # Complexity Assessment
-    if analysis.get("complexity"):
-        st.subheader("Complexity Assessment")
-        complexity = analysis.get("complexity", {})
-        score = complexity.get("complexity_score", 0)
-        st.progress(score / 10)
-        st.write(f"Complexity Score: {score}/10")
-        st.write(complexity.get("explanation", "No explanation available"))
-
 def handle_pdf_export(results, analysis):
     """This function is now deprecated as the export functionality has been moved to render_search_section"""
     pass
@@ -840,7 +806,7 @@ def render_network_section(research_results):
             if author_name and author_name not in authors:
                 authors[author_name] = {
                     'orcid': author.get('orcid'),
-                    'papers': []
+                                        'papers': []
                 }
             if author_name:
                 authors[author_name]['papers'].append(paper.get('title'))
