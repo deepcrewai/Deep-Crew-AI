@@ -277,7 +277,7 @@ def main():
                     <img src="https://raw.githubusercontent.com/gilbarbara/logos/main/logos/github-icon.svg" alt="GitHub">
                 </a>
                 <a href="#" target="_blank">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/X_icon_2.svg" alt="X (Twitter)">
+                    <img src="https://images.freeimages.com/image/large-previews/f35/x-twitter-logo-on-black-circle-5694247.png" alt="X (Twitter)">
                 </a>
                 <a href="#" target="_blank">
                     <img src="https://icon.icepanel.io/Technology/svg/GitBook.svg" alt="GitBook">
