@@ -24,7 +24,6 @@ def init_session_state():
     if 'initialized' not in st.session_state:
         st.session_state.initialized = True
         st.session_state.warning_message = "Choose Your Agent"
-        st.session_state.progress = 0
         logger.info("Session state initialized")
 
 
@@ -33,7 +32,7 @@ def reset_app():
     try:
         for key in [
                 'selected_stages', 'search_results', 'analysis', 'last_query',
-                'patent_results', 'patent_analysis', 'funding_data', 'progress'
+                'patent_results', 'patent_analysis', 'funding_data'
         ]:
             if key in st.session_state:
                 del st.session_state[key]
@@ -85,10 +84,6 @@ def main():
         if 'selected_stages' not in st.session_state:
             st.session_state.selected_stages = set()
 
-        # Add progress bar
-        if search_query or search_clicked:
-            progress_bar = st.progress(st.session_state.progress)
-
         # Display dynamic warning/info message
         st.info(st.session_state.warning_message)
 
@@ -139,17 +134,6 @@ def main():
                 st.session_state.warning_message = "Please select at least one research stage to proceed."
                 return
 
-            # Reset progress at the start of new search
-            st.session_state.progress = 0
-            progress_bar.progress(st.session_state.progress)
-
-            # Calculate progress step based on number of selected stages
-            progress_step = 1.0 / (len(selected_stages) + 1)  # +1 for initial setup
-
-            # Update progress for search initialization
-            st.session_state.progress += progress_step
-            progress_bar.progress(st.session_state.progress)
-
             # Sort stages in the desired order
             ordered_stages = []
             preferred_order = ['research', 'patents', 'funding', 'collaboration', 'synthesis', 'compliance']
@@ -170,7 +154,7 @@ def main():
                         current_stage = ordered_stages[idx]  # Use ordered_stages here
 
                         if current_stage == "research":
-                            with st.spinner("Analyzing Research..."):
+                            with st.spinner("🔍 Analyzing Research..."):
                                 openalex_client = OpenAlexClient()
                                 ai_analyzer = AIAnalyzer()
 
@@ -188,11 +172,6 @@ def main():
                                             st.session_state.warning_message = "No results found. Try different terms."
                                             st.session_state.search_results = []
                                             st.session_state.analysis = None
-
-                                        # Update progress after research
-                                        st.session_state.progress += progress_step
-                                        progress_bar.progress(st.session_state.progress)
-
                                     except Exception as e:
                                         logger.error(f"Error in research search: {str(e)}")
                                         st.session_state.warning_message = f"An error occurred during search: {str(e)}"
@@ -211,24 +190,20 @@ def main():
                                             render_analysis_section(st.session_state.analysis, section_type="research")
 
                         elif current_stage == "patents":
-                            with st.spinner("Searching patents..."):
+                            with st.spinner("🔍 Searching patents..."):
                                 patent_client = PatentSearchClient()
                                 if search_query != st.session_state.get('last_query', '') or st.session_state.get(
                                         'patent_results') is None:
                                     patent_results = patent_client.search_patents(search_query)
                                     if patent_results:
                                         st.session_state.patent_results = patent_results
-                                        with st.spinner("Analyzing patents..."):
+                                        with st.spinner("🤖 Analyzing patents..."):
                                             st.session_state.patent_analysis = patent_client.analyze_patents(
                                                 patent_results)
                                     else:
                                         st.session_state.warning_message = "No patent results found."
                                         st.session_state.patent_results = None
                                         st.session_state.patent_analysis = None
-
-                                    # Update progress after patents
-                                    st.session_state.progress += progress_step
-                                    progress_bar.progress(st.session_state.progress)
 
                                 # Create sub-tabs for Documents and AI Analysis
                                 patent_tab, analysis_tab = st.tabs(["Documents", "AI Analysis"])
@@ -251,22 +226,13 @@ def main():
                                 from funding import FundingAgent
                                 funding_agent = FundingAgent()
                                 st.session_state.funding_data = funding_agent.get_funding_opportunities(search_query)
-
-                                # Update progress after funding
-                                st.session_state.progress += progress_step
-                                progress_bar.progress(st.session_state.progress)
-
                             render_funding_section(search_query, st.session_state.funding_data)
 
                         elif current_stage == "collaboration":
                             render_network_section(st.session_state.get('search_results', []))
 
-                            # Update progress after collaboration
-                            st.session_state.progress += progress_step
-                            progress_bar.progress(st.session_state.progress)
-
                         elif current_stage == "synthesis":
-                            with st.spinner("Synthesizing insights..."):
+                            with st.spinner("🔄 Synthesizing insights..."):
                                 render_synthesis_section(
                                     research_data=st.session_state.get('search_results', []),
                                     patent_data=st.session_state.get('patent_results', []),
@@ -274,16 +240,8 @@ def main():
                                     selected_stages=selected_stages
                                 )
 
-                                # Update progress after synthesis
-                                st.session_state.progress += progress_step
-                                progress_bar.progress(st.session_state.progress)
-
                         elif current_stage == "compliance":
-                            st.info("Coming Soon")
-
-                            # Update progress after compliance
-                            st.session_state.progress += progress_step
-                            progress_bar.progress(st.session_state.progress)
+                            st.info("✓ Coming Soon")
 
                     except Exception as e:
                         logger.error(f"Error in tab {current_stage}: {str(e)}")
