@@ -8,8 +8,7 @@ from ai_analyzer import AIAnalyzer
 from patent_client import PatentSearchClient
 from components import (render_search_section, render_analysis_section,
                         render_patent_results, render_network_section,
-                        render_synthesis_section)  # Yeni eklenen
-from funding import render_funding_section
+                        render_synthesis_section)
 
 # Configure logging
 logging.basicConfig(
@@ -18,7 +17,6 @@ logging.basicConfig(
     handlers=[logging.StreamHandler(sys.stdout)])
 logger = logging.getLogger(__name__)
 
-
 def init_session_state():
     """Initialize session state variables"""
     if 'initialized' not in st.session_state:
@@ -26,7 +24,6 @@ def init_session_state():
         st.session_state.warning_message = "Choose Your Agent"
         st.session_state.progress = 0
         logger.info("Session state initialized")
-
 
 def reset_app():
     """Reset all session state variables"""
@@ -41,6 +38,44 @@ def reset_app():
     except Exception as e:
         logger.error(f"Error resetting app state: {str(e)}")
 
+def show_loading_game():
+    """Show loading game in a modal while processing"""
+    st.markdown("""
+        <style>
+        .loading-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            width: 80%;
+            max-width: 800px;
+            height: 80vh;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9998;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        </style>
+        <div class="modal-overlay"></div>
+        <div class="loading-modal">
+            <iframe src="https://deep-crew.ai/game/" allow="fullscreen"></iframe>
+        </div>
+    """, unsafe_allow_html=True)
 
 def main():
     try:
@@ -88,6 +123,8 @@ def main():
         # Add progress bar
         if search_query or search_clicked:
             progress_bar = st.progress(st.session_state.progress)
+            if st.session_state.progress < 1.0:
+                show_loading_game()
 
         # Display dynamic warning/info message
         st.info(st.session_state.warning_message)
