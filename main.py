@@ -8,7 +8,7 @@ from ai_analyzer import AIAnalyzer
 from patent_client import PatentSearchClient
 from components import (render_search_section, render_analysis_section,
                         render_patent_results, render_network_section,
-                        render_synthesis_section)  # Yeni eklenen
+                        render_synthesis_section)
 from funding import render_funding_section
 
 # Configure logging
@@ -18,7 +18,6 @@ logging.basicConfig(
     handlers=[logging.StreamHandler(sys.stdout)])
 logger = logging.getLogger(__name__)
 
-
 def init_session_state():
     """Initialize session state variables"""
     if 'initialized' not in st.session_state:
@@ -26,7 +25,6 @@ def init_session_state():
         st.session_state.warning_message = "Choose Your Agent"
         st.session_state.progress = 0
         logger.info("Session state initialized")
-
 
 def reset_app():
     """Reset all session state variables"""
@@ -41,7 +39,6 @@ def reset_app():
     except Exception as e:
         logger.error(f"Error resetting app state: {str(e)}")
 
-
 def main():
     try:
         # Initialize session state
@@ -50,15 +47,48 @@ def main():
         # Setup page configuration
         setup_page()
 
-        # Main content
+        # Add custom CSS for lightbox
         st.markdown("""
             <style>
-            div.stAlert {
-                text-align: center;
-                max-width: 750px;
-                margin: 1rem auto;
+            .lightbox {
+                display: none;
+                position: fixed;
+                z-index: 999;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.9);
+                justify-content: center;
+                align-items: center;
+            }
+            .lightbox.active {
+                display: flex;
+            }
+            .lightbox iframe {
+                width: 90%;
+                height: 90%;
+                border: none;
+            }
+            .lightbox-close {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                color: white;
+                font-size: 30px;
+                cursor: pointer;
+            }
+            .submarine-image {
+                cursor: pointer;
+                display: block;
+                margin: 20px auto;
+                max-width: 300px;
             }
             </style>
+            """, unsafe_allow_html=True)
+
+        # Main content
+        st.markdown("""
             <div class="main-container">
                 <div class="logo-container" style="text-align: center; width: 100%;">
                     <img src="https://deep-crew.ai/wp-content/uploads/2025/03/9128379182739812873.png" 
@@ -66,8 +96,7 @@ def main():
                          style="max-width: 350px; height: auto; margin: 30px auto;">
                 </div>
             </div>
-        """,
-                    unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
 
         # Add search section
         col_search, col_button = st.columns([6, 1])
@@ -91,6 +120,16 @@ def main():
 
         # Display dynamic warning/info message
         st.info(st.session_state.warning_message)
+
+        # Add submarine animation in the middle
+        st.markdown("""
+            <div style="text-align: center; margin: 30px 0;">
+                <img src="https://deep-crew.ai/wp-content/uploads/2025/03/animation-submarine-062119.gif" 
+                     alt="Submarine Animation" 
+                     class="submarine-image"
+                     onclick="openLightbox()">
+            </div>
+        """, unsafe_allow_html=True)
 
         # Create stage buttons using columns for horizontal layout
         col1, col2, col3, col4, col5 = st.columns(5)
@@ -292,12 +331,44 @@ def main():
         else:
             pass
 
+        # Add submarine animation at the bottom
+        st.markdown("""
+            <div style="text-align: center; margin: 30px 0;">
+                <img src="https://deep-crew.ai/wp-content/uploads/2025/03/animation-submarine-062119.gif" 
+                     alt="Submarine Animation" 
+                     class="submarine-image"
+                     onclick="openLightbox()">
+            </div>
+
+            <!-- Lightbox -->
+            <div class="lightbox" id="gameLightbox">
+                <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+                <iframe src="https://deep-crew.ai/game/" allow="fullscreen"></iframe>
+            </div>
+
+            <script>
+            function openLightbox() {
+                document.getElementById('gameLightbox').classList.add('active');
+            }
+
+            function closeLightbox() {
+                document.getElementById('gameLightbox').classList.remove('active');
+            }
+
+            // Close lightbox when clicking outside of iframe
+            document.getElementById('gameLightbox').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeLightbox();
+                }
+            });
+            </script>
+        """, unsafe_allow_html=True)
+
         logger.info("Main content rendered successfully")
 
     except Exception as e:
         logger.error(f"Error in main: {str(e)}", exc_info=True)
         st.error(f"An error occurred: {str(e)}")
-
 
 if __name__ == "__main__":
     try:
