@@ -277,10 +277,10 @@ def main():
                     <img src="https://raw.githubusercontent.com/gilbarbara/logos/main/logos/github-icon.svg" alt="GitHub">
                 </a>
                 <a href="#" target="_blank">
-                    <img src="https://raw.githubusercontent.com/gilbarbara/logos/main/logos/twitter.svg" alt="X (Twitter)">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/X_icon_2.svg" alt="X (Twitter)">
                 </a>
                 <a href="#" target="_blank">
-                    <img src="https://raw.githubusercontent.com/gilbarbara/logos/main/logos/gitbook.svg" alt="GitBook">
+                    <img src="https://icon.icepanel.io/Technology/svg/GitBook.svg" alt="GitBook">
                 </a>
             </div>
         """, unsafe_allow_html=True)
