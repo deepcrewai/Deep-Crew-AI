@@ -8,7 +8,7 @@ from ai_analyzer import AIAnalyzer
 from patent_client import PatentSearchClient
 from components import (render_search_section, render_analysis_section,
                         render_patent_results, render_network_section,
-                        render_synthesis_section)
+                        render_synthesis_section)  # Yeni eklenen
 from funding import render_funding_section
 
 # Configure logging
@@ -49,24 +49,13 @@ def main():
         # Setup page configuration
         setup_page()
 
-        # Main content at the top
+        # Main content
         st.markdown("""
             <style>
             div.stAlert {
                 text-align: center;
                 max-width: 750px;
                 margin: 1rem auto;
-            }
-            .submarine-container {
-                position: fixed;
-                top: 20px;
-                left: 20px;
-                z-index: 1000;
-                cursor: pointer;
-                transition: transform 0.3s ease;
-            }
-            .submarine-container:hover {
-                transform: scale(1.1);
             }
             </style>
             <div class="main-container">
@@ -75,15 +64,9 @@ def main():
                          alt="Deep Crew Logo" 
                          style="max-width: 350px; height: auto; margin: 30px auto;">
                 </div>
-                <div class="submarine-container">
-                    <a href="#" onclick="var w = 800; var h = 800; var left = (screen.width/2)-(w/2); var top = (screen.height/2)-(h/2); window.open('/static/game/game.html', 'Clean The Sea Game', 'popup=yes,width='+w+',height='+h+',top='+top+',left='+left+',menubar=no,toolbar=no,location=no,status=no'); return false;" style="display: block;">
-                        <img src="https://deep-crew.ai/wp-content/uploads/2025/03/animation-submarine-062119.gif" 
-                             alt="Play Clean The Sea Game" 
-                             style="max-width: 150px; height: auto;">
-                    </a>
-                </div>
             </div>
-        """, unsafe_allow_html=True)
+        """,
+                    unsafe_allow_html=True)
 
         # Add search section
         col_search, col_button = st.columns([6, 1])
