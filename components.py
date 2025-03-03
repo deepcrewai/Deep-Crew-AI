@@ -907,3 +907,43 @@ def render_synthesis_section(research_data, patent_data, funding_data, selected_
 
     except Exception as e:
         st.error(f"An error occurred during synthesis: {str(e)}")
+
+def render_funding_section(search_query: str, funding_data):
+    """Render the funding section based on search query and funding data."""
+    import streamlit as st
+    st.header("Funding")
+
+    # Create tabs for different views
+    overview_tab, details_tab = st.tabs(["Overview", "Detailed View"])
+
+    with overview_tab:
+        if funding_data:
+            st.write("### Available Funding Opportunities")
+
+            # Display summary metrics
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric("Total Opportunities", len(funding_data))
+            with col2:
+                total_amount = sum(item.get('amount', 0) for item in funding_data)
+                st.metric("Total Available Funding", f"${total_amount:,.2f}")
+            with col3:
+                avg_amount = total_amount / len(funding_data) if funding_data else 0
+                st.metric("Average Grant Size", f"${avg_amount:,.2f}")
+
+        else:
+            st.info(f"No funding opportunities found for '{search_query}'")
+
+    with details_tab:
+        if funding_data:
+            for item in funding_data:
+                with st.expander(item.get('title', 'Untitled Opportunity')):
+                    st.write(f"**Amount:** ${item.get('amount', 0):,.2f}")
+                    st.write(f"**Deadline:** {item.get('deadline', 'Not specified')}")
+                    st.write(f"**Description:** {item.get('description', 'No description available')}")
+                    if item.get('requirements'):
+                        st.write("**Requirements:**")
+                        for req in item['requirements']:
+                            st.write(f"- {req}")
+        else:
+            st.info("No detailed funding information available")

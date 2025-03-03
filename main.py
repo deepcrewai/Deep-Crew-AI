@@ -8,7 +8,7 @@ from ai_analyzer import AIAnalyzer
 from patent_client import PatentSearchClient
 from components import (render_search_section, render_analysis_section,
                         render_patent_results, render_network_section,
-                        render_synthesis_section)
+                        render_synthesis_section, render_funding_section)
 
 # Configure logging
 logging.basicConfig(
@@ -51,8 +51,8 @@ def show_loading_game():
             z-index: 9999;
             background: white;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
             width: 80%;
             max-width: 800px;
             height: 80vh;
@@ -87,18 +87,33 @@ def show_loading_game():
             border: none;
         }
         </style>
-        <div class="modal-overlay" onclick="closeModal()"></div>
+
+        <div class="modal-overlay"></div>
         <div class="loading-modal">
-            <button class="close-button" onclick="closeModal()">×</button>
+            <button class="close-button">×</button>
             <iframe src="https://deep-crew.ai/game/" allow="fullscreen"></iframe>
         </div>
         <script>
-        function closeModal() {
-            const modal = document.querySelector('.loading-modal');
+        document.addEventListener('DOMContentLoaded', function() {
             const overlay = document.querySelector('.modal-overlay');
-            if (modal) modal.style.display = 'none';
-            if (overlay) overlay.style.display = 'none';
-        }
+            const modal = document.querySelector('.loading-modal');
+            const closeButton = document.querySelector('.close-button');
+
+            function closeModal() {
+                const modal = document.querySelector('.loading-modal');
+                const overlay = document.querySelector('.modal-overlay');
+                modal.style.display = 'none';
+                overlay.style.display = 'none';
+            }
+
+            if (overlay) {
+                overlay.addEventListener('click', closeModal);
+            }
+
+            if (closeButton) {
+                closeButton.addEventListener('click', closeModal);
+            }
+        });
         </script>
     """, unsafe_allow_html=True)
 
