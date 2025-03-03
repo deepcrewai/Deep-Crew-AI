@@ -3,10 +3,12 @@ from typing import Dict, List, Optional
 import time
 from difflib import SequenceMatcher
 
+
 class OpenAlexClient:
+
     def __init__(self):
         self.base_url = "https://api.openalex.org"
-        self.email = "researcher@example.org"  # Updated email for better rate limits
+        self.email = "info@deep-crew.ai"  # Updated email for better rate limits
         self.last_request_time = 0
         self.min_request_interval = 1.0  # 1 second between requests
 
@@ -25,14 +27,13 @@ class OpenAlexClient:
 
         try:
             url = f"{self.base_url}/{endpoint}"
-            print(f"Making request to: {url} with params: {params}")  # Debug log
+            print(
+                f"Making request to: {url} with params: {params}")  # Debug log
 
-            response = requests.get(
-                url,
-                params=params,
-                headers=headers,
-                timeout=30
-            )
+            response = requests.get(url,
+                                    params=params,
+                                    headers=headers,
+                                    timeout=30)
             self.last_request_time = time.time()
 
             print(f"Response status: {response.status_code}")  # Debug log
@@ -40,7 +41,8 @@ class OpenAlexClient:
             if response.status_code == 429:  # Rate limit exceeded
                 print("Rate limit exceeded, waiting...")
                 time.sleep(5)  # Wait 5 seconds before retry
-                return self._make_request(endpoint, params)  # Retry the request
+                return self._make_request(endpoint,
+                                          params)  # Retry the request
 
             # Try to handle the response even if it's not 200
             try:
@@ -65,7 +67,8 @@ class OpenAlexClient:
             # Base search parameters with minimal filters
             params = {
                 "search": query,
-                "per_page": 100  # Get more results initially for better relevance filtering
+                "per_page":
+                100  # Get more results initially for better relevance filtering
             }
 
             # First attempt with exact query
@@ -111,27 +114,46 @@ class OpenAlexClient:
                         authors.append(authorship['author']['display_name'])
 
                 paper_data = {
-                    'title': paper.get('title', 'Title not found'),
-                    'abstract': abstract,
-                    'doi': paper.get('doi'),
-                    'publication_year': paper.get('publication_year'),
-                    'url': f"https://doi.org/{paper.get('doi')}" if paper.get('doi') else None,
-                    'concepts': paper.get('concepts', []),
-                    'authorships': paper.get('authorships', []),
-                    'cited_by_count': paper.get('cited_by_count', 0),
-                    'authors': authors
+                    'title':
+                    paper.get('title', 'Title not found'),
+                    'abstract':
+                    abstract,
+                    'doi':
+                    paper.get('doi'),
+                    'publication_year':
+                    paper.get('publication_year'),
+                    'url':
+                    f"https://doi.org/{paper.get('doi')}"
+                    if paper.get('doi') else None,
+                    'concepts':
+                    paper.get('concepts', []),
+                    'authorships':
+                    paper.get('authorships', []),
+                    'cited_by_count':
+                    paper.get('cited_by_count', 0),
+                    'authors':
+                    authors
                 }
 
                 # Calculate similarity score with more weight on title matches
                 if keywords:
                     # Calculate similarity for both title and abstract separately
-                    title_similarities = [self._calculate_similarity(paper_data['title'], kw) for kw in keywords]
-                    abstract_similarities = [self._calculate_similarity(paper_data['abstract'], kw) for kw in keywords]
+                    title_similarities = [
+                        self._calculate_similarity(paper_data['title'], kw)
+                        for kw in keywords
+                    ]
+                    abstract_similarities = [
+                        self._calculate_similarity(paper_data['abstract'], kw)
+                        for kw in keywords
+                    ]
 
                     # Give more weight to title matches (0.7) vs abstract matches (0.3)
-                    max_title_sim = max(title_similarities) if title_similarities else 0.0
-                    max_abstract_sim = max(abstract_similarities) if abstract_similarities else 0.0
-                    paper_data['similarity_score'] = (0.7 * max_title_sim) + (0.3 * max_abstract_sim)
+                    max_title_sim = max(
+                        title_similarities) if title_similarities else 0.0
+                    max_abstract_sim = max(abstract_similarities
+                                           ) if abstract_similarities else 0.0
+                    paper_data['similarity_score'] = (0.7 * max_title_sim) + (
+                        0.3 * max_abstract_sim)
                 else:
                     paper_data['similarity_score'] = 0.0
 
@@ -139,7 +161,8 @@ class OpenAlexClient:
 
             # Sort by similarity score
             enhanced_results.sort(key=lambda x: (-x['similarity_score']))
-            enhanced_results = enhanced_results[:50]  # Return top 50 most relevant results
+            enhanced_results = enhanced_results[:
+                                                50]  # Return top 50 most relevant results
 
             return enhanced_results
 
