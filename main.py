@@ -88,12 +88,6 @@ def show_loading_game():
         }
         </style>
 
-        <div class="modal-overlay"></div>
-        <div class="loading-modal">
-            <button class="close-button">×</button>
-            <iframe src="https://deep-crew.ai/game/" allow="fullscreen"></iframe>
-        </div>
-
         <script>
         document.addEventListener('DOMContentLoaded', function() {
             const overlay = document.querySelector('.modal-overlay');
@@ -109,7 +103,10 @@ def show_loading_game():
 
             if (overlay) {
                 overlay.addEventListener('click', function() {
-                    closeModal();
+                    const modal = document.querySelector('.loading-modal');
+                    const overlay = document.querySelector('.modal-overlay');
+                    modal.style.display = 'none';
+                    overlay.style.display = 'none';
                 });
             }
 
@@ -117,11 +114,20 @@ def show_loading_game():
                 closeButton.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    closeModal();
+                    const modal = document.querySelector('.loading-modal');
+                    const overlay = document.querySelector('.modal-overlay');
+                    modal.style.display = 'none';
+                    overlay.style.display = 'none';
                 });
             }
         });
         </script>
+
+        <div class="modal-overlay"></div>
+        <div class="loading-modal">
+            <button class="close-button">×</button>
+            <iframe src="https://deep-crew.ai/game/" allow="fullscreen"></iframe>
+        </div>
     """, unsafe_allow_html=True)
 
 def main():
