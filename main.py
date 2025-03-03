@@ -8,7 +8,7 @@ from ai_analyzer import AIAnalyzer
 from patent_client import PatentSearchClient
 from components import (render_search_section, render_analysis_section,
                         render_patent_results, render_network_section,
-                        render_synthesis_section, render_funding_section)
+                        render_synthesis_section)
 
 # Configure logging
 logging.basicConfig(
@@ -41,10 +41,6 @@ def reset_app():
 
 def show_loading_game():
     """Show loading game in a modal while processing"""
-    if st.button("❌ Close Game", key="close_game_button"):
-        st.session_state.show_game = False
-        st.rerun()
-
     st.markdown("""
         <style>
         .loading-modal {
@@ -55,14 +51,44 @@ def show_loading_game():
             z-index: 9999;
             background: white;
             padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
             width: 80%;
             max-width: 800px;
             height: 80vh;
         }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9998;
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            color: #666;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+        .close-button:hover {
+            color: #333;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
         </style>
+        <div class="modal-overlay" onclick="document.querySelector('.loading-modal').style.display='none'; document.querySelector('.modal-overlay').style.display='none';"></div>
         <div class="loading-modal">
+            <button class="close-button" onclick="document.querySelector('.loading-modal').style.display='none'; document.querySelector('.modal-overlay').style.display='none';">×</button>
             <iframe src="https://deep-crew.ai/game/" allow="fullscreen"></iframe>
         </div>
     """, unsafe_allow_html=True)
@@ -118,7 +144,6 @@ def main():
                 if st.button("Analysis in Progress... But No Need to Get Bored! 🎮"):
                     st.session_state.show_game = True
                     show_loading_game()
-
 
 
         # Display dynamic warning/info message
