@@ -86,11 +86,17 @@ def show_loading_game():
             border: none;
         }
         </style>
-        <div class="modal-overlay" onclick="document.querySelector('.loading-modal').style.display='none'; document.querySelector('.modal-overlay').style.display='none';"></div>
+        <div class="modal-overlay" onclick="closeGameModal()"></div>
         <div class="loading-modal">
-            <button class="close-button" onclick="document.querySelector('.loading-modal').style.display='none'; document.querySelector('.modal-overlay').style.display='none';">×</button>
+            <button class="close-button" onclick="closeGameModal()">×</button>
             <iframe src="https://deep-crew.ai/game/" allow="fullscreen"></iframe>
         </div>
+        <script>
+        function closeGameModal() {
+            document.querySelector('.loading-modal').style.display = 'none';
+            document.querySelector('.modal-overlay').style.display = 'none';
+        }
+        </script>
     """, unsafe_allow_html=True)
 
 def main():
@@ -144,6 +150,7 @@ def main():
                 if st.button("Analysis in Progress... But No Need to Get Bored! 🎮"):
                     st.session_state.show_game = True
                     show_loading_game()
+
 
 
         # Display dynamic warning/info message
