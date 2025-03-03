@@ -63,7 +63,7 @@ def show_loading_game():
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.2);
             z-index: 9998;
             cursor: pointer;
         }
@@ -87,17 +87,19 @@ def show_loading_game():
             border: none;
         }
         </style>
-        <script>
-        function closeModal() {
-            document.querySelector('.loading-modal').style.display = 'none';
-            document.querySelector('.modal-overlay').style.display = 'none';
-        }
-        </script>
         <div class="modal-overlay" onclick="closeModal()"></div>
         <div class="loading-modal">
             <button class="close-button" onclick="closeModal()">×</button>
             <iframe src="https://deep-crew.ai/game/" allow="fullscreen"></iframe>
         </div>
+        <script>
+        function closeModal() {
+            const modal = document.querySelector('.loading-modal');
+            const overlay = document.querySelector('.modal-overlay');
+            if (modal) modal.style.display = 'none';
+            if (overlay) overlay.style.display = 'none';
+        }
+        </script>
     """, unsafe_allow_html=True)
 
 def main():
