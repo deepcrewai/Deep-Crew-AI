@@ -250,6 +250,41 @@ def main():
         else:
             pass
 
+        # Add footer with social media links
+        st.markdown("""
+            <style>
+            .footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background-color: white;
+                padding: 10px;
+                text-align: center;
+                border-top: 1px solid #e5e5e5;
+            }
+            .footer img {
+                height: 30px;
+                margin: 0 15px;
+                transition: transform 0.2s;
+            }
+            .footer img:hover {
+                transform: scale(1.1);
+            }
+            </style>
+            <div class="footer">
+                <a href="#" target="_blank">
+                    <img src="https://raw.githubusercontent.com/gilbarbara/logos/main/logos/github-icon.svg" alt="GitHub">
+                </a>
+                <a href="#" target="_blank">
+                    <img src="https://raw.githubusercontent.com/gilbarbara/logos/main/logos/twitter.svg" alt="X (Twitter)">
+                </a>
+                <a href="#" target="_blank">
+                    <img src="https://raw.githubusercontent.com/gilbarbara/logos/main/logos/gitbook.svg" alt="GitBook">
+                </a>
+            </div>
+        """, unsafe_allow_html=True)
+
         logger.info("Main content rendered successfully")
 
     except Exception as e:
