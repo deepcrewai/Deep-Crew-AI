@@ -23,6 +23,7 @@ def init_session_state():
         st.session_state.initialized = True
         st.session_state.warning_message = "Choose Your Agent"
         st.session_state.progress = 0
+        st.session_state.show_game = False
         logger.info("Session state initialized")
 
 def reset_app():
@@ -30,7 +31,7 @@ def reset_app():
     try:
         for key in [
                 'selected_stages', 'search_results', 'analysis', 'last_query',
-                'patent_results', 'patent_analysis', 'funding_data', 'progress'
+                'patent_results', 'patent_analysis', 'funding_data', 'progress', 'show_game'
         ]:
             if key in st.session_state:
                 del st.session_state[key]
@@ -65,14 +66,29 @@ def show_loading_game():
             background: rgba(0,0,0,0.5);
             z-index: 9998;
         }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            color: #666;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+        .close-button:hover {
+            color: #333;
+        }
         iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
         </style>
-        <div class="modal-overlay"></div>
+        <div class="modal-overlay" onclick="document.querySelector('.loading-modal').style.display='none'; document.querySelector('.modal-overlay').style.display='none';"></div>
         <div class="loading-modal">
+            <button class="close-button" onclick="document.querySelector('.loading-modal').style.display='none'; document.querySelector('.modal-overlay').style.display='none';">×</button>
             <iframe src="https://deep-crew.ai/game/" allow="fullscreen"></iframe>
         </div>
     """, unsafe_allow_html=True)
@@ -124,7 +140,11 @@ def main():
         if search_query or search_clicked:
             progress_bar = st.progress(st.session_state.progress)
             if st.session_state.progress < 1.0:
-                show_loading_game()
+                # Add game button under progress bar
+                if st.button("Analysis in Progress... But No Need to Get Bored! 🎮"):
+                    st.session_state.show_game = True
+                    show_loading_game()
+
 
         # Display dynamic warning/info message
         st.info(st.session_state.warning_message)
@@ -334,7 +354,6 @@ def main():
     except Exception as e:
         logger.error(f"Error in main: {str(e)}", exc_info=True)
         st.error(f"An error occurred: {str(e)}")
-
 
 if __name__ == "__main__":
     try:
