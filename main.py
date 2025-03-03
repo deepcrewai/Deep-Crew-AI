@@ -93,6 +93,7 @@ def show_loading_game():
             <button class="close-button">×</button>
             <iframe src="https://deep-crew.ai/game/" allow="fullscreen"></iframe>
         </div>
+
         <script>
         document.addEventListener('DOMContentLoaded', function() {
             const overlay = document.querySelector('.modal-overlay');
@@ -107,7 +108,9 @@ def show_loading_game():
             }
 
             if (overlay) {
-                overlay.addEventListener('click', closeModal);
+                overlay.addEventListener('click', function() {
+                    closeModal();
+                });
             }
 
             if (closeButton) {
