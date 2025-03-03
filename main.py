@@ -280,7 +280,7 @@ def main():
                     <img src="https://images.freeimages.com/image/large-previews/f35/x-twitter-logo-on-black-circle-5694247.png" alt="X (Twitter)">
                 </a>
                 <a href="#" target="_blank">
-                    <img src="https://icon.icepanel.io/Technology/svg/GitBook.svg" alt="GitBook">
+                    <img src="https://www.svgrepo.com/show/330505/gitbook.svg" alt="GitBook">
                 </a>
             </div>
         """, unsafe_allow_html=True)
