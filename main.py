@@ -111,7 +111,11 @@ def show_loading_game():
             }
 
             if (closeButton) {
-                closeButton.addEventListener('click', closeModal);
+                closeButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeModal();
+                });
             }
         });
         </script>
