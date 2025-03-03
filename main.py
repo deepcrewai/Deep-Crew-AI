@@ -273,13 +273,13 @@ def main():
             }
             </style>
             <div class="footer">
-                <a href="#" target="_blank">
+                <a href="https://github.com/deepcrewai" target="_blank">
                     <img src="https://raw.githubusercontent.com/gilbarbara/logos/main/logos/github-icon.svg" alt="GitHub">
                 </a>
-                <a href="#" target="_blank">
+                <a href="https://x.com/deepcrewai" target="_blank">
                     <img src="https://images.freeimages.com/image/large-previews/f35/x-twitter-logo-on-black-circle-5694247.png" alt="X (Twitter)">
                 </a>
-                <a href="#" target="_blank">
+                <a href="https://deepcrewai.gitbook.io/deepcrewai" target="_blank">
                     <img src="https://www.svgrepo.com/show/330505/gitbook.svg" alt="GitBook">
                 </a>
             </div>
