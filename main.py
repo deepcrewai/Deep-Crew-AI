@@ -84,7 +84,7 @@ def main():
                 padding: 10px;
                 border-radius: 0 0 10px 0;
                 box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
-                z-index: 1000;
+                z-index: 1000000;
             }
             .accessibility-menu summary {
                 cursor: pointer;
@@ -93,11 +93,17 @@ def main():
             }
             .accessibility-menu div {
                 padding: 5px;
+                background: white;
             }
             .accessibility-menu label {
                 display: block;
                 margin: 5px 0;
                 cursor: pointer;
+            }
+
+            /* Ensure menu is visible above Streamlit elements */
+            .stApp > header {
+                z-index: 999999;
             }
             </style>
 
