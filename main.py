@@ -84,14 +84,6 @@ def main():
         if 'selected_stages' not in st.session_state:
             st.session_state.selected_stages = set()
 
-        # Calculate progress based on selected stages
-        total_stages = 5  # Total number of available stages (excluding synthesis)
-        selected_count = len([stage for stage in st.session_state.selected_stages if stage != 'synthesis'])
-        progress = selected_count / total_stages
-
-        # Add progress bar
-        st.progress(progress, f"Selected {selected_count} of {total_stages} stages")
-
         # Display dynamic warning/info message
         st.info(st.session_state.warning_message)
 
