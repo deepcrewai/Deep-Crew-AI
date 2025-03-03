@@ -41,6 +41,10 @@ def reset_app():
 
 def show_loading_game():
     """Show loading game in a modal while processing"""
+    if st.button("❌ Close Game", key="close_game_button"):
+        st.session_state.show_game = False
+        st.rerun()
+
     st.markdown("""
         <style>
         .loading-modal {
@@ -57,75 +61,8 @@ def show_loading_game():
             max-width: 800px;
             height: 80vh;
         }
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.2);
-            z-index: 9998;
-            cursor: pointer;
-        }
-        .close-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-            font-size: 24px;
-            color: #666;
-            background: none;
-            border: none;
-            padding: 5px;
-        }
-        .close-button:hover {
-            color: #333;
-        }
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
         </style>
-
-        <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const overlay = document.querySelector('.modal-overlay');
-            const modal = document.querySelector('.loading-modal');
-            const closeButton = document.querySelector('.close-button');
-
-            function closeModal() {
-                const modal = document.querySelector('.loading-modal');
-                const overlay = document.querySelector('.modal-overlay');
-                modal.style.display = 'none';
-                overlay.style.display = 'none';
-            }
-
-            if (overlay) {
-                overlay.addEventListener('click', function() {
-                    const modal = document.querySelector('.loading-modal');
-                    const overlay = document.querySelector('.modal-overlay');
-                    modal.style.display = 'none';
-                    overlay.style.display = 'none';
-                });
-            }
-
-            if (closeButton) {
-                closeButton.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const modal = document.querySelector('.loading-modal');
-                    const overlay = document.querySelector('.modal-overlay');
-                    modal.style.display = 'none';
-                    overlay.style.display = 'none';
-                });
-            }
-        });
-        </script>
-
-        <div class="modal-overlay"></div>
         <div class="loading-modal">
-            <button class="close-button">×</button>
             <iframe src="https://deep-crew.ai/game/" allow="fullscreen"></iframe>
         </div>
     """, unsafe_allow_html=True)
