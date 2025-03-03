@@ -262,6 +262,7 @@ def main():
                 padding: 10px;
                 text-align: center;
                 border-top: 1px solid #e5e5e5;
+                z-index: 999;
             }
             .footer img {
                 height: 30px;
@@ -270,6 +271,9 @@ def main():
             }
             .footer img:hover {
                 transform: scale(1.1);
+            }
+            .main-container {
+                margin-bottom: 60px;
             }
             </style>
             <div class="footer">
