@@ -454,7 +454,7 @@ def render_search_section(results):
                         </div>
                     </span>
                     <span>Citations: {paper.get('cited_by_count', 0)}</span>
-                    {f'<a href="{paper["url"]}" class="paper-link" target="_blank">View Paper</a>' if paper.get("url") and paper["url"] is not None else ''}
+                    """ + (f'<a href="{paper["url"]}" class="paper-link" target="_blank">View Paper</a>' if paper.get("url") else '') + """
                 </div>
             </div>
         """, unsafe_allow_html=True)
