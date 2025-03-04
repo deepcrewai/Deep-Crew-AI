@@ -53,23 +53,23 @@ def main():
         st.markdown("""
             <style>
             /* Accessibility Classes */
-            body.grayscale {
+            .stApp.grayscale {
                 filter: grayscale(100%) !important;
             }
-            body.high-contrast {
+            .stApp.high-contrast {
                 filter: contrast(150%) !important;
             }
-            body.negative-contrast {
+            .stApp.negative-contrast {
                 filter: invert(100%) !important;
             }
-            body.light-background {
+            .stApp.light-background {
                 background-color: #ffffff !important;
                 color: #000000 !important;
             }
-            body.links-underline a {
+            .stApp.links-underline a {
                 text-decoration: underline !important;
             }
-            body.readable-font {
+            .stApp.readable-font {
                 font-family: Arial, sans-serif !important;
                 font-size: 18px !important;
                 line-height: 1.6 !important;
