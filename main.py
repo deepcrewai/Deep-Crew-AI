@@ -111,46 +111,47 @@ def main():
                 <summary>Accessibility Tools</summary>
                 <div>
                     <label>
-                        <input type="checkbox" onchange="document.body.classList.toggle('grayscale')"> Grayscale
+                        <input type="checkbox" onchange="toggleFeature('grayscale')"> Grayscale
                     </label>
                     <label>
-                        <input type="checkbox" onchange="document.body.classList.toggle('high-contrast')"> High Contrast
+                        <input type="checkbox" onchange="toggleFeature('high-contrast')"> High Contrast
                     </label>
                     <label>
-                        <input type="checkbox" onchange="document.body.classList.toggle('negative-contrast')"> Negative Contrast
+                        <input type="checkbox" onchange="toggleFeature('negative-contrast')"> Negative Contrast
                     </label>
                     <label>
-                        <input type="checkbox" onchange="document.body.classList.toggle('light-background')"> Light Background
+                        <input type="checkbox" onchange="toggleFeature('light-background')"> Light Background
                     </label>
                     <label>
-                        <input type="checkbox" onchange="document.body.classList.toggle('links-underline')"> Links Underline
+                        <input type="checkbox" onchange="toggleFeature('links-underline')"> Links Underline
                     </label>
                     <label>
-                        <input type="checkbox" onchange="document.body.classList.toggle('readable-font')"> Readable Font
+                        <input type="checkbox" onchange="toggleFeature('readable-font')"> Readable Font
                     </label>
                 </div>
             </details>
 
             <script>
+                function toggleFeature(feature) {
+                    const mainElement = document.querySelector('.stApp');
+                    if (mainElement) {
+                        mainElement.classList.toggle(feature);
+                        localStorage.setItem(`accessibility_${feature}`, mainElement.classList.contains(feature));
+                    }
+                }
+
                 // Initialize accessibility settings from localStorage
                 document.addEventListener('DOMContentLoaded', function() {
                     const features = ['grayscale', 'high-contrast', 'negative-contrast', 
                                    'light-background', 'links-underline', 'readable-font'];
+                    const mainElement = document.querySelector('.stApp');
 
                     features.forEach(feature => {
                         const enabled = localStorage.getItem(`accessibility_${feature}`);
-                        if (enabled === 'true') {
-                            document.body.classList.add(feature);
-                            document.querySelector(`input[onchange="document.body.classList.toggle('${feature}')"]`).checked = true;
+                        if (enabled === 'true' && mainElement) {
+                            mainElement.classList.add(feature);
+                            document.querySelector(`input[onchange="toggleFeature('${feature}')"]`).checked = true;
                         }
-                    });
-                });
-
-                // Save settings to localStorage when changed
-                document.querySelectorAll('.accessibility-menu input').forEach(input => {
-                    input.addEventListener('change', function() {
-                        const feature = this.parentElement.textContent.trim().toLowerCase().replace(' ', '-');
-                        localStorage.setItem(`accessibility_${feature}`, this.checked);
                     });
                 });
             </script>
