@@ -1,5 +1,8 @@
 # DeepCrew AI - Patent Research Platform 🔬
 
+![alt text](https://deep-crew.ai/wp-content/uploads/2025/03/Deep-Vrew-Logo-Soft.png)
+
+
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/downloads/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.32.0-FF4B4B.svg)](https://streamlit.io)
 [![OpenAI](https://img.shields.io/badge/OpenAI-API-00A36C.svg)](https://openai.com/blog/openai-api)
