@@ -49,116 +49,15 @@ def main():
         # Setup page configuration
         setup_page()
 
-        # Add accessibility tools
-        st.markdown("""
-            <style>
-            /* Accessibility Classes */
-            .stApp.grayscale {
-                filter: grayscale(100%) !important;
-            }
-            .stApp.high-contrast {
-                filter: contrast(150%) !important;
-            }
-            .stApp.negative-contrast {
-                filter: invert(100%) !important;
-            }
-            .stApp.light-background {
-                background-color: #ffffff !important;
-                color: #000000 !important;
-            }
-            .stApp.links-underline a {
-                text-decoration: underline !important;
-            }
-            .stApp.readable-font {
-                font-family: Arial, sans-serif !important;
-                font-size: 18px !important;
-                line-height: 1.6 !important;
-            }
-
-            /* Accessibility Menu Styling */
-            .accessibility-menu {
-                position: fixed;
-                top: 0;
-                left: 0;
-                background: white;
-                padding: 10px;
-                border-radius: 0 0 10px 0;
-                box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
-                z-index: 1000000;
-            }
-            .accessibility-menu summary {
-                cursor: pointer;
-                padding: 5px;
-                font-weight: bold;
-            }
-            .accessibility-menu div {
-                padding: 5px;
-                background: white;
-            }
-            .accessibility-menu label {
-                display: block;
-                margin: 5px 0;
-                cursor: pointer;
-            }
-
-            /* Ensure menu is visible above Streamlit elements */
-            .stApp > header {
-                z-index: 999999;
-            }
-            </style>
-
-            <details class="accessibility-menu">
-                <summary>Accessibility Tools</summary>
-                <div>
-                    <label>
-                        <input type="checkbox" onchange="toggleFeature('grayscale')"> Grayscale
-                    </label>
-                    <label>
-                        <input type="checkbox" onchange="toggleFeature('high-contrast')"> High Contrast
-                    </label>
-                    <label>
-                        <input type="checkbox" onchange="toggleFeature('negative-contrast')"> Negative Contrast
-                    </label>
-                    <label>
-                        <input type="checkbox" onchange="toggleFeature('light-background')"> Light Background
-                    </label>
-                    <label>
-                        <input type="checkbox" onchange="toggleFeature('links-underline')"> Links Underline
-                    </label>
-                    <label>
-                        <input type="checkbox" onchange="toggleFeature('readable-font')"> Readable Font
-                    </label>
-                </div>
-            </details>
-
-            <script>
-                function toggleFeature(feature) {
-                    const mainElement = document.querySelector('.stApp');
-                    if (mainElement) {
-                        mainElement.classList.toggle(feature);
-                        localStorage.setItem(`accessibility_${feature}`, mainElement.classList.contains(feature));
-                    }
-                }
-
-                // Initialize accessibility settings from localStorage
-                document.addEventListener('DOMContentLoaded', function() {
-                    const features = ['grayscale', 'high-contrast', 'negative-contrast', 
-                                   'light-background', 'links-underline', 'readable-font'];
-                    const mainElement = document.querySelector('.stApp');
-
-                    features.forEach(feature => {
-                        const enabled = localStorage.getItem(`accessibility_${feature}`);
-                        if (enabled === 'true' && mainElement) {
-                            mainElement.classList.add(feature);
-                            document.querySelector(`input[onchange="toggleFeature('${feature}')"]`).checked = true;
-                        }
-                    });
-                });
-            </script>
-        """, unsafe_allow_html=True)
-
         # Main content
         st.markdown("""
+            <style>
+            div.stAlert {
+                text-align: center;
+                max-width: 750px;
+                margin: 1rem auto;
+            }
+            </style>
             <div class="main-container">
                 <div class="logo-container" style="text-align: center; width: 100%;">
                     <img src="https://deep-crew.ai/wp-content/uploads/2025/03/9128379182739812873.png" 
@@ -166,7 +65,8 @@ def main():
                          style="max-width: 350px; height: auto; margin: 30px auto;">
                 </div>
             </div>
-        """, unsafe_allow_html=True)
+        """,
+                    unsafe_allow_html=True)
 
         # Add search section
         col_search, col_button = st.columns([6, 1])
